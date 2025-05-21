@@ -1,5 +1,3 @@
-Basado en tu código, aquí tienes una descripción optimizada para GitHub que refleja exactamente lo que has desarrollado:
-
 ```markdown
 # 🍳 Friday Night Cooking - Web Edition
 
