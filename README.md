@@ -61,5 +61,5 @@ graph TD
 - [ ] Implementar API de canciones
 
 📜 **Proyecto personal educativo** - ¡Aprendiendo desarrollo frontend avanzado!
-```
+
 
