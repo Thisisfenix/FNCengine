@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friday Night Cooking</title>
+    <!-- Bootstrap CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --color-menu: #f39c12;
+            --color-menu-hover: #e67e22;
+            --color-texto: #ffffff;
+            --color-fondo: #121212;
+            --color-fondo-panel: rgba(0, 0, 0, 0.85);
+            --sombra-panel: 0 0 20px rgba(243, 156, 18, 0.3);
+            --transicion-rapida: all 0.25s ease;
+        }
+
+        body {
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .hud-panel {
+            background-color: var(--color-fondo-panel);
+            border-radius: 15px;
+            padding: 2rem;
+            color: var(--color-texto);
+            max-width: 600px;
+            width: 95%;
+            margin: 2rem auto;
+            border: 2px solid var(--color-menu);
+            box-shadow: var(--sombra-panel);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hud-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-menu), transparent);
+            z-index: 1;
+        }
+
+        .btn-cocina {
+            background-color: var(--color-menu);
+            border: none;
+            color: var(--color-texto);
+            padding: 12px 24px;
+            margin: 8px 0;
+            border-radius: 8px;
+            width: 100%;
+            transition: var(--transicion-rapida);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-cocina:hover {
+            background-color: var(--color-menu-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-cocina:active {
+            transform: translateY(1px);
+        }
+
+        .btn-cocina:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background-color: #7f8c8d;
+        }
+
+        #update-banner {
+            background: linear-gradient(90deg, #17a2b8, #138496);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transicion-rapida);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #update-banner:hover {
+            background: linear-gradient(90deg, #138496, #117a8b);
+        }
+
+        #update-banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                        transparent, 
+                        rgba(255, 255, 255, 0.2), 
+                        transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        #update-banner:hover::after {
+            transform: translateX(100%);
+        }
+
+        #color-picker-container {
+            padding: 15px;
+            text-align: center;
+            background-color: rgba(0,0,0,0.7);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .update-item {
+            background-color: rgba(255,255,255,0.1);
+            border-left: 4px solid var(--color-menu);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+            transition: var(--transicion-rapida);
+        }
+
+        .update-item:hover {
+            background-color: rgba(255,255,255,0.15);
+            transform: translateX(5px);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--color-texto);
+            font-size: 1.5rem;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+            transition: var(--transicion-rapida);
+            z-index: 2;
+        }
+
+        .close-btn:hover {
+            color: var(--color-menu);
+            transform: rotate(90deg);
+        }
+
+        .hud-panel.hidden {
+            display: none;
+        }
+
+        .popup-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            z-index: 1001;
+            width: 95%;
+            max-width: 600px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-out;
+        }
+
+        .popup-panel.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #fondo-oscuro {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            transition: opacity 0.3s ease;
+        }
+
+        #fondo-oscuro.active {
+            display: block;
+            opacity: 1;
+        }
+
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--color-menu), #f1c40f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--color-menu);
+            margin: 10px auto;
+            border-radius: 2px;
+        }
+
+        .creditos-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--color-menu);
+            margin-bottom: 15px;
+            transition: var(--transicion-rapida);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .creditos-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .form-range::-webkit-slider-thumb {
+            background: var(--color-menu);
+        }
+
+        .form-range::-moz-range-thumb {
+            background: var(--color-menu);
+        }
+
+        .form-range::-ms-thumb {
+            background: var(--color-menu);
+        }
+
+        footer {
+            background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.5));
+            color: var(--color-texto);
+            padding: 15px;
+            text-align: center;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Controles de música */
+        .music-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: var(--color-fondo-panel);
+            padding: 10px 15px;
+            border-radius: 50px;
+            border: 1px solid var(--color-menu);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .music-btn {
+            background: var(--color-menu);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transicion-rapida);
+            color: white;
+        }
+
+        .music-btn:hover {
+            background: var(--color-menu-hover);
+            transform: scale(1.1);
+        }
+
+        .music-btn i {
+            font-size: 1.2rem;
+        }
+
+        /* Ajustes responsivos */
+        @media (max-width: 768px) {
+            .hud-panel {
+                padding: 1.5rem;
+                margin: 1rem auto;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .btn-cocina {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .music-controls {
+                bottom: 10px;
+                right: 10px;
+                padding: 8px 12px;
+            }
+
+            .music-btn {
+                width: 35px;
+                height: 35px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hud-panel {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .creditos-avatar {
+                width: 80px;
+                height: 80px;
+            }
+
+            .music-controls {
+                flex-direction: column;
+                border-radius: 15px;
+                padding: 10px;
+            }
+        }
+
+        /* Tema claro */
+        body.tema-claro {
+            --color-texto: #000000;
+            --color-fondo: #f5f5f5;
+            --color-fondo-panel: rgba(255, 255, 255, 0.9);
+        }
+
+        body.tema-claro .update-item,
+        body.tema-claro footer {
+            color: #333333;
+        }
+
+        body.tema-claro .close-btn {
+            color: #333333;
+        }
+
+        body.tema-claro .close-btn:hover {
+            color: var(--color-menu);
+        }
+    </style>
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Fondo oscurecido -->
+    <div id="fondo-oscuro"></div>
+
+    <!-- Banner de actualización (clickeable) -->
+    <div id="update-banner">
+        ⚡ Actualización 0.1.2 - Haz clic para ver los cambios (o desaparecerá en 10 segundos)
+    </div>
+
+    <!-- Selector de color -->
+    <div id="color-picker-container">
+        <label for="color-picker">Color del menú:</label>
+        <input type="color" id="color-picker" class="form-control form-control-color" value="#f39c12" title="Elige el color del menú">
+    </div>
+
+    <!-- Controles de música -->
+    <div class="music-controls">
+        <button id="btn-play-music" class="music-btn" title="Reproducir música">
+            <i class="fas fa-play"></i>
+        </button>
+        <button id="btn-pause-music" class="music-btn" title="Pausar música">
+            <i class="fas fa-pause"></i>
+        </button>
+        <button id="btn-stop-music" class="music-btn" title="Detener música">
+            <i class="fas fa-stop"></i>
+        </button>
+    </div>
+
+    <main class="container flex-grow-1 d-flex align-items-center justify-content-center">
+        <!-- Menú principal -->
+        <section id="menu-principal" class="hud-panel w-100">
+            <h1 class="text-center mb-4">Friday Night Cooking</h1>
+            <div class="d-grid gap-2">
+                <button id="btn-jugar" class="btn-cocina">Jugar</button>
+                <button id="btn-crear" class="btn-cocina" disabled>Crear</button>
+                <button id="btn-actualizacion" class="btn-cocina">Actualizaciones</button>
+                <button id="btn-opciones" class="btn-cocina">Opciones</button>
+                <button id="btn-creditos" class="btn-cocina">Créditos</button>
+                <button id="btn-salir" class="btn-cocina">Salir</button>
+            </div>
+        </section>
+
+        <!-- Panel de actualización -->
+        <section id="panel-actualizacion" class="hud-panel popup-panel w-100">
+            <button id="btn-volver-menu-act" class="close-btn" aria-label="Cerrar actualización">✕</button>
+            <h2 class="text-center mb-4">Últimas Actualizaciones</h2>
+            <div class="update-item">
+                <h4>Versión 0.1.2 <span class="badge bg-success ms-2">Nuevo</span></h4>
+                <ul>
+                    <li>Corrección de errores en el sistema de guardado</li>
+                    <li>Mejora en la interfaz de usuario</li>
+                    <li>Nuevo sistema de notificaciones</li>
+                    <li>Optimización de rendimiento</li>
+                </ul>
+                <small class="text-muted">Publicado: 15/06/2023</small>
+            </div>
+            <div class="update-item">
+                <h4>Versión 0.1.1</h4>
+                <ul>
+                    <li>Primera versión pública</li>
+                    <li>Sistema básico de cocina implementado</li>
+                    <li>Menú principal funcional</li>
+                </ul>
+                <small class="text-muted">Publicado: 01/06/2023</small>
+            </div>
+        </section>
+
+        <!-- Panel de opciones -->
+        <section id="panel-opciones" class="hud-panel popup-panel w-100" role="dialog" aria-modal="true" aria-labelledby="opciones-title">
+            <button id="btn-volver-menu" class="close-btn" aria-label="Cerrar opciones">✕</button>
+            <h2 id="opciones-title" class="text-center mb-4">Opciones</h2>
+            <div class="mb-4">
+                <label for="selector-tema" class="form-label">Tema:</label>
+                <select id="selector-tema" class="form-select">
+                    <option value="automatico">Automático (Sistema)</option>
+                    <option value="light">Claro</option>
+                    <option value="dark">Oscuro</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Volumen música: <span id="valor-volumen-musica">50</span>%</label>
+                <input type="range" id="volumen-musica" class="form-range" min="0" max="100" step="1" value="50">
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Volumen sonidos: <span id="valor-volumen-sonido">50</span>%</label>
+                <input type="range" id="volumen-sonido" class="form-range" min="0" max="100" step="1" value="50">
+            </div>
+            <div class="form-check form-switch mb-4">
+                <input class="form-check-input" type="checkbox" id="auto-play-music">
+                <label class="form-check-label" for="auto-play-music">Reproducir música automáticamente</label>
+            </div>
+            <div class="text-center mt-4">
+                <button class="btn-cocina" id="btn-guardar-opciones">Guardar Configuración</button>
+            </div>
+        </section>
+
+        <!-- Panel de créditos -->
+        <section id="panel-creditos" class="hud-panel popup-panel w-100" role="dialog" aria-modal="true" aria-labelledby="creditos-title">
+            <button id="btn-cerrar-creditos" class="close-btn" aria-label="Cerrar créditos">✕</button>
+            <h2 id="creditos-title" class="text-center mb-4">Créditos</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-4">
+                    <img src="assets/images/9fc2a9df8789de0960974d06923f1929.png" alt="Desarrollador" class="creditos-avatar">
+                    <h4>Just Fenix</h4>
+                    <p class="text-muted">Desarrollador Principal</p>
+                </div>
+                <div class="col-md-6 text-center mb-4">
+                    <img src="assets/images/c323129d4ccb30882fcb89814a94b9f8.png" alt="Desarrollador" class="creditos-avatar">
+                    <h4>Less</h4>
+                    <p class="text-muted">Idea original</p>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <div class="update-item">
+                    <h5>Gracias por jugar</h5>
+                    <p class="mb-0">FNC Engine 0.1.2</p>
+                    <small class="text-muted">© 2025 Todos los derechos reservados</small>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center py-3">
+        © FNC Engine 0.1.2 - Todos los derechos reservados
+    </footer>
+
+    <!-- Audio para música de fondo -->
+    <audio id="bg-music" loop>
+        <!-- Reemplaza con tu archivo de música -->
+        <source src="assets/music/lo-fi-1_04-15745.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <!-- Audio para efectos de sonido -->
+    <audio id="sound-effect">
+        <!-- Reemplaza con tu archivo de efecto de sonido -->
+        <source src="assets/sounds/knife-slice-41231.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const elementos = {
+            menuPrincipal: document.getElementById('menu-principal'),
+            panelActualizacion: document.getElementById('panel-actualizacion'),
+            panelOpciones: document.getElementById('panel-opciones'),
+            panelCreditos: document.getElementById('panel-creditos'),
+            btnJugar: document.getElementById('btn-jugar'),
+            btnActualizacion: document.getElementById('btn-actualizacion'),
+            btnOpciones: document.getElementById('btn-opciones'),
+            btnCreditos: document.getElementById('btn-creditos'),
+            btnSalir: document.getElementById('btn-salir'),
+            btnVolverMenuAct: document.getElementById('btn-volver-menu-act'),
+            btnVolverMenu: document.getElementById('btn-volver-menu'),
+            btnCerrarCreditos: document.getElementById('btn-cerrar-creditos'),
+            btnGuardarOpciones: document.getElementById('btn-guardar-opciones'),
+            colorPicker: document.getElementById('color-picker'),
+            selectorTema: document.getElementById('selector-tema'),
+            volumenMusica: document.getElementById('volumen-musica'),
+            volumenSonido: document.getElementById('volumen-sonido'),
+            valorVolumenMusica: document.getElementById('valor-volumen-musica'),
+            valorVolumenSonido: document.getElementById('valor-volumen-sonido'),
+            updateBanner: document.getElementById('update-banner'),
+            fondoOscuro: document.getElementById('fondo-oscuro'),
+            bgMusic: document.getElementById('bg-music'),
+            soundEffect: document.getElementById('sound-effect'),
+            btnPlayMusic: document.getElementById('btn-play-music'),
+            btnPauseMusic: document.getElementById('btn-pause-music'),
+            btnStopMusic: document.getElementById('btn-stop-music'),
+            autoPlayMusic: document.getElementById('auto-play-music')
+        };
+
+        // Inicializar controles de música
+        function initMusicControls() {
+            // Configurar eventos para los botones de música
+            elementos.btnPlayMusic.addEventListener('click', () => {
+                elementos.bgMusic.play();
+                playSoundEffect();
+            });
+            
+            elementos.btnPauseMusic.addEventListener('click', () => {
+                elementos.bgMusic.pause();
+                playSoundEffect();
+            });
+            
+            elementos.btnStopMusic.addEventListener('click', () => {
+                elementos.bgMusic.pause();
+                elementos.bgMusic.currentTime = 0;
+                playSoundEffect();
+            });
+            
+            // Actualizar volumen cuando cambia el control deslizante
+            elementos.volumenMusica.addEventListener('input', (e) => {
+                const volumen = e.target.value / 100;
+                elementos.bgMusic.volume = volumen;
+                elementos.valorVolumenMusica.textContent = e.target.value;
+            });
+            
+            // Reproducir automáticamente si está configurado
+            if (localStorage.getItem('autoPlayMusic')) {
+                elementos.autoPlayMusic.checked = true;
+                // Esperar a la interacción del usuario para reproducir
+                document.addEventListener('click', function primeraInteraccion() {
+                    if (elementos.autoPlayMusic.checked) {
+                        elementos.bgMusic.play().catch(e => console.log("Auto-play bloqueado:", e));
+                    }
+                    document.removeEventListener('click', primeraInteraccion);
+                }, { once: true });
+            }
+        }
+
+        // Reproducir efecto de sonido
+        function playSoundEffect() {
+            elementos.soundEffect.currentTime = 0;
+            elementos.soundEffect.volume = elementos.volumenSonido.value / 100;
+            elementos.soundEffect.play().catch(e => console.log("Error al reproducir sonido:", e));
+        }
+
+        function mostrarPanel(panel) {
+            elementos.fondoOscuro.classList.add('active');
+            panel.classList.add('active');
+            
+            // Deshabilitar scroll del body
+            document.body.style.overflow = 'hidden';
+            
+            // Reproducir efecto de sonido
+            playSoundEffect();
+        }
+
+        function ocultarPaneles() {
+            document.querySelectorAll('.popup-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            elementos.fondoOscuro.classList.remove('active');
+            
+            // Habilitar scroll del body
+            document.body.style.overflow = '';
+            
+            // Reproducir efecto de sonido
+            playSoundEffect();
+        }
+
+        function volverAlMenu() {
+            ocultarPaneles();
+            
+            // Pequeña animación de "shake" al volver al menú
+            elementos.menuPrincipal.style.animation = 'none';
+            void elementos.menuPrincipal.offsetWidth; // Trigger reflow
+            elementos.menuPrincipal.style.animation = 'shake 0.5s';
+            
+            // Reproducir efecto de sonido
+            playSoundEffect();
+        }
+
+        // Configurar eventos
+        elementos.btnJugar.addEventListener('click', () => {
+            alert('¡Función de jugar habilitada en la próxima actualización!');
+            playSoundEffect();
+        });
+
+        elementos.btnActualizacion.addEventListener('click', () => {
+            mostrarPanel(elementos.panelActualizacion);
+        });
+
+        elementos.btnOpciones.addEventListener('click', () => {
+            mostrarPanel(elementos.panelOpciones);
+        });
+
+        elementos.btnCreditos.addEventListener('click', () => {
+            mostrarPanel(elementos.panelCreditos);
+        });
+
+        elementos.btnSalir.addEventListener('click', () => {
+            if (confirm('¿Estás seguro que quieres salir del juego?')) {
+                // Animación de despedida
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '0';
+                
+                setTimeout(() => {
+                    alert('Gracias por jugar Friday Night Cooking. ¡Hasta pronto!');
+                    // En un entorno real, aquí se cerraría la ventana o aplicación
+                }, 500);
+            }
+            playSoundEffect();
+        });
+
+        elementos.btnVolverMenuAct.addEventListener('click', volverAlMenu);
+        elementos.btnVolverMenu.addEventListener('click', volverAlMenu);
+        elementos.btnCerrarCreditos.addEventListener('click', volverAlMenu);
+        elementos.fondoOscuro.addEventListener('click', volverAlMenu);
+
+        elementos.btnGuardarOpciones.addEventListener('click', () => {
+            // Mostrar feedback visual de que se guardó
+            const btn = elementos.btnGuardarOpciones;
+            btn.textContent = '✓ Guardado';
+            btn.style.backgroundColor = '#2ecc71';
+            
+            setTimeout(() => {
+                btn.textContent = 'Guardar Configuración';
+                btn.style.backgroundColor = '';
+                volverAlMenu();
+            }, 1500);
+            
+            // Guardar preferencia de auto-reproducción
+            localStorage.setItem('autoPlayMusic', elementos.autoPlayMusic.checked);
+            
+            // Reproducir efecto de sonido
+            playSoundEffect();
+        });
+
+        // Configurar banner de actualización
+        elementos.updateBanner.addEventListener('click', () => {
+            elementos.updateBanner.style.display = 'none';
+            localStorage.setItem('bannerOculto', 'true');
+            mostrarPanel(elementos.panelActualizacion);
+        });
+
+        // Ocultar banner después de 10 segundos si no está oculto
+        setTimeout(() => {
+            if (!localStorage.getItem('bannerOculto')) {
+                elementos.updateBanner.style.opacity = '0';
+                setTimeout(() => {
+                    elementos.updateBanner.style.display = 'none';
+                }, 500);
+            }
+        }, 10000);
+
+        // Configurar selector de color
+        elementos.colorPicker.addEventListener('input', (e) => {
+            const color = e.target.value;
+            document.documentElement.style.setProperty('--color-menu', color);
+            document.documentElement.style.setProperty('--color-menu-hover', 
+                ajustarBrillo(color, 20)); // Hacer más claro para el hover
+            localStorage.setItem('colorMenu', color);
+        });
+
+        // Función para ajustar brillo de color
+        function ajustarBrillo(hex, percent) {
+            // Convertir HEX a RGB
+            let r = parseInt(hex.substring(1, 3), 16);
+            let g = parseInt(hex.substring(3, 5), 16);
+            let b = parseInt(hex.substring(5, 7), 16);
+
+            // Ajustar brillo
+            r = Math.min(255, r + r * percent / 100);
+            g = Math.min(255, g + g * percent / 100);
+            b = Math.min(255, b + b * percent / 100);
+
+            // Convertir de nuevo a HEX
+            r = Math.round(r).toString(16).padStart(2, '0');
+            g = Math.round(g).toString(16).padStart(2, '0');
+            b = Math.round(b).toString(16).padStart(2, '0');
+
+            return `#${r}${g}${b}`;
+        }
+
+        // Configurar controles de volumen
+        elementos.volumenMusica.addEventListener('input', (e) => {
+            elementos.valorVolumenMusica.textContent = e.target.value;
+            elementos.bgMusic.volume = e.target.value / 100;
+        });
+
+        elementos.volumenSonido.addEventListener('input', (e) => {
+            elementos.valorVolumenSonido.textContent = e.target.value;
+            elementos.soundEffect.volume = e.target.value / 100;
+        });
+
+        // Cargar preferencias guardadas
+        function cargarPreferencias() {
+            const colorGuardado = localStorage.getItem('colorMenu');
+            if (colorGuardado) {
+                elementos.colorPicker.value = colorGuardado;
+                document.documentElement.style.setProperty('--color-menu', colorGuardado);
+                document.documentElement.style.setProperty('--color-menu-hover', 
+                    ajustarBrillo(colorGuardado, 20));
+            }
+
+            if (localStorage.getItem('bannerOculto')) {
+                elementos.updateBanner.style.display = 'none';
+            }
+            
+            // Cargar tema preferido si existe
+            const temaGuardado = localStorage.getItem('temaPreferido');
+            if (temaGuardado) {
+                elementos.selectorTema.value = temaGuardado;
+                aplicarTema(temaGuardado);
+            }
+            
+            // Cargar configuraciones de volumen
+            const volMusica = localStorage.getItem('volumenMusica');
+            if (volMusica) {
+                elementos.volumenMusica.value = volMusica;
+                elementos.valorVolumenMusica.textContent = volMusica;
+                elementos.bgMusic.volume = volMusica / 100;
+            }
+            
+            const volSonido = localStorage.getItem('volumenSonido');
+            if (volSonido) {
+                elementos.volumenSonido.value = volSonido;
+                elementos.valorVolumenSonido.textContent = volSonido;
+                elementos.soundEffect.volume = volSonido / 100;
+            }
+        }
+
+        // Aplicar tema seleccionado
+        function aplicarTema(tema) {
+            if (tema === 'light') {
+                document.body.classList.add('tema-claro');
+                document.body.classList.remove('tema-oscuro');
+            } else if (tema === 'dark') {
+                document.body.classList.remove('tema-claro');
+                document.body.classList.add('tema-oscuro');
+            } else {
+                // Tema automático (basado en preferencias del sistema)
+                document.body.classList.remove('tema-claro', 'tema-oscuro');
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                    document.body.classList.add('tema-claro');
+                } else {
+                    document.body.classList.add('tema-oscuro');
+                }
+            }
+        }
+
+        // Configurar selector de tema
+        elementos.selectorTema.addEventListener('change', (e) => {
+            aplicarTema(e.target.value);
+        });
+
+        // Configurar detector de cambios de tema del sistema
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
+                if (elementos.selectorTema.value === 'automatico') {
+                    aplicarTema(e.matches ? 'light' : 'dark');
+                }
+            });
+        }
+
+        // Guardar configuración al hacer clic en el botón guardar
+        elementos.btnGuardarOpciones.addEventListener('click', () => {
+            localStorage.setItem('temaPreferido', elementos.selectorTema.value);
+            localStorage.setItem('volumenMusica', elementos.volumenMusica.value);
+            localStorage.setItem('volumenSonido', elementos.volumenSonido.value);
+        });
+
+        // Inicializar
+        window.addEventListener('DOMContentLoaded', () => {
+            cargarPreferencias();
+            initMusicControls();
+            
+            // Configurar evento para botones (efecto de sonido)
+            document.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', playSoundEffect);
+            });
+        });
+
+        // Agregar animación de shake
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+            
+            /* Mejoras responsivas para pantallas muy pequeñas */
+            @media (max-width: 360px) {
+                .hud-panel {
+                    padding: 1rem;
+                    margin: 0.5rem auto;
+                }
+                
+                h1 {
+                    font-size: 1.5rem;
+                }
+                
+                .btn-cocina {
+                    padding: 8px 12px;
+                    font-size: 0.8rem;
+                }
+                
+                .music-controls {
+                    bottom: 5px;
+                    right: 5px;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
