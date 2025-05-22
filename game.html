@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friday Night Cooking - Juego</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-menu: #f39c12;
+            --color-menu-hover: #e67e22;
+            --color-texto: #ffffff;
+            --color-fondo: #121212;
+            --color-fondo-panel: rgba(0, 0, 0, 0.85);
+            --sombra-panel: 0 0 20px rgba(243, 156, 18, 0.3);
+            --transicion-rapida: all 0.25s ease;
+        }
+
+        body {
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .game-hud {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .hud-panel {
+            background-color: var(--color-fondo-panel);
+            border-radius: 10px;
+            padding: 10px 15px;
+            color: var(--color-texto);
+            border: 2px solid var(--color-menu);
+            box-shadow: var(--sombra-panel);
+            pointer-events: auto;
+        }
+
+        .ingredient {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+            z-index: 10;
+        }
+
+        .ingredient:hover {
+            transform: scale(1.1);
+        }
+
+        .ingredient:active {
+            transform: scale(0.9);
+        }
+
+        .recipe-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--color-fondo-panel);
+            border-radius: 10px;
+            padding: 15px;
+            border: 2px solid var(--color-menu);
+            box-shadow: var(--sombra-panel);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .recipe-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .recipe-item img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .progress-container {
+            width: 200px;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--color-menu);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .btn-game {
+            background-color: var(--color-menu);
+            border: none;
+            color: var(--color-texto);
+            padding: 8px 16px;
+            margin: 5px;
+            border-radius: 5px;
+            transition: var(--transicion-rapida);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-game:hover {
+            background-color: var(--color-menu-hover);
+            transform: translateY(-2px);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--color-menu);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+        .achievement-unlocked {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 3px solid var(--color-menu);
+            border-radius: 10px;
+            padding: 20px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .achievement-unlocked.show {
+            opacity: 1;
+        }
+
+        .achievement-icon-large {
+            font-size: 3rem;
+            color: var(--color-menu);
+            margin-bottom: 15px;
+        }
+
+        .secret-found {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .secret-found.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .secret-content {
+            background-color: var(--color-fondo-panel);
+            border: 3px solid #2ecc71;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .secret-title {
+            color: #2ecc71;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        /* Tema claro */
+        body.tema-claro {
+            --color-texto: #000000;
+            --color-fondo: #f5f5f5;
+            --color-fondo-panel: rgba(255, 255, 255, 0.9);
+        }
+
+        body.tema-claro .hud-panel,
+        body.tema-claro .recipe-panel {
+            color: #333333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="game-container">
+        <!-- Fondo del juego -->
+        <div id="game-background"
+            style="width:100%; height:100%; background-image:url('assets/images/kitchen-bg.jpg'); background-size:cover;">
+        </div>
+
+        <!-- HUD del juego -->
+        <div class="game-hud">
+            <div class="hud-panel">
+                <div>Tiempo: <span id="game-time">60</span>s</div>
+                <div>Puntuación: <span id="game-score">0</span></div>
+            </div>
+            <div class="hud-panel">
+                <button id="btn-pause" class="btn-game"><i class="fas fa-pause"></i></button>
+                <button id="btn-exit" class="btn-game"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </div>
+
+        <!-- Ingredientes aparecerán aquí dinámicamente -->
+
+        <!-- Panel de receta -->
+        <div class="recipe-panel">
+            <h4>Receta del día</h4>
+            <div id="current-recipe"></div>
+            <div class="progress-container">
+                <div class="progress-bar" id="recipe-progress"></div>
+            </div>
+            <small>Recolecta los ingredientes necesarios</small>
+        </div>
+
+        <!-- Notificación -->
+        <div class="notification" id="notification"></div>
+
+        <!-- Logro desbloqueado -->
+        <div class="achievement-unlocked" id="achievement-unlocked">
+            <div class="achievement-icon-large">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <h3>Logro desbloqueado!</h3>
+            <h4 id="achievement-name">Nombre del logro</h4>
+            <p id="achievement-desc">Descripción del logro</p>
+            <button class="btn-game" id="btn-close-achievement">Continuar</button>
+        </div>
+
+        <!-- Secreto encontrado -->
+        <div class="secret-found" id="secret-found">
+            <div class="secret-content">
+                <h3 class="secret-title">SECRETO DESCUBIERTO!</h3>
+                <h4 id="secret-name">Nombre del secreto</h4>
+                <p id="secret-desc">Descripción del secreto</p>
+                <button class="btn-game" id="btn-close-secret" style="background-color: #2ecc71;">Continuar</button>
+            </div>
+        </div>
+
+        <!-- Menú de pausa -->
+        <div class="secret-found" id="pause-menu">
+            <div class="secret-content">
+                <h3>JUEGO EN PAUSA</h3>
+                <div class="d-grid gap-2">
+                    <button class="btn-game" id="btn-resume">Continuar</button>
+                    <button class="btn-game" id="btn-restart">Reiniciar</button>
+                    <button class="btn-game" id="btn-exit-menu">Salir al menú</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio para efectos de sonido -->
+    <audio id="collect-sound">
+        <source src="assets/sounds/collect-item.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="complete-sound">
+        <source src="assets/sounds/recipe-complete.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="achievement-sound">
+        <source src="assets/sounds/achievement-unlocked.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Scripts -->
+     <script>
+        // Configuración del juego - MEJORADO
+        const gameConfig = {
+            timeLimit: 60,
+            ingredientSpawnRate: 1500,
+            maxIngredients: 10,
+            recipes: [
+                {
+                    name: "Ensalada Simple",
+                    ingredients: ["Lechuga", "Tomate", "Pepino"],
+                    difficulty: 1
+                },
+                {
+                    name: "Sándwich",
+                    ingredients: ["Pan", "Jamón", "Queso", "Lechuga"],
+                    difficulty: 2
+                },
+                {
+                    name: "Pasta",
+                    ingredients: ["Pasta", "Salsa de Tomate", "Queso"],
+                    difficulty: 3
+                },
+                {
+                    name: "Pizza",
+                    ingredients: ["Masa", "Salsa de Tomate", "Queso", "Pepperoni"],
+                    difficulty: 4
+                }
+            ],
+            ingredients: [
+                { name: "Lechuga", image: "assets/images/ingredients/lechuga.png" },
+                { name: "Tomate", image: "assets/images/ingredients/tomate.png" },
+                { name: "Pepino", image: "assets/images/ingredients/pepino.png" },
+                { name: "Pan", image: "assets/images/ingredients/pan.png" },
+                { name: "Jamón", image: "assets/images/ingredients/jamon.png" },
+                { name: "Queso", image: "assets/images/ingredients/queso.png" },
+                { name: "Pasta", image: "assets/images/ingredients/pasta.png" },
+                { name: "Salsa de Tomate", image: "assets/images/ingredients/salsa-tomate.png" },
+                { name: "Masa", image: "assets/images/ingredients/masa.png" },
+                { name: "Pepperoni", image: "assets/images/ingredients/pepperoni.png" },
+                { name: "Huevo", image: "assets/images/ingredients/huevo.png" },
+                { name: "Champiñón", image: "assets/images/ingredients/champinon.png" },
+                { name: "Cebolla", image: "assets/images/ingredients/cebolla.png" },
+                { name: "Ajo", image: "assets/images/ingredients/ajo.png" },
+                { name: "Pimiento", image: "assets/images/ingredients/pimiento.png" }
+            ],
+            secretIngredients: [
+                { name: "Ingrediente Misterioso", image: "assets/images/ingredients/mystery.png", secretId: 3 }
+            ]
+        };
+
+        // Estado del juego - MEJORADO
+        let gameState = {
+            timeLeft: gameConfig.timeLimit,
+            score: 0,
+            isPaused: false,
+            isGameOver: false,
+            currentRecipe: null,
+            collectedIngredients: [],
+            activeIngredients: [],
+            achievements: {
+                firstRecipe: false,
+                fiveRecipes: false,
+                tenRecipes: false,
+                secretFound: false,
+                perfectRecipe: false,
+                timeChallenge: false
+            },
+            stats: {
+                recipesCompleted: 0,
+                ingredientsCollected: 0,
+                clicks: 0,
+                playTime: 0
+            },
+            secretsFound: []
+        };
+
+        // Elementos del DOM
+        const gameTimeEl = document.getElementById('game-time');
+        const gameScoreEl = document.getElementById('game-score');
+        const currentRecipeEl = document.getElementById('current-recipe');
+        const recipeProgressEl = document.getElementById('recipe-progress');
+        const notificationEl = document.getElementById('notification');
+        const achievementUnlockedEl = document.getElementById('achievement-unlocked');
+        const achievementNameEl = document.getElementById('achievement-name');
+        const achievementDescEl = document.getElementById('achievement-desc');
+        const secretFoundEl = document.getElementById('secret-found');
+        const secretNameEl = document.getElementById('secret-name');
+        const secretDescEl = document.getElementById('secret-desc');
+        const pauseMenuEl = document.getElementById('pause-menu');
+        const gameContainer = document.querySelector('.game-container');
+
+        // Sonidos
+        const collectSound = document.getElementById('collect-sound');
+        const completeSound = document.getElementById('complete-sound');
+        const achievementSound = document.getElementById('achievement-sound');
+
+        // Botones
+        document.getElementById('btn-pause').addEventListener('click', pauseGame);
+        document.getElementById('btn-exit').addEventListener('click', exitGame);
+        document.getElementById('btn-resume').addEventListener('click', resumeGame);
+        document.getElementById('btn-restart').addEventListener('click', restartGame);
+        document.getElementById('btn-exit-menu').addEventListener('click', exitGame);
+        document.getElementById('btn-close-achievement').addEventListener('click', () => {
+            achievementUnlockedEl.classList.remove('show');
+        });
+        document.getElementById('btn-close-secret').addEventListener('click', () => {
+            secretFoundEl.classList.remove('show');
+        });
+
+        // Inicializar el juego - MEJORADO
+        function initGame() {
+            // Cargar estado guardado
+            const savedState = JSON.parse(localStorage.getItem('fnc-game-state'));
+            
+            if (savedState) {
+                gameState = {
+                    ...gameState,
+                    achievements: savedState.achievements || gameState.achievements,
+                    stats: savedState.stats || gameState.stats,
+                    secretsFound: savedState.secretsFound || gameState.secretsFound
+                };
+            }
+
+            // Reiniciar estado temporal
+            gameState.timeLeft = gameConfig.timeLimit;
+            gameState.score = 0;
+            gameState.isPaused = false;
+            gameState.isGameOver = false;
+            gameState.currentRecipe = null;
+            gameState.collectedIngredients = [];
+            gameState.activeIngredients = [];
+
+            updateUI();
+            selectRandomRecipe();
+            startGameLoop();
+            startIngredientSpawner();
+            loadSettings();
+        }
+
+        // Bucle principal del juego - MEJORADO
+        function startGameLoop() {
+            const gameLoop = setInterval(() => {
+                if (gameState.isPaused || gameState.isGameOver) return;
+
+                gameState.timeLeft--;
+                gameState.stats.playTime++;
+                gameTimeEl.textContent = gameState.timeLeft;
+
+                if (gameState.timeLeft <= 0) {
+                    clearInterval(gameLoop);
+                    endGame();
+                }
+
+                // Logro: Sobrevivir 30 segundos
+                if (gameConfig.timeLimit - gameState.timeLeft === 30 && !gameState.achievements.timeChallenge) {
+                    unlockAchievement("Supervivencia", "Sobrevive al menos 30 segundos en una partida", "timeChallenge");
+                }
+            }, 1000);
+        }
+
+        // Generador de ingredientes - MEJORADO
+        function startIngredientSpawner() {
+            const spawner = setInterval(() => {
+                if (gameState.isPaused || gameState.isGameOver) {
+                    clearInterval(spawner);
+                    return;
+                }
+
+                if (gameState.activeIngredients.length < gameConfig.maxIngredients) {
+                    spawnIngredient();
+                }
+            }, gameConfig.ingredientSpawnRate);
+        }
+
+        // Generar un ingrediente aleatorio - MEJORADO
+        function spawnIngredient() {
+            // 5% de chance de spawnear un ingrediente secreto
+            const isSecret = Math.random() < 0.05 && !gameState.secretsFound.includes(3);
+            const ingredientsPool = isSecret ? gameConfig.secretIngredients : gameConfig.ingredients;
+            const ingredient = ingredientsPool[Math.floor(Math.random() * ingredientsPool.length)];
+
+            const element = document.createElement('div');
+            element.className = 'ingredient';
+            
+            // Usar imagen de respaldo si la principal falla
+            element.style.backgroundImage = `url('${ingredient.image}'), url('assets/images/ingredients/default.png')`;
+
+            // Posición aleatoria evitando bordes y superposiciones
+            const maxX = gameContainer.clientWidth - 100;
+            const maxY = gameContainer.clientHeight - 150; // Dejar espacio para el panel de receta
+            const posX = Math.max(20, Math.min(maxX - 20, Math.floor(Math.random() * maxX)));
+            const posY = Math.max(20, Math.min(maxY - 20, Math.floor(Math.random() * maxY)));
+
+            element.style.left = `${posX}px`;
+            element.style.top = `${posY}px`;
+
+            // Almacenar datos del ingrediente
+            element.dataset.name = ingredient.name;
+            if (ingredient.secretId) {
+                element.dataset.secretId = ingredient.secretId;
+            }
+
+            element.addEventListener('click', collectIngredient);
+            gameContainer.appendChild(element);
+
+            gameState.activeIngredients.push({
+                element: element,
+                name: ingredient.name,
+                secretId: ingredient.secretId,
+                x: posX,
+                y: posY
+            });
+        }
+
+        // Recolectar un ingrediente - MEJORADO
+        function collectIngredient(e) {
+            if (gameState.isPaused || gameState.isGameOver) return;
+
+            gameState.stats.clicks++;
+            const ingredientElement = e.target;
+            const ingredientName = ingredientElement.dataset.name;
+            const secretId = ingredientElement.dataset.secretId;
+
+            // Animación al recolectar
+            ingredientElement.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                ingredientElement.remove();
+            }, 100);
+
+            // Eliminar de los ingredientes activos
+            gameState.activeIngredients = gameState.activeIngredients.filter(
+                ing => ing.element !== ingredientElement
+            );
+
+            // Reproducir sonido
+            playSound(collectSound);
+
+            // Añadir a los ingredientes recolectados
+            gameState.collectedIngredients.push(ingredientName);
+            gameState.stats.ingredientsCollected++;
+
+            // Verificar si es un ingrediente secreto
+            if (secretId && !gameState.secretsFound.includes(parseInt(secretId))) {
+                gameState.secretsFound.push(parseInt(secretId));
+                showSecretFound(secretId);
+                // Desbloquear logro de secreto
+                if (!gameState.achievements.secretFound) {
+                    unlockAchievement("Cazador de secretos", "Descubre tu primer secreto oculto", "secretFound");
+                    // También actualizar el logro en index.html
+                    saveAchievement('secret_finder');
+                }
+            }
+
+            // Verificar receta actual
+            checkRecipe();
+            updateUI();
+        }
+
+        // Reproducir sonido con manejo de errores
+        function playSound(audioElement) {
+            try {
+                audioElement.currentTime = 0;
+                audioElement.play().catch(e => console.log("No se pudo reproducir sonido:", e));
+            } catch (e) {
+                console.log("Error al reproducir sonido:", e);
+            }
+        }
+
+        // Seleccionar una receta aleatoria - MEJORADO
+        function selectRandomRecipe() {
+            const recipe = gameConfig.recipes[Math.floor(Math.random() * gameConfig.recipes.length)];
+            gameState.currentRecipe = {
+                name: recipe.name,
+                ingredients: [...recipe.ingredients],
+                originalIngredients: [...recipe.ingredients],
+                difficulty: recipe.difficulty
+            };
+
+            renderRecipe();
+        }
+
+        // Renderizar la receta actual - MEJORADO
+        function renderRecipe() {
+            currentRecipeEl.innerHTML = `
+                <h5>${gameState.currentRecipe.name}</h5>
+                ${gameState.currentRecipe.originalIngredients.map(ing => {
+                    // Buscar la imagen del ingrediente
+                    const ingredient = gameConfig.ingredients.find(i => i.name === ing) || 
+                                     gameConfig.secretIngredients.find(i => i.name === ing);
+                    const imageSrc = ingredient ? ingredient.image : 'assets/images/ingredients/default.png';
+                    
+                    return `
+                    <div class="recipe-item">
+                        <img src="${imageSrc}" alt="${ing}" onerror="this.src='assets/images/ingredients/default.png'">
+                        <span>${ing}</span>
+                    </div>
+                    `;
+                }).join('')}
+            `;
+
+            updateRecipeProgress();
+        }
+
+        // Verificar si se completó la receta - MEJORADO
+        function checkRecipe() {
+            const currentIngredients = [...gameState.currentRecipe.ingredients];
+            const collected = [...gameState.collectedIngredients];
+            let perfectRecipe = true;
+
+            // Verificar cada ingrediente recolectado
+            for (let i = 0; i < collected.length; i++) {
+                const index = currentIngredients.indexOf(collected[i]);
+                if (index !== -1) {
+                    currentIngredients.splice(index, 1);
+                } else {
+                    // Ingrediente extra no necesario
+                    perfectRecipe = false;
+                }
+            }
+
+            gameState.currentRecipe.ingredients = currentIngredients;
+            gameState.collectedIngredients = [];
+
+            if (currentIngredients.length === 0) {
+                completeRecipe(perfectRecipe);
+            }
+
+            updateRecipeProgress();
+        }
+
+        // Completar la receta actual - MEJORADO
+        function completeRecipe(isPerfect) {
+            // Calcular puntuación basada en la dificultad
+            const difficulty = gameState.currentRecipe.difficulty;
+            let points = difficulty * 10;
+            
+            // Bonus por receta perfecta
+            if (isPerfect) {
+                points += 5;
+                if (!gameState.achievements.perfectRecipe) {
+                    unlockAchievement("Perfeccionista", "Completa una receta sin ingredientes extras", "perfectRecipe");
+                }
+            }
+
+            gameState.score += points;
+            gameState.stats.recipesCompleted++;
+
+            // Mostrar notificación
+            showNotification(`¡Receta completada! +${points} puntos`);
+
+            // Reproducir sonido
+            playSound(completeSound);
+
+            // Verificar logros
+            checkAchievements();
+
+            // Guardar estadísticas
+            saveGameStats();
+
+            // Seleccionar nueva receta
+            selectRandomRecipe();
+        }
+
+        // Verificar logros - MEJORADO
+        function checkAchievements() {
+            // Primer receta completada
+            if (gameState.stats.recipesCompleted === 1 && !gameState.achievements.firstRecipe) {
+                unlockAchievement("Primeros pasos", "Completa tu primera receta", "firstRecipe");
+            }
+
+            // 5 recetas completadas
+            if (gameState.stats.recipesCompleted === 5 && !gameState.achievements.fiveRecipes) {
+                unlockAchievement("Chef novato", "Completa 5 recetas", "fiveRecipes");
+            }
+
+            // 10 recetas completadas
+            if (gameState.stats.recipesCompleted === 10 && !gameState.achievements.tenRecipes) {
+                unlockAchievement("Chef experimentado", "Completa 10 recetas", "tenRecipes");
+            }
+        }
+
+        // Desbloquear logro - MEJORADO
+        function unlockAchievement(name, description, key) {
+            gameState.achievements[key] = true;
+
+            // Mostrar notificación
+            achievementNameEl.textContent = name;
+            achievementDescEl.textContent = description;
+            achievementUnlockedEl.classList.add('show');
+
+            // Reproducir sonido
+            playSound(achievementSound);
+
+            // Guardar en localStorage
+            saveAchievement(key);
+            
+            // También guardar en los logros generales
+            const achievementKey = key === 'firstRecipe' ? 'first_recipe' : 
+                                 key === 'fiveRecipes' ? 'five_recipes' :
+                                 key === 'tenRecipes' ? 'ten_recipes' :
+                                 key === 'secretFound' ? 'secret_finder' :
+                                 key === 'perfectRecipe' ? 'perfect_recipe' :
+                                 key === 'timeChallenge' ? 'time_challenge' : key;
+            
+            if (achievementKey) {
+                saveGeneralAchievement(achievementKey);
+            }
+        }
+
+        // Guardar logro general (para index.html)
+        function saveGeneralAchievement(key) {
+            const achievements = JSON.parse(localStorage.getItem('fnc-achievements') || {});
+            achievements[key] = true;
+            localStorage.setItem('fnc-achievements', JSON.stringify(achievements));
+        }
+
+        // Mostrar secreto encontrado - MEJORADO
+        function showSecretFound(secretId) {
+            let secretName = "";
+            let secretDesc = "";
+
+            switch (parseInt(secretId)) {
+                case 3:
+                    secretName = "El ingrediente prohibido";
+                    secretDesc = "¡Encontraste el ingrediente misterioso que fue eliminado antes del lanzamiento!";
+                    break;
+            }
+
+            secretNameEl.textContent = secretName;
+            secretDescEl.textContent = secretDesc;
+            secretFoundEl.classList.add('show');
+
+            // Guardar en localStorage
+            saveSecret(secretId);
+            
+            // Marcar secreto como desbloqueado en index.html
+            markSecretAsUnlocked(secretId);
+        }
+
+        // Marcar secreto como desbloqueado en index.html
+        function markSecretAsUnlocked(secretId) {
+            const secrets = JSON.parse(localStorage.getItem('fnc-secrets') || []);
+            if (!secrets.includes(parseInt(secretId))) {
+                secrets.push(parseInt(secretId));
+                localStorage.setItem('fnc-secrets', JSON.stringify(secrets));
+            }
+        }
+
+        // ... (resto de las funciones se mantienen igual) ...
+
+        // Iniciar el juego cuando se carga la página
+        window.addEventListener('load', initGame);
+    </script>
+</body>
+
+</html>
