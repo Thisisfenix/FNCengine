@@ -495,6 +495,17 @@ function redirigirAJuego() {
     try {
         console.log("Preparando datos para game.html...");
         
+        // Asegurarse de que los secretos sean un array válido
+        const secretsStr = localStorage.getItem('fnc-secrets');
+        let secrets = [];
+        try {
+            secrets = secretsStr ? JSON.parse(secretsStr) : [];
+            if (!Array.isArray(secrets)) secrets = [];
+        } catch (e) {
+            console.error("Error al parsear secretos:", e);
+            secrets = [];
+        }
+
         const gameData = {
             colorMenu: localStorage.getItem('colorMenu') || '#f39c12',
             volumenMusica: localStorage.getItem('volumenMusica') || 50,
@@ -502,7 +513,7 @@ function redirigirAJuego() {
             dificultad: localStorage.getItem('dificultad') || 'normal',
             controles: localStorage.getItem('controles') || 'teclado',
             achievements: achievementsData,
-            secrets: JSON.parse(localStorage.getItem('fnc-secrets') || [])
+            secrets: secrets
         };
 
         console.log("Datos a enviar:", gameData);
@@ -510,11 +521,7 @@ function redirigirAJuego() {
         sessionStorage.setItem('fnc-gameData', JSON.stringify(gameData));
         console.log("Redirigiendo a game.html...");
         
-        if (window.location.pathname.endsWith('game.html')) {
-            window.location.reload();
-        } else {
-            window.location.href = 'game.html';
-        }
+        window.location.href = 'game.html';
         
     } catch (error) {
         console.error("Error al redirigir:", error);
@@ -523,46 +530,54 @@ function redirigirAJuego() {
 }
 
 function cargarDatosDesdeJuego() {
-    const gameData = JSON.parse(sessionStorage.getItem('fnc-gameData') || {});
-    
-    if (gameData.achievements) {
-        // Actualizar los logros locales con los del juego
-        const updatedAchievements = {
-            ...achievementsData,
-            ...gameData.achievements
-        };
+    try {
+        const gameDataStr = sessionStorage.getItem('fnc-gameData');
+        if (!gameDataStr) return;
+
+        const gameData = JSON.parse(gameDataStr);
         
-        localStorage.setItem('fnc-achievements', JSON.stringify(updatedAchievements));
-        sessionStorage.setItem('fnc-achievements', JSON.stringify(updatedAchievements));
-        achievementsData = updatedAchievements;
-        
-        // Actualizar la UI
-        for (const [id, unlocked] of Object.entries(gameData.achievements)) {
-            if (unlocked) {
-                const achievement = document.getElementById(`achievement-${id}`);
-                if (achievement) {
-                    achievement.classList.remove('achievement-locked');
-                    const progressBar = achievement.querySelector('.achievement-progress-bar');
-                    if (progressBar) {
-                        progressBar.style.width = '100%';
+        if (gameData.achievements) {
+            // Actualizar los logros locales con los del juego
+            const updatedAchievements = {
+                ...achievementsData,
+                ...gameData.achievements
+            };
+            
+            localStorage.setItem('fnc-achievements', JSON.stringify(updatedAchievements));
+            sessionStorage.setItem('fnc-achievements', JSON.stringify(updatedAchievements));
+            achievementsData = updatedAchievements;
+            
+            // Actualizar la UI
+            for (const [id, unlocked] of Object.entries(gameData.achievements)) {
+                if (unlocked) {
+                    const achievement = document.getElementById(`achievement-${id}`);
+                    if (achievement) {
+                        achievement.classList.remove('achievement-locked');
+                        const progressBar = achievement.querySelector('.achievement-progress-bar');
+                        if (progressBar) {
+                            progressBar.style.width = '100%';
+                        }
                     }
                 }
             }
         }
-    }
-    
-    if (gameData.secrets) {
-        localStorage.setItem('fnc-secrets', JSON.stringify(gameData.secrets));
-    }
+        
+        if (gameData.secrets && Array.isArray(gameData.secrets)) {
+            localStorage.setItem('fnc-secrets', JSON.stringify(gameData.secrets));
+        }
 
-    if (gameData.dificultad) {
-        localStorage.setItem('dificultad', gameData.dificultad);
-    }
+        if (gameData.dificultad) {
+            localStorage.setItem('dificultad', gameData.dificultad);
+        }
 
-    if (gameData.controles) {
-        localStorage.setItem('controles', gameData.controles);
+        if (gameData.controles) {
+            localStorage.setItem('controles', gameData.controles);
+        }
+    } catch (e) {
+        console.error("Error al cargar datos del juego:", e);
     }
 }
+
 
 function configurarSecretos() {
     if(localStorage.getItem('secret_unlocked')) {
