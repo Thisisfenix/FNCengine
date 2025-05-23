@@ -1,4 +1,4 @@
-// main.js - Contiene toda la lógica del menú principal y sincronización con el juego
+// main.js - Versión completa mejorada
 
 // Elementos del DOM
 const elementos = {
@@ -7,7 +7,9 @@ const elementos = {
     panelLogros: document.getElementById('panel-logros'),
     panelOpciones: document.getElementById('panel-opciones'),
     panelCreditos: document.getElementById('panel-creditos'),
+    panelSecretos: document.getElementById('panel-secretos'),
     btnJugar: document.getElementById('btn-jugar'),
+    btnSecretos: document.getElementById('btn-secretos'),
     btnActualizacion: document.getElementById('btn-actualizacion'),
     btnLogros: document.getElementById('btn-logros'),
     btnOpciones: document.getElementById('btn-opciones'),
@@ -17,10 +19,14 @@ const elementos = {
     btnVolverMenuLogros: document.getElementById('btn-volver-menu-logros'),
     btnVolverMenu: document.getElementById('btn-volver-menu'),
     btnCerrarCreditos: document.getElementById('btn-cerrar-creditos'),
+    btnCerrarSecretos: document.getElementById('btn-cerrar-secretos'),
     btnGuardarOpciones: document.getElementById('btn-guardar-opciones'),
     btnResetOpciones: document.getElementById('btn-reset-opciones'),
+    btnSubmitPassword: document.getElementById('submit-password'),
     colorPicker: document.getElementById('color-picker'),
     selectorTema: document.getElementById('selector-tema'),
+    selectorDificultad: document.getElementById('selector-dificultad'),
+    selectorControles: document.getElementById('selector-controles'),
     volumenMusica: document.getElementById('volumen-musica'),
     volumenSonido: document.getElementById('volumen-sonido'),
     valorVolumenMusica: document.getElementById('valor-volumen-musica'),
@@ -48,21 +54,26 @@ const elementos = {
     enableShake: document.getElementById('enable-shake'),
     showHints: document.getElementById('show-hints'),
     resetConfirm: document.getElementById('reset-confirm'),
+    inputPassword: document.getElementById('secret-password'),
     achievements: {
-        firstLaunch: document.getElementById('achievement-first_launch'),
-        updateChecker: document.getElementById('achievement-update_checker'),
-        optionsExplorer: document.getElementById('achievement-options_explorer'),
-        musicLover: document.getElementById('achievement-music_lover'),
-        colorChanger: document.getElementById('achievement-color_changer'),
-        secretFinder: document.getElementById('achievement-secret_finder'),
-        musicExplorer: document.getElementById('achievement-music_explorer'),
-        clickMaster: document.getElementById('achievement-click_master'),
-        firstRecipe: document.getElementById('achievement-first_recipe'),
-        fiveRecipes: document.getElementById('achievement-five_recipes'),
-        tenRecipes: document.getElementById('achievement-ten_recipes'),
-        perfectRecipe: document.getElementById('achievement-perfect_recipe'),
-        timeChallenge: document.getElementById('achievement-time_challenge'),
-        timeTraveler: document.getElementById('achievement-time_traveler')
+        firstLaunch: document.getElementById('achievement-firstLaunch'),
+        updateChecker: document.getElementById('achievement-updateChecker'),
+        optionsExplorer: document.getElementById('achievement-optionsExplorer'),
+        musicLover: document.getElementById('achievement-musicLover'),
+        colorChanger: document.getElementById('achievement-colorChanger'),
+        secretFinder: document.getElementById('achievement-secretFinder'),
+        musicExplorer: document.getElementById('achievement-musicExplorer'),
+        clickMaster: document.getElementById('achievement-clickMaster'),
+        firstRecipe: document.getElementById('achievement-firstRecipe'),
+        fiveRecipes: document.getElementById('achievement-fiveRecipes'),
+        tenRecipes: document.getElementById('achievement-tenRecipes'),
+        perfectRecipe: document.getElementById('achievement-perfectRecipe'),
+        timeChallenge: document.getElementById('achievement-timeChallenge'),
+        timeTraveler: document.getElementById('achievement-timeTraveler'),
+        masterChef: document.getElementById('achievement-masterChef'),
+        speedRunner: document.getElementById('achievement-speedRunner'),
+        collector: document.getElementById('achievement-collector'),
+        secretMaster: document.getElementById('achievement-secretMaster')
     },
     secretItems: {
         secret1: document.getElementById('secret-1'),
@@ -70,7 +81,8 @@ const elementos = {
         secret3: document.getElementById('secret-3'),
         secret4: document.getElementById('secret-4'),
         secret5: document.getElementById('secret-5'),
-        secret6: document.getElementById('secret-6')
+        secret6: document.getElementById('secret-6'),
+        secretPanel: document.getElementById('secret-panel')
     }
 };
 
@@ -87,15 +99,15 @@ const secretCodes = {
 };
 let clickCount = 0;
 let visitedHours = new Set();
+let achievementsData = {};
 
 // Inicializar controles de música
 function initMusicControls() {
-    // Configurar eventos de los botones de música
     elementos.btnPlayMusic.addEventListener('click', () => {
         musicTracks[currentMusicIndex].element.play();
         elementos.nombreMusica.textContent = musicTracks[currentMusicIndex].name;
         playSoundEffect();
-        unlockAchievement('music_lover');
+        unlockAchievement('musicLover');
         checkMusicExplorerAchievement();
     });
 
@@ -141,18 +153,15 @@ function initMusicControls() {
         elementos.valorVolumenMusica.textContent = e.target.value;
     });
 
-    // Configuración avanzada de música
     elementos.toggleAdvancedSettings.addEventListener('click', () => {
         elementos.advancedSettingsContent.classList.toggle('collapsed');
         elementos.toggleAdvancedSettings.classList.toggle('collapsed');
 
-        // Ajustar la altura máxima del contenido
         if (!elementos.advancedSettingsContent.classList.contains('collapsed')) {
             elementos.advancedSettingsContent.style.maxHeight = elementos.advancedSettingsContent.scrollHeight + 'px';
         }
     });
 
-    // Reproducción automática si está habilitada
     if (localStorage.getItem('autoPlayMusic')) {
         elementos.autoPlayMusic.checked = true;
         document.addEventListener('click', function primeraInteraccion() {
@@ -163,14 +172,12 @@ function initMusicControls() {
         }, { once: true });
     }
 
-    // Configurar el volumen inicial para todas las pistas
     const volMusica = localStorage.getItem('volumenMusica') || 50;
     musicTracks.forEach(track => {
         track.element.volume = volMusica / 100;
     });
 }
 
-// Cambiar música (siguiente/anterior)
 function changeMusic(direction) {
     musicTracks[currentMusicIndex].element.pause();
 
@@ -188,9 +195,8 @@ function changeMusic(direction) {
     checkMusicExplorerAchievement();
 }
 
-// Verificar si el jugador ha escuchado todas las canciones
 function checkMusicExplorerAchievement() {
-    if (localStorage.getItem('achievement_music_explorer')) return;
+    if (achievementsData.musicExplorer) return;
 
     const allHeard = musicTracks.every((track, index) => {
         return localStorage.getItem(`music_heard_${index}`) ||
@@ -198,13 +204,12 @@ function checkMusicExplorerAchievement() {
     });
 
     if (allHeard) {
-        unlockAchievement('music_explorer');
+        unlockAchievement('musicExplorer');
     } else {
         localStorage.setItem(`music_heard_${currentMusicIndex}`, 'true');
     }
 }
 
-// Reproducir efecto de sonido
 function playSoundEffect() {
     const soundSetting = localStorage.getItem('soundEffects') || 'full';
     if (soundSetting === 'none') return;
@@ -217,14 +222,12 @@ function playSoundEffect() {
     }
 }
 
-// Reproducir efecto de secreto desbloqueado
 function playSecretSound() {
     elementos.secretSound.currentTime = 0;
     elementos.secretSound.volume = elementos.volumenSonido.value / 100;
     elementos.secretSound.play().catch(e => console.log("Error al reproducir sonido de secreto:", e));
 }
 
-// Mostrar panel
 function mostrarPanel(panel) {
     elementos.fondoOscuro.classList.add('active');
     panel.classList.add('active');
@@ -232,7 +235,6 @@ function mostrarPanel(panel) {
     playSoundEffect();
 }
 
-// Ocultar paneles
 function ocultarPaneles() {
     document.querySelectorAll('.popup-panel').forEach(panel => {
         panel.classList.remove('active');
@@ -242,7 +244,6 @@ function ocultarPaneles() {
     playSoundEffect();
 }
 
-// Volver al menú con efecto de sacudida
 function volverAlMenu() {
     ocultarPaneles();
 
@@ -256,28 +257,64 @@ function volverAlMenu() {
     playSoundEffect();
 }
 
-// Desbloquear logro
-function unlockAchievement(achievementId) {
-    const achievement = elementos.achievements[achievementId];
-    if (!achievement || localStorage.getItem(`achievement_${achievementId}`)) return;
+function showAchievementNotification(title, description) {
+    const notification = document.createElement('div');
+    notification.className = 'achievement-notification';
+    notification.innerHTML = `
+        <div class="achievement-notification-content">
+            <div class="achievement-notification-icon">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <div class="achievement-notification-text">
+                <h4>¡Logro desbloqueado!</h4>
+                <h5>${title}</h5>
+                <p>${description}</p>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 100);
 
-    localStorage.setItem(`achievement_${achievementId}`, 'true');
-    achievement.classList.remove('achievement-locked');
-    achievement.querySelector('.achievement-progress-bar').style.width = '100%';
-
-    const title = achievement.querySelector('.achievement-title').textContent;
-    const desc = achievement.querySelector('.achievement-desc').textContent;
-
-    // Mostrar notificación solo si no son pistas
-    if (localStorage.getItem('showHints') !== 'false') {
-        alert(`¡Logro desbloqueado!\n${title}\n${desc}`);
-    }
-
-    // Guardar en el sistema de logros generales
-    saveAchievement(achievementId);
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            notification.remove();
+        }, 500);
+    }, 3000);
 }
 
-// Desbloquear secreto
+function unlockAchievement(achievementId) {
+    // Si ya está desbloqueado, no hacer nada
+    if (achievementsData[achievementId]) return;
+
+    // Marcar como desbloqueado
+    achievementsData[achievementId] = true;
+    localStorage.setItem('fnc-achievements', JSON.stringify(achievementsData));
+    sessionStorage.setItem('fnc-achievements', JSON.stringify(achievementsData));
+    
+    // Actualizar la UI
+    const achievement = elementos.achievements[achievementId];
+    if (achievement) {
+        achievement.classList.remove('achievement-locked');
+        const progressBar = achievement.querySelector('.achievement-progress-bar');
+        if (progressBar) {
+            progressBar.style.width = '100%';
+        }
+
+        // Mostrar notificación visual
+        const title = achievement.querySelector('.achievement-title').textContent;
+        const desc = achievement.querySelector('.achievement-desc').textContent;
+        
+        if (localStorage.getItem('showHints') !== 'false') {
+            showAchievementNotification(title, desc);
+        }
+    }
+}
+
 function unlockSecret(secretId) {
     const secret = elementos.secretItems[secretId];
     if (!secret || localStorage.getItem(`secret_${secretId}`)) return;
@@ -285,29 +322,25 @@ function unlockSecret(secretId) {
     localStorage.setItem(`secret_${secretId}`, 'true');
     secret.classList.add('unlocked');
 
-    const title = secret.querySelector('h5').textContent;
+    const title = secret.querySelector('h5')?.textContent || "Secreto Desbloqueado";
     playSecretSound();
-    unlockAchievement('secret_finder');
+    unlockAchievement('secretFinder');
 
-    // Mostrar notificación especial para el Konami Code
     if (secretId === 'secret4') {
         setTimeout(() => {
-            alert(`¡SECRETO DESBLOQUEADO!\n\n${title}\n\nHas descubierto el código Konami en el juego. ¡Bien hecho!`);
+            showAchievementNotification("Maestro Konami", "Has descubierto el código Konami en el juego. ¡Bien hecho!");
         }, 500);
     }
 
-    // Guardar en el sistema de secretos generales
     saveSecret(secretId);
 }
 
-// Cargar preferencias
 function cargarPreferencias() {
     const colorGuardado = localStorage.getItem('colorMenu');
     if (colorGuardado) {
         elementos.colorPicker.value = colorGuardado;
         document.documentElement.style.setProperty('--color-menu', colorGuardado);
-        document.documentElement.style.setProperty('--color-menu-hover',
-            ajustarBrillo(colorGuardado, 20));
+        document.documentElement.style.setProperty('--color-menu-hover', ajustarBrillo(colorGuardado, 20));
     }
 
     const temaGuardado = localStorage.getItem('temaPreferido');
@@ -331,7 +364,6 @@ function cargarPreferencias() {
         elementos.valorVolumenSonido.textContent = volSonido;
     }
 
-    // Cargar configuración avanzada
     const animationSpeed = localStorage.getItem('animationSpeed');
     if (animationSpeed) {
         elementos.animationSpeed.value = animationSpeed;
@@ -358,15 +390,18 @@ function cargarPreferencias() {
         elementos.resetConfirm.checked = resetConfirm === 'true';
     }
 
-    // Cargar logros y secretos desde el sistema general
+    const dificultad = localStorage.getItem('dificultad') || 'normal';
+    elementos.selectorDificultad.value = dificultad;
+    
+    const controles = localStorage.getItem('controles') || 'teclado';
+    elementos.selectorControles.value = controles;
+
     loadAchievements();
     loadSecrets();
 
-    // Cargar contador de clics
     clickCount = parseInt(localStorage.getItem('clickCount') || 0);
     updateClickMasterAchievement();
 
-    // Cargar horas visitadas
     const savedHours = localStorage.getItem('visitedHours');
     if (savedHours) {
         visitedHours = new Set(JSON.parse(savedHours));
@@ -374,7 +409,6 @@ function cargarPreferencias() {
     }
 }
 
-// Ajustar brillo de color
 function ajustarBrillo(hex, percent) {
     let r = parseInt(hex.substring(1, 3), 16);
     let g = parseInt(hex.substring(3, 5), 16);
@@ -391,7 +425,6 @@ function ajustarBrillo(hex, percent) {
     return `#${r}${g}${b}`;
 }
 
-// Aplicar tema
 function aplicarTema(tema) {
     document.body.classList.remove('tema-claro', 'tema-oscuro');
 
@@ -406,17 +439,14 @@ function aplicarTema(tema) {
     }
 }
 
-// Detectar código Konami
 function setupKonamiCode() {
     document.addEventListener('keydown', (e) => {
         secretCodes.currentInput.push(e.key);
 
-        // Mantener solo el número necesario de teclas
         if (secretCodes.currentInput.length > secretCodes.konami.length) {
             secretCodes.currentInput.shift();
         }
 
-        // Verificar si coincide con el código Konami
         if (secretCodes.currentInput.length === secretCodes.konami.length) {
             const isKonami = secretCodes.currentInput.every((val, index) => val === secretCodes.konami[index]);
 
@@ -427,9 +457,8 @@ function setupKonamiCode() {
     });
 }
 
-// Actualizar logro de clics
 function updateClickMasterAchievement() {
-    if (localStorage.getItem('achievement_click_master')) return;
+    if (achievementsData.clickMaster) return;
 
     const achievement = elementos.achievements.clickMaster;
     const progress = Math.min(100, (clickCount / 100) * 100);
@@ -437,18 +466,16 @@ function updateClickMasterAchievement() {
     achievement.querySelector('.achievement-progress-bar').style.width = `${progress}%`;
 
     if (clickCount >= 100) {
-        unlockAchievement('click_master');
+        unlockAchievement('clickMaster');
     }
 }
 
-// Actualizar logro de viajero del tiempo
 function updateTimeTravelerAchievement() {
-    if (localStorage.getItem('achievement_time_traveler')) return;
+    if (achievementsData.timeTraveler) return;
 
     const now = new Date();
     const currentHour = now.getHours();
 
-    // Registrar la hora actual si no está registrada
     if (!visitedHours.has(currentHour)) {
         visitedHours.add(currentHour);
         localStorage.setItem('visitedHours', JSON.stringify(Array.from(visitedHours)));
@@ -460,13 +487,120 @@ function updateTimeTravelerAchievement() {
     achievement.querySelector('.achievement-progress-bar').style.width = `${progress}%`;
 
     if (visitedHours.size >= 5) {
-        unlockAchievement('time_traveler');
+        unlockAchievement('timeTraveler');
     }
 }
 
-// Configurar eventos
+function redirigirAJuego() {
+    try {
+        console.log("Preparando datos para game.html...");
+        
+        const gameData = {
+            colorMenu: localStorage.getItem('colorMenu') || '#f39c12',
+            volumenMusica: localStorage.getItem('volumenMusica') || 50,
+            volumenSonido: localStorage.getItem('volumenSonido') || 50,
+            dificultad: localStorage.getItem('dificultad') || 'normal',
+            controles: localStorage.getItem('controles') || 'teclado',
+            achievements: achievementsData,
+            secrets: JSON.parse(localStorage.getItem('fnc-secrets') || [])
+        };
+
+        console.log("Datos a enviar:", gameData);
+        
+        sessionStorage.setItem('fnc-gameData', JSON.stringify(gameData));
+        console.log("Redirigiendo a game.html...");
+        
+        if (window.location.pathname.endsWith('game.html')) {
+            window.location.reload();
+        } else {
+            window.location.href = 'game.html';
+        }
+        
+    } catch (error) {
+        console.error("Error al redirigir:", error);
+        alert("Error al cargar el juego. Por favor recarga la página.");
+    }
+}
+
+function cargarDatosDesdeJuego() {
+    const gameData = JSON.parse(sessionStorage.getItem('fnc-gameData') || {});
+    
+    if (gameData.achievements) {
+        // Actualizar los logros locales con los del juego
+        const updatedAchievements = {
+            ...achievementsData,
+            ...gameData.achievements
+        };
+        
+        localStorage.setItem('fnc-achievements', JSON.stringify(updatedAchievements));
+        sessionStorage.setItem('fnc-achievements', JSON.stringify(updatedAchievements));
+        achievementsData = updatedAchievements;
+        
+        // Actualizar la UI
+        for (const [id, unlocked] of Object.entries(gameData.achievements)) {
+            if (unlocked) {
+                const achievement = document.getElementById(`achievement-${id}`);
+                if (achievement) {
+                    achievement.classList.remove('achievement-locked');
+                    const progressBar = achievement.querySelector('.achievement-progress-bar');
+                    if (progressBar) {
+                        progressBar.style.width = '100%';
+                    }
+                }
+            }
+        }
+    }
+    
+    if (gameData.secrets) {
+        localStorage.setItem('fnc-secrets', JSON.stringify(gameData.secrets));
+    }
+
+    if (gameData.dificultad) {
+        localStorage.setItem('dificultad', gameData.dificultad);
+    }
+
+    if (gameData.controles) {
+        localStorage.setItem('controles', gameData.controles);
+    }
+}
+
+function configurarSecretos() {
+    if(localStorage.getItem('secret_unlocked')) {
+        elementos.btnSecretos.style.display = 'block';
+    }
+
+    if(elementos.btnSecretos) {
+        elementos.btnSecretos.addEventListener('click', () => {
+            mostrarPanel(elementos.panelSecretos);
+        });
+    }
+
+    if(elementos.btnSubmitPassword) {
+        elementos.btnSubmitPassword.addEventListener('click', () => {
+            if(elementos.inputPassword.value.toLowerCase() === 'carne') {
+                unlockSecret('secretPanel');
+                elementos.btnSecretos.style.display = 'block';
+                localStorage.setItem('secret_unlocked', 'true');
+                playSecretSound();
+                showAchievementNotification("Panel de Secretos", "¡Has desbloqueado el panel de secretos!");
+                volverAlMenu();
+            } else {
+                alert('Contraseña incorrecta');
+                elementos.inputPassword.value = '';
+            }
+        });
+    }
+
+    if(elementos.inputPassword) {
+        elementos.inputPassword.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') {
+                elementos.btnSubmitPassword.click();
+            }
+        });
+    }
+}
+
 function configurarEventos() {
-    // Contador de clics para logros
     document.addEventListener('click', (e) => {
         if (e.target.classList.contains('btn-cocina') ||
             e.target.classList.contains('music-btn') ||
@@ -480,16 +614,13 @@ function configurarEventos() {
     elementos.btnJugar.addEventListener('click', () => {
         playSoundEffect();
 
-        // Verificar si es 3:33 AM para desbloquear secreto
         const now = new Date();
         if (now.getHours() === 3 && now.getMinutes() === 33) {
             unlockSecret('secret2');
         }
 
-        // Registrar hora actual para logro de viajero del tiempo
         updateTimeTravelerAchievement();
 
-        // Verificar si se mantiene presionado para secreto del menú oculto
         let pressTimer = setTimeout(() => {
             unlockSecret('secret6');
         }, 10000);
@@ -497,8 +628,7 @@ function configurarEventos() {
         elementos.btnJugar.addEventListener('mouseup', () => clearTimeout(pressTimer));
         elementos.btnJugar.addEventListener('mouseleave', () => clearTimeout(pressTimer));
 
-        // Redirigir a game.html
-        window.location.href = 'game.html';
+        redirigirAJuego();
     });
 
     elementos.btnActualizacion.addEventListener('click', () => {
@@ -534,6 +664,7 @@ function configurarEventos() {
     elementos.btnVolverMenuLogros.addEventListener('click', volverAlMenu);
     elementos.btnVolverMenu.addEventListener('click', volverAlMenu);
     elementos.btnCerrarCreditos.addEventListener('click', volverAlMenu);
+    elementos.btnCerrarSecretos?.addEventListener('click', volverAlMenu);
     elementos.fondoOscuro.addEventListener('click', volverAlMenu);
 
     elementos.colorPicker.addEventListener('input', (e) => {
@@ -541,9 +672,8 @@ function configurarEventos() {
         document.documentElement.style.setProperty('--color-menu', color);
         document.documentElement.style.setProperty('--color-menu-hover', ajustarBrillo(color, 20));
         localStorage.setItem('colorMenu', color);
-        unlockAchievement('color_changer');
+        unlockAchievement('colorChanger');
 
-        // Contador de cambios de color para secreto
         let colorChanges = parseInt(localStorage.getItem('colorChanges') || 0);
         colorChanges++;
         localStorage.setItem('colorChanges', colorChanges.toString());
@@ -565,6 +695,8 @@ function configurarEventos() {
         localStorage.setItem('temaPreferido', elementos.selectorTema.value);
         localStorage.setItem('volumenMusica', elementos.volumenMusica.value);
         localStorage.setItem('volumenSonido', elementos.volumenSonido.value);
+        localStorage.setItem('dificultad', elementos.selectorDificultad.value);
+        localStorage.setItem('controles', elementos.selectorControles.value);
         localStorage.setItem('autoPlayMusic', elementos.autoPlayMusic.checked);
         localStorage.setItem('animationSpeed', elementos.animationSpeed.value);
         localStorage.setItem('soundEffects', elementos.soundEffects.value);
@@ -572,7 +704,6 @@ function configurarEventos() {
         localStorage.setItem('showHints', elementos.showHints.checked);
         localStorage.setItem('resetConfirm', elementos.resetConfirm.checked);
 
-        // Aplicar cambios inmediatos
         document.documentElement.style.setProperty('--transicion-rapida', `all ${elementos.animationSpeed.value}s ease`);
 
         const btn = elementos.btnGuardarOpciones;
@@ -590,9 +721,10 @@ function configurarEventos() {
             confirm('¿Estás seguro que quieres restablecer todas las configuraciones a los valores predeterminados?');
 
         if (shouldReset) {
-            // Restablecer valores predeterminados
             elementos.colorPicker.value = '#f39c12';
             elementos.selectorTema.value = 'automatico';
+            elementos.selectorDificultad.value = 'normal';
+            elementos.selectorControles.value = 'teclado';
             elementos.volumenMusica.value = '50';
             elementos.volumenSonido.value = '50';
             elementos.valorVolumenMusica.textContent = '50';
@@ -604,13 +736,11 @@ function configurarEventos() {
             elementos.showHints.checked = true;
             elementos.resetConfirm.checked = true;
 
-            // Aplicar cambios
             document.documentElement.style.setProperty('--color-menu', '#f39c12');
             document.documentElement.style.setProperty('--color-menu-hover', '#e67e22');
             document.documentElement.style.setProperty('--transicion-rapida', 'all 1s ease');
             aplicarTema('automatico');
 
-            // Actualizar volumen de música
             musicTracks.forEach(track => {
                 track.element.volume = 0.5;
             });
@@ -635,12 +765,10 @@ function configurarEventos() {
         }
     }, 10000);
 
-    // Desbloquear primer secreto después de 5 minutos de juego
     setTimeout(() => {
         unlockSecret('secret1');
     }, 300000);
 
-    // Desbloquear quinto secreto al visitar todos los paneles
     const panelsVisited = {
         updates: false,
         achievements: false,
@@ -675,30 +803,40 @@ function configurarEventos() {
     }
 }
 
-// Sistema de logros y secretos (sincronización con game.html)
 function loadAchievements() {
-    const achievements = JSON.parse(localStorage.getItem('fnc-achievements') || '{}');
+    // Cargar de localStorage (datos persistentes)
+    const savedAchievements = JSON.parse(localStorage.getItem('fnc-achievements') || '{}');
+    
+    // Cargar de sessionStorage (datos recientes de game.html)
+    const sessionAchievements = JSON.parse(sessionStorage.getItem('fnc-achievements') || '{}');
+    
+    // Combinar ambos conjuntos de datos
+    achievementsData = {
+        ...savedAchievements,
+        ...sessionAchievements
+    };
 
-    // Actualizar cada logro en la interfaz
-    for (const [key, unlocked] of Object.entries(achievements)) {
-        const achievementElement = document.getElementById(`achievement-${key}`);
-        if (achievementElement) {
-            if (unlocked) {
-                achievementElement.classList.remove('achievement-locked');
-                // Actualizar progreso si es necesario
-                const progressBar = achievementElement.querySelector('.achievement-progress-bar');
+    // Actualizar la UI para cada logro
+    for (const [id, unlocked] of Object.entries(achievementsData)) {
+        if (unlocked) {
+            const achievement = document.getElementById(`achievement-${id}`);
+            if (achievement) {
+                achievement.classList.remove('achievement-locked');
+                const progressBar = achievement.querySelector('.achievement-progress-bar');
                 if (progressBar) {
                     progressBar.style.width = '100%';
                 }
             }
         }
     }
+    
+    // Guardar el estado combinado
+    localStorage.setItem('fnc-achievements', JSON.stringify(achievementsData));
 }
 
 function loadSecrets() {
-    const secrets = JSON.parse(localStorage.getItem('fnc-secrets') || '[]');
+    const secrets = JSON.parse(localStorage.getItem('fnc-secrets') || []);
 
-    // Marcar secretos desbloqueados
     secrets.forEach(secretId => {
         const secretElement = document.getElementById(`secret-${secretId}`);
         if (secretElement) {
@@ -708,39 +846,41 @@ function loadSecrets() {
 }
 
 function saveAchievement(key) {
-    const achievements = JSON.parse(localStorage.getItem('fnc-achievements') || '{}');
-    achievements[key] = true;
-    localStorage.setItem('fnc-achievements', JSON.stringify(achievements));
+    achievementsData[key] = true;
+    localStorage.setItem('fnc-achievements', JSON.stringify(achievementsData));
+    sessionStorage.setItem('fnc-achievements', JSON.stringify(achievementsData));
 }
 
 function saveSecret(secretId) {
-    const secrets = JSON.parse(localStorage.getItem('fnc-secrets') || '[]');
+    const secrets = JSON.parse(localStorage.getItem('fnc-secrets') || []);
     if (!secrets.includes(parseInt(secretId))) {
         secrets.push(parseInt(secretId));
         localStorage.setItem('fnc-secrets', JSON.stringify(secrets));
     }
 }
 
-// Inicializar el juego
 function inicializarJuego() {
     initMusicControls();
     configurarEventos();
+    configurarSecretos();
     cargarPreferencias();
     setupKonamiCode();
+    
+    // Primero cargar los logros locales
+    loadAchievements();
+    
+    // Luego sincronizar con los datos del juego
+    cargarDatosDesdeJuego();
 
-    // Registrar hora actual para logro de viajero del tiempo
     const now = new Date();
     visitedHours.add(now.getHours());
     localStorage.setItem('visitedHours', JSON.stringify(Array.from(visitedHours)));
     updateTimeTravelerAchievement();
 
-    // Desbloquear logro de primer lanzamiento si es necesario
-    if (!localStorage.getItem('achievement_first_launch')) {
-        localStorage.setItem('achievement_first_launch', 'true');
-        unlockAchievement('first_launch');
+    if (!achievementsData.firstLaunch) {
+        unlockAchievement('firstLaunch');
     }
 
-    // Ocultar banner de actualización después de 10 segundos
     setTimeout(() => {
         if (!localStorage.getItem('bannerOculto')) {
             elementos.updateBanner.style.opacity = '0';
@@ -751,5 +891,4 @@ function inicializarJuego() {
     }, 10000);
 }
 
-// Iniciar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', inicializarJuego);

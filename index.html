@@ -4,596 +4,806 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Friday Night Cooking</title>
-    <!-- Bootstrap CSS -->
+    <title>Friday Night Cooking 0.1.7</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-
-<style>
-    :root {
-        --color-menu: #f39c12;
-        --color-menu-hover: #e67e22;
-        --color-texto: #ffffff;
-        --color-fondo: #121212;
-        --color-fondo-panel: rgba(0, 0, 0, 0.85);
-        --sombra-panel: 0 0 20px rgba(243, 156, 18, 0.3);
-        --transicion-rapida: all 0.25s ease;
-    }
-
-    body {
-        background-color: var(--color-fondo);
-        color: var(--color-texto);
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        overflow-x: hidden;
-    }
-
-    .hud-panel {
-        background-color: var(--color-fondo-panel);
-        border-radius: 15px;
-        padding: 2rem;
-        color: var(--color-texto);
-        max-width: 600px;
-        width: 95%;
-        margin: 2rem auto;
-        border: 2px solid var(--color-menu);
-        box-shadow: var(--sombra-panel);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .hud-panel::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, var(--color-menu), transparent);
-        z-index: 1;
-    }
-
-    .btn-cocina {
-        background-color: var(--color-menu);
-        border: none;
-        color: var(--color-texto);
-        padding: 12px 24px;
-        margin: 8px 0;
-        border-radius: 8px;
-        width: 100%;
-        transition: var(--transicion-rapida);
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-cocina:hover {
-        background-color: var(--color-menu-hover);
-        transform: translateY(-3px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn-cocina:active {
-        transform: translateY(1px);
-    }
-
-    .btn-cocina:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        background-color: #7f8c8d;
-    }
-
-    #update-banner {
-        background: linear-gradient(90deg, #17a2b8, #138496);
-        color: white;
-        padding: 12px;
-        text-align: center;
-        font-weight: bold;
-        cursor: pointer;
-        transition: var(--transicion-rapida);
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    #update-banner:hover {
-        background: linear-gradient(90deg, #138496, #117a8b);
-    }
-
-    #update-banner::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg,
-                transparent,
-                rgba(255, 255, 255, 0.2),
-                transparent);
-        transform: translateX(-100%);
-        transition: transform 0.6s ease;
-    }
-
-    #update-banner:hover::after {
-        transform: translateX(100%);
-    }
-
-    #color-picker-container {
-        padding: 15px;
-        text-align: center;
-        background-color: rgba(0, 0, 0, 0.7);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .update-item {
-        background-color: rgba(255, 255, 255, 0.1);
-        border-left: 4px solid var(--color-menu);
-        padding: 15px;
-        margin-bottom: 15px;
-        border-radius: 0 8px 8px 0;
-        transition: var(--transicion-rapida);
-    }
-
-    .update-item:hover {
-        background-color: rgba(255, 255, 255, 0.15);
-        transform: translateX(5px);
-    }
-
-    .close-btn {
-        background: none;
-        border: none;
-        color: var(--color-texto);
-        font-size: 1.5rem;
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        cursor: pointer;
-        transition: var(--transicion-rapida);
-        z-index: 2;
-    }
-
-    .close-btn:hover {
-        color: var(--color-menu);
-        transform: rotate(90deg);
-    }
-
-    .popup-panel {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0.95);
-        z-index: 1001;
-        width: 95%;
-        max-width: 600px;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease-out;
-    }
-
-    .popup-panel.active {
-        opacity: 1;
-        visibility: visible;
-        transform: translate(-50%, -50%) scale(1);
-    }
-
-    #fondo-oscuro {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.8);
-        z-index: 1000;
-        backdrop-filter: blur(5px);
-        transition: opacity 0.3s ease;
-    }
-
-    #fondo-oscuro.active {
-        display: block;
-        opacity: 1;
-    }
-
-    h1,
-    h2,
-    h3,
-    h4 {
-        font-weight: 700;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    }
-
-    h1 {
-        font-size: 2.5rem;
-        margin-bottom: 1.5rem;
-        background: linear-gradient(to right, var(--color-menu), #f1c40f);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        position: relative;
-    }
-
-    h1::after {
-        content: '';
-        display: block;
-        width: 100px;
-        height: 4px;
-        background: var(--color-menu);
-        margin: 10px auto;
-        border-radius: 2px;
-    }
-
-    .creditos-avatar {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid var(--color-menu);
-        margin-bottom: 15px;
-        transition: var(--transicion-rapida);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    .creditos-avatar:hover {
-        transform: scale(1.05);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .music-controls-container {
-        background-color: rgba(0, 0, 0, 0.2);
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        border: 1px solid var(--color-menu);
-    }
-
-    .music-info {
-        text-align: center;
-        margin-bottom: 15px;
-        font-style: italic;
-        color: var(--color-menu);
-    }
-
-    .music-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 10px;
-    }
-
-    .music-btn {
-        background: var(--color-menu);
-        border: none;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: var(--transicion-rapida);
-        color: white;
-    }
-
-    .music-btn:hover {
-        background: var(--color-menu-hover);
-        transform: scale(1.1);
-    }
-
-    /* Panel de actualizaciones con scroll */
-    #panel-actualizacion {
-        max-height: 80vh;
-        overflow-y: auto;
-    }
-
-    /* Estilos para logros */
-    .achievements-container {
-        max-height: 60vh;
-        overflow-y: auto;
-        padding-right: 10px;
-    }
-
-    .achievement {
-        display: flex;
-        align-items: center;
-        margin-bottom: 15px;
-        padding: 10px;
-        background-color: rgba(255, 255, 255, 0.05);
-        border-radius: 8px;
-        transition: var(--transicion-rapida);
-    }
-
-    .achievement:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .achievement-icon {
-        width: 50px;
-        height: 50px;
-        margin-right: 15px;
-        border-radius: 8px;
-        background-color: var(--color-menu);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        color: white;
-    }
-
-    .achievement-info {
-        flex: 1;
-    }
-
-    .achievement-title {
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .achievement-desc {
-        font-size: 0.9rem;
-        opacity: 0.8;
-    }
-
-    .achievement-locked {
-        opacity: 0.5;
-    }
-
-    .achievement-locked .achievement-icon {
-        background-color: #7f8c8d;
-    }
-
-    .achievement-progress {
-        height: 5px;
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 5px;
-        margin-top: 5px;
-        overflow: hidden;
-    }
-
-    .achievement-progress-bar {
-        height: 100%;
-        background-color: var(--color-menu);
-        width: 0%;
-        transition: width 0.5s ease;
-    }
-
-    @keyframes shake {
-
-        0%,
-        100% {
-            transform: translateX(0);
+    <style>
+        :root {
+            --color-menu: #f39c12;
+            --color-menu-hover: #e67e22;
+            --color-texto: #ffffff;
+            --color-fondo: #121212;
+            --color-fondo-panel: rgba(0, 0, 0, 0.85);
+            --sombra-panel: 0 0 20px rgba(243, 156, 18, 0.3);
+            --transicion-rapida: all 0.25s ease;
         }
 
-        10%,
-        30%,
-        50%,
-        70%,
-        90% {
-            transform: translateX(-5px);
+        body {
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
         }
 
-        20%,
-        40%,
-        60%,
-        80% {
-            transform: translateX(5px);
-        }
-    }
-
-    /* Estilos para el selector de música */
-    .music-selector {
-        margin: 15px 0;
-        width: 100%;
-    }
-
-    .music-selector select {
-        background-color: rgba(0, 0, 0, 0.2);
-        color: var(--color-texto);
-        border: 1px solid var(--color-menu);
-        border-radius: 5px;
-        padding: 8px;
-        width: 100%;
-    }
-
-    /* Estilos para secretos desbloqueados */
-    .secrets-container {
-        max-height: 40vh;
-        overflow-y: auto;
-        padding-right: 10px;
-    }
-
-    .secret-item {
-        background-color: rgba(243, 156, 18, 0.1);
-        border-left: 4px solid var(--color-menu);
-        padding: 15px;
-        margin-bottom: 15px;
-        border-radius: 0 8px 8px 0;
-        transition: var(--transicion-rapida);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .secret-item::before {
-        content: '🔒 SECRETO';
-        position: absolute;
-        top: 0;
-        right: 0;
-        background-color: var(--color-menu);
-        color: white;
-        font-size: 0.7rem;
-        padding: 2px 8px;
-        border-radius: 0 0 0 5px;
-    }
-
-    .secret-item.unlocked::before {
-        content: '🔓 SECRETO';
-        background-color: #2ecc71;
-    }
-
-    .secret-item:hover {
-        background-color: rgba(243, 156, 18, 0.15);
-    }
-
-    /* Barras de scroll personalizadas */
-    .achievements-container::-webkit-scrollbar,
-    .secrets-container::-webkit-scrollbar,
-    #panel-actualizacion::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    .achievements-container::-webkit-scrollbar-track,
-    .secrets-container::-webkit-scrollbar-track,
-    #panel-actualizacion::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 10px;
-    }
-
-    .achievements-container::-webkit-scrollbar-thumb,
-    .secrets-container::-webkit-scrollbar-thumb,
-    #panel-actualizacion::-webkit-scrollbar-thumb {
-        background-color: var(--color-menu);
-        border-radius: 10px;
-    }
-
-    /* Tema claro */
-    body.tema-claro {
-        --color-texto: #000000;
-        --color-fondo: #f5f5f5;
-        --color-fondo-panel: rgba(255, 255, 255, 0.9);
-    }
-
-    body.tema-claro .update-item,
-    body.tema-claro footer {
-        color: #333333;
-    }
-
-    body.tema-claro .close-btn {
-        color: #333333;
-    }
-
-    body.tema-claro .close-btn:hover {
-        color: var(--color-menu);
-    }
-
-    body.tema-claro .music-info {
-        color: var(--color-menu-hover);
-    }
-
-    /* Configuración avanzada */
-    .advanced-settings {
-        background-color: rgba(0, 0, 0, 0.1);
-        padding: 15px;
-        border-radius: 8px;
-        margin-top: 20px;
-        border: 1px dashed var(--color-menu);
-    }
-
-    .advanced-settings h5 {
-        color: var(--color-menu);
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        cursor: pointer;
-    }
-
-    .advanced-settings h5 i {
-        transition: transform 0.3s ease;
-    }
-
-    .advanced-settings h5.collapsed i {
-        transform: rotate(-90deg);
-    }
-
-    .advanced-settings-content {
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-    }
-
-    .advanced-settings-content.collapsed {
-        max-height: 0 !important;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
         .hud-panel {
-            padding: 1.5rem;
-            margin: 1rem auto;
+            background-color: var(--color-fondo-panel);
+            border-radius: 15px;
+            padding: 2rem;
+            color: var(--color-texto);
+            max-width: 600px;
+            width: 95%;
+            margin: 2rem auto;
+            border: 2px solid var(--color-menu);
+            box-shadow: var(--sombra-panel);
+            position: relative;
+            overflow: hidden;
         }
 
-        h1 {
-            font-size: 2rem;
+        .hud-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-menu), transparent);
+            z-index: 1;
         }
 
         .btn-cocina {
-            padding: 10px 15px;
-            font-size: 0.9rem;
+            background-color: var(--color-menu);
+            border: none;
+            color: var(--color-texto);
+            padding: 12px 24px;
+            margin: 8px 0;
+            border-radius: 8px;
+            width: 100%;
+            transition: var(--transicion-rapida);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .music-btn {
-            width: 35px;
-            height: 35px;
+        .btn-cocina:hover {
+            background-color: var(--color-menu-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
-    }
 
-    @media (max-width: 480px) {
-        .hud-panel {
-            padding: 1rem;
+        .btn-cocina:active {
+            transform: translateY(1px);
+        }
+
+        .btn-cocina:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background-color: #7f8c8d;
+        }
+
+        #update-banner {
+            background: linear-gradient(90deg, #17a2b8, #138496);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transicion-rapida);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #update-banner:hover {
+            background: linear-gradient(90deg, #138496, #117a8b);
+        }
+
+        #update-banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.2),
+                    transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        #update-banner:hover::after {
+            transform: translateX(100%);
+        }
+
+        #color-picker-container {
+            padding: 15px;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .update-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--color-menu);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+            transition: var(--transicion-rapida);
+        }
+
+        .update-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--color-texto);
+            font-size: 1.5rem;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+            transition: var(--transicion-rapida);
+            z-index: 2;
+        }
+
+        .close-btn:hover {
+            color: var(--color-menu);
+            transform: rotate(90deg);
+        }
+
+        .popup-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            z-index: 1001;
+            width: 95%;
+            max-width: 600px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-out;
+        }
+
+        .popup-panel.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #fondo-oscuro {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            transition: opacity 0.3s ease;
+        }
+
+        #fondo-oscuro.active {
+            display: block;
+            opacity: 1;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         h1 {
-            font-size: 1.8rem;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--color-menu), #f1c40f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--color-menu);
+            margin: 10px auto;
+            border-radius: 2px;
         }
 
         .creditos-avatar {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--color-menu);
+            margin-bottom: 15px;
+            transition: var(--transicion-rapida);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-    }
 
-    /* Scroll para opciones */
-    /* Scroll estético para el panel de opciones */
-    #panel-opciones {
-        max-height: 80vh;
-        overflow-y: auto;
-        padding-right: 10px;
-        /* espacio para el scrollbar */
-    }
+        .creditos-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
 
-    /* Scrollbar personalizado (igual que logros) */
-    #panel-opciones::-webkit-scrollbar {
-        width: 8px;
-    }
+        .music-controls-container {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid var(--color-menu);
+        }
 
-    #panel-opciones::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 10px;
-    }
+        .music-info {
+            text-align: center;
+            margin-bottom: 15px;
+            font-style: italic;
+            color: var(--color-menu);
+        }
 
-    #panel-opciones::-webkit-scrollbar-thumb {
-        background-color: var(--color-menu);
-        border-radius: 10px;
-    }
-</style>
+        .music-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .music-btn {
+            background: var(--color-menu);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transicion-rapida);
+            color: white;
+        }
+
+        .music-btn:hover {
+            background: var(--color-menu-hover);
+            transform: scale(1.1);
+        }
+
+        #panel-actualizacion {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .achievements-container {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .achievement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: var(--transicion-rapida);
+            cursor: help;
+            position: relative;
+        }
+
+        .achievement:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .achievement:hover::after {
+            content: attr(data-progress);
+            position: absolute;
+            right: 10px;
+            bottom: 5px;
+            font-size: 0.8rem;
+            color: var(--color-menu);
+        }
+
+        .achievement-icon {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+            border-radius: 8px;
+            background-color: var(--color-menu);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .achievement-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .achievement-locked {
+            opacity: 0.5;
+        }
+
+        .achievement-locked .achievement-icon {
+            background-color: #7f8c8d;
+        }
+
+        .achievement-progress {
+            height: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .achievement-progress-bar {
+            height: 100%;
+            background-color: var(--color-menu);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-5px);
+            }
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(5px);
+            }
+        }
+
+        .music-selector {
+            margin: 15px 0;
+            width: 100%;
+        }
+
+        .music-selector select {
+            background-color: rgba(0, 0, 0, 0.2);
+            color: var(--color-texto);
+            border: 1px solid var(--color-menu);
+            border-radius: 5px;
+            padding: 8px;
+            width: 100%;
+        }
+
+        .secrets-container {
+            max-height: 40vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .secret-item {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-left: 4px solid var(--color-menu);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+            transition: var(--transicion-rapida);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .secret-item::before {
+            content: '🔒 SECRETO';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--color-menu);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 0 0 0 5px;
+        }
+
+        .secret-item.unlocked::before {
+            content: '🔓 SECRETO';
+            background-color: #2ecc71;
+        }
+
+        .secret-item:hover {
+            background-color: rgba(243, 156, 18, 0.15);
+        }
+
+        .achievements-container::-webkit-scrollbar,
+        .secrets-container::-webkit-scrollbar,
+        #panel-actualizacion::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .achievements-container::-webkit-scrollbar-track,
+        .secrets-container::-webkit-scrollbar-track,
+        #panel-actualizacion::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .achievements-container::-webkit-scrollbar-thumb,
+        .secrets-container::-webkit-scrollbar-thumb,
+        #panel-actualizacion::-webkit-scrollbar-thumb {
+            background-color: var(--color-menu);
+            border-radius: 10px;
+        }
+
+        body.tema-claro {
+            --color-texto: #000000;
+            --color-fondo: #f5f5f5;
+            --color-fondo-panel: rgba(255, 255, 255, 0.9);
+        }
+
+        body.tema-claro .update-item,
+        body.tema-claro footer {
+            color: #333333;
+        }
+
+        body.tema-claro .close-btn {
+            color: #333333;
+        }
+
+        body.tema-claro .close-btn:hover {
+            color: var(--color-menu);
+        }
+
+        body.tema-claro .music-info {
+            color: var(--color-menu-hover);
+        }
+
+        .advanced-settings {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px dashed var(--color-menu);
+        }
+
+        .advanced-settings h5 {
+            color: var(--color-menu);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .advanced-settings h5 i {
+            transition: transform 0.3s ease;
+        }
+
+        .advanced-settings h5.collapsed i {
+            transform: rotate(-90deg);
+        }
+
+        .advanced-settings-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .advanced-settings-content.collapsed {
+            max-height: 0 !important;
+        }
+
+        .secret-panel {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #8e44ad;
+        }
+
+        .secret-panel h3 {
+            color: #8e44ad;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .secret-input {
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid #8e44ad;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        #secret-password {
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid #8e44ad;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        /* Estilos para el panel secreto en móviles */
+        @media (max-width: 768px) {
+            .secret-panel {
+                padding: 15px;
+            }
+
+            .secret-panel h3 {
+                font-size: 1.5rem;
+            }
+
+            #secret-password {
+                padding: 12px;
+                font-size: 1rem;
+            }
+
+            #submit-password {
+                padding: 12px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Efecto visual al activar el panel secreto */
+        .popup-panel.active {
+            animation: secretReveal 0.5s ease-out;
+        }
+
+        @keyframes secretReveal {
+            0% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+            }
+            70% {
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hud-panel {
+                padding: 1.5rem;
+                margin: 1rem auto;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .btn-cocina {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .music-btn {
+                width: 35px;
+                height: 35px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hud-panel {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .creditos-avatar {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        #panel-opciones {
+            max-height: 80vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        #panel-opciones::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #panel-opciones::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        #panel-opciones::-webkit-scrollbar-thumb {
+            background-color: var(--color-menu);
+            border-radius: 10px;
+        }
+
+        /* NUEVOS ESTILOS PARA 0.1.7 */
+        #panel-creditos {
+            top: 45%;
+            transform: translate(-50%, -50%) scale(0.95);
+        }
+
+        .creditos-container {
+            max-height: 65vh;
+            padding-bottom: 20px;
+        }
+
+        .creditos-seccion {
+            margin-bottom: 25px;
+        }
+
+        /* Estilos para el panel secreto */
+        .secret-panel {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #8e44ad;
+            color: white;
+        }
+
+        .secret-panel h3 {
+            color: #8e44ad;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(142, 68, 173, 0.5);
+        }
+
+        .secret-achievements-container {
+            max-height: 60vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .secrets-scrollable {
+            overflow-y: auto;
+            padding-right: 10px;
+            flex-grow: 1;
+            margin-bottom: 15px;
+        }
+
+        .secret-item {
+            background-color: rgba(142, 68, 173, 0.1);
+            border-left: 3px solid #8e44ad;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+            position: relative;
+        }
+
+        .secret-item.unlocked {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-left-color: #2ecc71;
+        }
+
+        .secret-item h5 {
+            color: #8e44ad;
+            margin-bottom: 5px;
+        }
+
+        .secret-item.unlocked h5 {
+            color: #2ecc71;
+        }
+
+        .secret-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .secret-status.locked {
+            color: #e74c3c;
+        }
+
+        .secret-status.unlocked {
+            color: #2ecc71;
+            background-color: rgba(46, 204, 113, 0.2);
+        }
+
+        /* Scrollbar personalizada */
+        .secrets-scrollable::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .secrets-scrollable::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+        }
+
+        .secrets-scrollable::-webkit-scrollbar-thumb {
+            background-color: #8e44ad;
+            border-radius: 3px;
+        }
+
+        .achievement-notification {
+            position: fixed;
+            top: 20px;
+            right: -400px;
+            width: 350px;
+            background-color: var(--color-fondo-panel);
+            border-left: 5px solid var(--color-menu);
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            transition: right 0.5s ease;
+        }
+
+        .achievement-notification.show {
+            right: 20px;
+        }
+
+        .achievement-notification-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .achievement-notification-icon {
+            font-size: 2rem;
+            color: var(--color-menu);
+            margin-right: 15px;
+        }
+
+        .achievement-notification-text h4 {
+            color: var(--color-menu);
+            margin: 0 0 5px 0;
+        }
+
+        .achievement-notification-text h5 {
+            margin: 0 0 5px 0;
+            font-size: 1.1rem;
+        }
+
+        .achievement-notification-text p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
 
 <body>
-    <!-- Fondo oscurecido -->
     <div id="fondo-oscuro"></div>
 
-    <!-- Banner de actualización -->
     <div id="update-banner">
-        ⚡ Actualización 0.1.6 - Haz clic para ver los cambios (o desaparecerá en 10 segundos)
+        ⚡ Actualización 0.1.7 - Haz clic para ver los cambios (o desaparecerá en 10 segundos)
     </div>
 
-    <!-- Selector de color -->
     <div id="color-picker-container">
         <label for="color-picker">Color del menú:</label>
         <input type="color" id="color-picker" class="form-control form-control-color" value="#f39c12"
@@ -601,7 +811,6 @@
     </div>
 
     <main class="container flex-grow-1 d-flex align-items-center justify-content-center">
-        <!-- Menú principal -->
         <section id="menu-principal" class="hud-panel w-100">
             <h1 class="text-center mb-4">Friday Night Cooking</h1>
             <div class="d-grid gap-2">
@@ -611,98 +820,151 @@
                 <button id="btn-logros" class="btn-cocina">Logros</button>
                 <button id="btn-opciones" class="btn-cocina">Opciones</button>
                 <button id="btn-creditos" class="btn-cocina">Créditos</button>
+                <button id="btn-secretos" class="btn-cocina"
+                    style="display: none; background-color: #8e44ad;">Secretos</button>
                 <button id="btn-salir" class="btn-cocina">Salir</button>
             </div>
         </section>
 
-        <!-- Panel de actualización -->
         <section id="panel-actualizacion" class="hud-panel popup-panel w-100">
             <button id="btn-volver-menu-act" class="close-btn">✕</button>
             <h2 class="text-center mb-4">Últimas Actualizaciones</h2>
             <div class="update-container">
-                <!-- Dentro de #panel-actualizacion, después de la versión 0.1.5 -->
                 <div class="update-item">
-                    <h4>Versión 0.1.6 <span class="badge bg-success ms-2">Nuevo</span></h4>
+                    <h4>Versión 0.1.7 <span class="badge bg-success ms-2">Nuevo</span></h4>
                     <ul>
                         <li><strong>Nuevas características:</strong>
                             <ul>
-                                <li>Sistema de recetas ampliado con 5 nuevas combinaciones</li>
-                                <li>3 ingredientes secretos desbloqueables</li>
-                                <li>Modo tiempo infinito (activable en pausa)</li>
-                                <li>Efectos de partículas al cocinar</li>
-                                <li>Interfaz rediseñada con temas personalizables</li>
-                            </ul>
-                        </li>
-                        <li><strong>Mejoras de rendimiento:</strong>
-                            <ul>
-                                <li>Optimización de sprites para un 30% más de FPS</li>
-                                <li>Reducción de carga de memoria</li>
+                                <li>Sistema de secretos con contraseña</li>
+                                <li>4 nuevos logros desbloqueables</li>
+                                <li>Configuración de dificultad y controles</li>
                             </ul>
                         </li>
                         <li><strong>Correcciones:</strong>
                             <ul>
-                                <li>Arreglado bug de sincronización de logros</li>
-                                <li>Solucionado problema con ingredientes atascados</li>
-                                <li>Corregido error en el sistema de guardado</li>
+                                <li>Sincronización de logros entre pantallas</li>
+                                <li>Mejoras en el panel de créditos</li>
+                                <li>Optimización del sistema de guardado</li>
+                                <li>Problema de redirección a game.html</li>
                             </ul>
                         </li>
                     </ul>
                     <small class="text-muted">Publicado: 23/05/2025</small>
                 </div>
                 <div class="update-item">
-                    <h4>Versión 0.1.5</h4>
+                    <h4>Versión 0.1.6</h4>
                     <ul>
                         <li><strong>Nuevas características:</strong>
                             <ul>
-                                <li>Sistema de selección de música con 3 canciones diferentes</li>
-                                <li>5 nuevos logros desbloqueables</li>
-                                <li>5 secretos ocultos en el mapa del juego</li>
-                                <li>Nuevos efectos de sonido</li>
-                                <li>Mejoras en el sistema de guardado</li>
-                                <li>Configuración avanzada en opciones</li>
-                                <li>Sistema de scroll mejorado en todos los paneles</li>
-                            </ul>
-                        </li>
-                        <li><strong>Mejoras de diseño:</strong>
-                            <ul>
-                                <li>Nuevos iconos para los logros</li>
-                                <li>Interfaz mejorada para el selector de música</li>
-                                <li>Efectos visuales para secretos desbloqueados</li>
-                                <li>Optimización del sistema de temas</li>
+                                <li>Sistema de recetas ampliado</li>
+                                <li>3 ingredientes secretos</li>
+                                <li>Modo tiempo infinito</li>
                             </ul>
                         </li>
                     </ul>
                     <small class="text-muted">Publicado: 22/05/2025</small>
                 </div>
-                <div class="update-item">
-                    <h4>Versión 0.1.4</h4>
-                    <ul>
-                        <li><strong>Nuevas características:</strong>
-                            <ul>
-                                <li>Sistema de logros implementado</li>
-                                <li>Mejor organización del código</li>
-                                <li>Barra de scroll en el panel de actualizaciones</li>
-                            </ul>
-                        </li>
-                        <li><strong>Mejoras de diseño:</strong>
-                            <ul>
-                                <li>Nuevos iconos para los logros</li>
-                                <li>Mejor organización visual del contenido</li>
-                                <li>Optimización del sistema de temas</li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <small class="text-muted">Publicado: 21/05/2025</small>
-                </div>
             </div>
         </section>
 
-        <!-- Panel de logros -->
         <section id="panel-logros" class="hud-panel popup-panel w-100">
             <button id="btn-volver-menu-logros" class="close-btn">✕</button>
             <h2 class="text-center mb-4">Logros</h2>
             <div class="achievements-container">
-                <div class="achievement" id="achievement-first_launch">
+                <!-- Logros del juego -->
+                <div class="achievement" id="achievement-firstRecipe" data-progress="0/1">
+                    <div class="achievement-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Primera Receta</div>
+                        <div class="achievement-desc">Completa tu primera receta</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement" id="achievement-fiveRecipes" data-progress="0/5">
+                    <div class="achievement-icon">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Chef Novato</div>
+                        <div class="achievement-desc">Completa 5 recetas</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement" id="achievement-tenRecipes" data-progress="0/10">
+                    <div class="achievement-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Chef Experimentado</div>
+                        <div class="achievement-desc">Completa 10 recetas</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement" id="achievement-perfectRecipe" data-progress="0/1">
+                    <div class="achievement-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Perfeccionista</div>
+                        <div class="achievement-desc">Completa una receta sin errores</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement" id="achievement-timeChallenge" data-progress="0/1">
+                    <div class="achievement-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Supervivencia</div>
+                        <div class="achievement-desc">Sobrevive 30 segundos</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement" id="achievement-masterChef" data-progress="0/1">
+                    <div class="achievement-icon">
+                        <i class="fas fa-hat-chef"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Chef Maestro</div>
+                        <div class="achievement-desc">Completa todas las recetas</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement" id="achievement-speedRunner" data-progress="0/1">
+                    <div class="achievement-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Velocista</div>
+                        <div class="achievement-desc">Completa una receta en menos de 30 segundos</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logros del menú principal -->
+                <div class="achievement" id="achievement-firstLaunch">
                     <div class="achievement-icon">
                         <i class="fas fa-rocket"></i>
                     </div>
@@ -714,7 +976,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="achievement achievement-locked" id="achievement-update_checker">
+
+                <div class="achievement achievement-locked" id="achievement-updateChecker">
                     <div class="achievement-icon">
                         <i class="fas fa-list-check"></i>
                     </div>
@@ -726,150 +989,105 @@
                         </div>
                     </div>
                 </div>
-                <div class="achievement achievement-locked" id="achievement-options_explorer">
+
+                <div class="achievement achievement-locked" id="achievement-optionsExplorer">
                     <div class="achievement-icon">
-                        <i class="fas fa-sliders"></i>
+                        <i class="fas fa-sliders-h"></i>
                     </div>
                     <div class="achievement-info">
-                        <div class="achievement-title">Ajustador profesional</div>
-                        <div class="achievement-desc">Visita el menú de opciones</div>
+                        <div class="achievement-title">Explorador de opciones</div>
+                        <div class="achievement-desc">Accede al menú de opciones</div>
                         <div class="achievement-progress">
                             <div class="achievement-progress-bar" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
-                <div class="achievement achievement-locked" id="achievement-music_lover">
+
+                <div class="achievement achievement-locked" id="achievement-musicLover">
                     <div class="achievement-icon">
                         <i class="fas fa-music"></i>
                     </div>
                     <div class="achievement-info">
                         <div class="achievement-title">Amante de la música</div>
-                        <div class="achievement-desc">Reproduce la música del juego</div>
+                        <div class="achievement-desc">Reproduce música en el juego</div>
                         <div class="achievement-progress">
                             <div class="achievement-progress-bar" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
-                <div class="achievement achievement-locked" id="achievement-color_changer">
+
+                <div class="achievement achievement-locked" id="achievement-colorChanger">
                     <div class="achievement-icon">
                         <i class="fas fa-palette"></i>
                     </div>
                     <div class="achievement-info">
-                        <div class="achievement-title">Artista del color</div>
-                        <div class="achievement-desc">Cambia el color del menú principal</div>
+                        <div class="achievement-title">Cambiador de colores</div>
+                        <div class="achievement-desc">Cambia el color del menú</div>
                         <div class="achievement-progress">
                             <div class="achievement-progress-bar" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
-                <div class="achievement achievement-locked" id="achievement-secret_finder">
+
+                <div class="achievement achievement-locked" id="achievement-secretFinder">
                     <div class="achievement-icon">
                         <i class="fas fa-key"></i>
                     </div>
                     <div class="achievement-info">
-                        <div class="achievement-title">Cazador de secretos</div>
-                        <div class="achievement-desc">Descubre tu primer secreto oculto</div>
+                        <div class="achievement-title">Buscador de secretos</div>
+                        <div class="achievement-desc">Encuentra tu primer secreto</div>
                         <div class="achievement-progress">
                             <div class="achievement-progress-bar" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
-                <div class="achievement achievement-locked" id="achievement-music_explorer">
+
+                <div class="achievement achievement-locked" id="achievement-musicExplorer">
                     <div class="achievement-icon">
                         <i class="fas fa-headphones"></i>
                     </div>
                     <div class="achievement-info">
                         <div class="achievement-title">Explorador musical</div>
-                        <div class="achievement-desc">Escucha todas las canciones del juego</div>
+                        <div class="achievement-desc">Escucha todas las canciones</div>
                         <div class="achievement-progress">
                             <div class="achievement-progress-bar" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
-                <div class="achievement achievement-locked" id="achievement-click_master">
+
+                <div class="achievement achievement-locked" id="achievement-clickMaster">
                     <div class="achievement-icon">
-                        <i class="fas fa-hand-pointer"></i>
+                        <i class="fas fa-mouse"></i>
                     </div>
                     <div class="achievement-info">
                         <div class="achievement-title">Maestro del clic</div>
-                        <div class="achievement-desc">Haz 100 clics en cualquier botón</div>
+                        <div class="achievement-desc">Haz 100 clics en el juego</div>
                         <div class="achievement-progress">
                             <div class="achievement-progress-bar" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
-                <div class="achievement achievement-locked" id="achievement-time_traveler">
+
+                <div class="achievement achievement-locked" id="achievement-timeTraveler">
                     <div class="achievement-icon">
-                        <i class="fas fa-clock"></i>
+                        <i class="fas fa-hourglass-half"></i>
                     </div>
                     <div class="achievement-info">
                         <div class="achievement-title">Viajero del tiempo</div>
-                        <div class="achievement-desc">Visita el juego a diferentes horas del día</div>
-                        <div class="achievement-progress">
-                            <div class="achievement-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Añade estos logros después de los existentes -->
-                <div class="achievement achievement-locked" id="achievement-first_recipe">
-                    <div class="achievement-icon">
-                        <i class="fas fa-utensils"></i>
-                    </div>
-                    <div class="achievement-info">
-                        <div class="achievement-title">Primera receta</div>
-                        <div class="achievement-desc">Completa tu primera receta en el juego</div>
+                        <div class="achievement-desc">Juega en 5 horas diferentes</div>
                         <div class="achievement-progress">
                             <div class="achievement-progress-bar" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="achievement achievement-locked" id="achievement-five_recipes">
+                <div class="achievement achievement-locked" id="achievement-secretMaster">
                     <div class="achievement-icon">
-                        <i class="fas fa-medal"></i>
+                        <i class="fas fa-user-secret"></i>
                     </div>
                     <div class="achievement-info">
-                        <div class="achievement-title">Chef novato</div>
-                        <div class="achievement-desc">Completa 5 recetas en el juego</div>
-                        <div class="achievement-progress">
-                            <div class="achievement-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="achievement achievement-locked" id="achievement-ten_recipes">
-                    <div class="achievement-icon">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <div class="achievement-info">
-                        <div class="achievement-title">Chef experimentado</div>
-                        <div class="achievement-desc">Completa 10 recetas en el juego</div>
-                        <div class="achievement-progress">
-                            <div class="achievement-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="achievement achievement-locked" id="achievement-perfect_recipe">
-                    <div class="achievement-icon">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <div class="achievement-info">
-                        <div class="achievement-title">Perfeccionista</div>
-                        <div class="achievement-desc">Completa una receta sin ingredientes extras</div>
-                        <div class="achievement-progress">
-                            <div class="achievement-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="achievement achievement-locked" id="achievement-time_challenge">
-                    <div class="achievement-icon">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="achievement-info">
-                        <div class="achievement-title">Supervivencia</div>
-                        <div class="achievement-desc">Sobrevive al menos 30 segundos en una partida</div>
+                        <div class="achievement-title">Maestro de secretos</div>
+                        <div class="achievement-desc">Descubre todos los secretos</div>
                         <div class="achievement-progress">
                             <div class="achievement-progress-bar" style="width: 0%"></div>
                         </div>
@@ -878,7 +1096,6 @@
             </div>
         </section>
 
-        <!-- Panel de opciones -->
         <section id="panel-opciones" class="hud-panel popup-panel w-100">
             <button id="btn-volver-menu" class="close-btn">✕</button>
             <h2 class="text-center mb-4">Opciones</h2>
@@ -888,6 +1105,24 @@
                     <option value="automatico">Automático (Sistema)</option>
                     <option value="light">Claro</option>
                     <option value="dark">Oscuro</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="selector-dificultad" class="form-label">Dificultad:</label>
+                <select id="selector-dificultad" class="form-select">
+                    <option value="facil">Fácil</option>
+                    <option value="normal" selected>Normal</option>
+                    <option value="dificil">Difícil</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="selector-controles" class="form-label">Controles:</label>
+                <select id="selector-controles" class="form-select">
+                    <option value="teclado" selected>Teclado</option>
+                    <option value="raton">Ratón</option>
+                    <option value="mixto">Mixto</option>
                 </select>
             </div>
 
@@ -936,7 +1171,6 @@
                 </div>
             </div>
 
-            <!-- Configuración avanzada -->
             <div class="advanced-settings">
                 <h5 class="collapsed" id="toggle-advanced-settings">
                     Configuración avanzada
@@ -983,102 +1217,216 @@
             </div>
         </section>
 
-        <!-- Panel de créditos -->
         <section id="panel-creditos" class="hud-panel popup-panel w-100">
             <button id="btn-cerrar-creditos" class="close-btn">✕</button>
             <h2 class="text-center mb-4">Créditos</h2>
-            <div class="row justify-content-center">
-                <div class="col-md-6 text-center mb-4">
-                    <img src="assets/images/9fc2a9df8789de0960974d06923f1929.png" alt="Desarrollador"
-                        class="creditos-avatar">
-                    <h4>Just Fenix</h4>
-                    <p class="text-muted">Desarrollador Principal</p>
-                </div>
-                <div class="col-md-6 text-center mb-4">
-                    <img src="assets/images/c323129d4ccb30882fcb89814a94b9f8.png" alt="Desarrollador"
-                        class="creditos-avatar">
-                    <h4>Less</h4>
-                    <p class="text-muted">Idea original</p>
-                </div>
-            </div>
 
-            <!-- Sección de secretos desbloqueados -->
-            <h3 class="text-center mt-4">Secretos descubiertos</h3>
-            <div class="secrets-container">
-                <div class="secret-item" id="secret-1">
-                    <h5>El chef desaparecido</h5>
-                    <p>¿Has notado que el chef original nunca aparece en los créditos? Se dice que dejó una receta
-                        secreta escondida en el juego...</p>
+            <div class="creditos-container">
+                <div class="row justify-content-center creditos-seccion">
+                    <div class="col-md-4 text-center">
+                        <img src="assets/images/9fc2a9df8789de0960974d06923f1929.png" class="creditos-avatar"
+                            alt="Desarrollador">
+                        <h4>Just Fenix</h4>
+                        <p class="text-muted">Desarrollador Principal</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <img src="assets/images/c323129d4ccb30882fcb89814a94b9f8.png" class="creditos-avatar"
+                            alt="Diseñador">
+                        <h4>Less</h4>
+                        <p class="text-muted">Diseño & Arte</p>
+                    </div>
                 </div>
-                <div class="secret-item" id="secret-2">
-                    <h5>La cocina de medianoche</h5>
-                    <p>Si cambias la hora de tu sistema a las 3:33 AM y abres el juego, algo peculiar podría ocurrir...
-                    </p>
-                </div>
-                <div class="secret-item" id="secret-3">
-                    <h5>El ingrediente prohibido</h5>
-                    <p>En la versión alpha, había un ingrediente misterioso que fue eliminado antes del lanzamiento.
-                        ¿Podrás encontrarlo?</p>
-                </div>
-                <div class="secret-item" id="secret-4">
-                    <h5>La receta de la abuela</h5>
-                    <p>Presiona las teclas ↑ ↑ ↓ ↓ ← → ← → B A en el menú principal para descubrir un mensaje oculto.
-                    </p>
-                </div>
-                <div class="secret-item" id="secret-5">
-                    <h5>El restaurante abandonado</h5>
-                    <p>En el mapa del juego, hay un restaurante cerrado que nadie visita. ¿Qué secretos esconde?</p>
-                </div>
-                <div class="secret-item" id="secret-6">
-                    <h5>El menú secreto</h5>
-                    <p>Mantén presionado el botón "Jugar" durante 10 segundos para acceder a un menú oculto con
-                        funciones experimentales.</p>
-                </div>
-            </div>
 
-            <div class="text-center mt-4">
-                <div class="update-item">
+                <div class="text-center mt-4">
+                    <h5>Colaboradores</h5>
+                    <div class="row justify-content-center">
+                        <div class="col-md-3 text-center">
+                            <p>Testers</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <p>Comunidad</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="update-item mt-4">
                     <h5>Gracias por jugar</h5>
-                    <p class="mb-0">FNC Engine 0.1.6</p>
+                    <p class="mb-0">FNC Engine 0.1.7</p>
                     <small class="text-muted">© 2025 Todos los derechos reservados</small>
+                </div>
+            </div>
+        </section>
+
+        <section id="panel-secretos" class="hud-panel popup-panel w-100" style="display: none;">
+            <button id="btn-cerrar-secretos" class="close-btn">✕</button>
+            <div class="secret-panel">
+                <h3>🔒 Área Secreta</h3>
+
+                <!-- Contenedor de logros secretos con scroll -->
+                <div class="secret-achievements-container">
+                    <h4 class="text-center mb-3">Logros Secretos</h4>
+
+                    <div class="secrets-scrollable">
+                        <!-- Logro 1 -->
+                        <div class="secret-item" id="secret-1">
+                            <h5>Paciencia Recompensada</h5>
+                            <p>Esperaste 5 minutos en el menú principal</p>
+                            <div class="secret-status locked">🔒 Bloqueado</div>
+                        </div>
+
+                        <!-- Logro 2 -->
+                        <div class="secret-item" id="secret-2">
+                            <h5>Hora del Misterio</h5>
+                            <p>Jugaste a las 3:33 AM</p>
+                            <div class="secret-status locked">🔒 Bloqueado</div>
+                        </div>
+
+                        <!-- Logro 3 -->
+                        <div class="secret-item" id="secret-3">
+                            <h5>Cambiador de Colores</h5>
+                            <p>Cambiaste el color del menú 5 veces</p>
+                            <div class="secret-status locked">🔒 Bloqueado</div>
+                        </div>
+
+                        <!-- Logro 4 -->
+                        <div class="secret-item" id="secret-4">
+                            <h5>Maestro Konami</h5>
+                            <p>Descubriste el código Konami</p>
+                            <div class="secret-status locked">🔒 Bloqueado</div>
+                        </div>
+
+                        <!-- Logro 5 -->
+                        <div class="secret-item" id="secret-5">
+                            <h5>Explorador Completo</h5>
+                            <p>Visitaste todos los paneles del menú</p>
+                            <div class="secret-status locked">🔒 Bloqueado</div>
+                        </div>
+
+                        <!-- Logro 6 -->
+                        <div class="secret-item" id="secret-6">
+                            <h5>Persistencia</h5>
+                            <p>Mantuviste presionado el botón Jugar por 10 segundos</p>
+                            <div class="secret-status locked">🔒 Bloqueado</div>
+                        </div>
+                    </div>
+
+                    <!-- Controles de contraseña -->
+                    <div class="secret-controls mt-4">
+                        <input type="password" id="secret-password" class="form-control mb-3"
+                            placeholder="Ingresa la contraseña secreta">
+                        <button id="submit-password" class="btn-cocina"
+                            style="background-color: #8e44ad;">Verificar</button>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
     <footer class="text-center py-3">
-        © FNC Engine 0.1.6 - Todos los derechos reservados
+        © FNC Engine 0.1.7 - Todos los derechos reservados
     </footer>
 
-    <!-- Audio para música de fondo -->
     <audio id="bg-music" loop>
         <source src="assets/music/lo-fi-1_04-15745.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Audio para música alternativa 1 -->
     <audio id="bg-music-1" loop>
         <source src="assets/music/kitchen-groove.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Audio para música alternativa 2 -->
     <audio id="bg-music-2" loop>
         <source src="assets/music/midnight-snack.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Audio para efectos de sonido -->
     <audio id="sound-effect">
         <source src="assets/sounds/knife-slice-41231.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Audio para efecto de secreto desbloqueado -->
     <audio id="secret-sound">
         <source src="assets/sounds/magic-chime-14865.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Bootstrap JS Bundle with Popper -->
-
-    <script src="js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Detector de gesto táctil secreto (dibujar una "C" en pantalla)
+        let touchStartPos = null;
+        let touchPath = [];
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            touchPath = [];
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (touchStartPos) {
+                touchPath.push({
+                    x: e.touches[0].clientX,
+                    y: e.touches[0].clientY
+                });
+            }
+        });
+
+        document.addEventListener('touchend', () => {
+            if (touchPath.length > 20) { // Mínimo de puntos para considerar un gesto
+                const deltaX = touchPath[touchPath.length - 1].x - touchStartPos.x;
+                const deltaY = touchPath[touchPath.length - 1].y - touchStartPos.y;
+
+                // Verificar si el gesto se parece a una "C" (movimiento semicircular)
+                if (Math.abs(deltaX) > 100 && Math.abs(deltaY) > 50) {
+                    showSecretPanel();
+                }
+            }
+            touchStartPos = null;
+        });
+
+        // Método para mostrar el panel secreto
+        function showSecretPanel() {
+            const panelSecreto = document.getElementById('panel-secretos');
+            const fondoOscuro = document.getElementById('fondo-oscuro');
+
+            if (panelSecreto && fondoOscuro) {
+                panelSecreto.style.display = 'block';
+                panelSecreto.classList.add('active');
+                fondoOscuro.classList.add('active');
+                document.body.style.overflow = 'hidden';
+
+                // Reproducir sonido de feedback
+                const secretSound = document.getElementById('secret-sound');
+                if (secretSound) {
+                    secretSound.currentTime = 0;
+                    secretSound.play().catch(e => console.log("Error al reproducir sonido:", e));
+                }
+
+                // Vibración (opcional, solo para móviles)
+                if (navigator.vibrate) {
+                    navigator.vibrate([100, 50, 100]);
+                }
+            }
+        }
+
+        // Combinación de teclas para mostrar el panel secreto: Ctrl+Alt+C
+        document.addEventListener('keydown', function (event) {
+            if (event.ctrlKey && event.altKey && event.key.toLowerCase() === 'c') {
+                const panelSecreto = document.getElementById('panel-secretos');
+                const fondoOscuro = document.getElementById('fondo-oscuro');
+
+                if (panelSecreto && fondoOscuro) {
+                    panelSecreto.style.display = 'block';
+                    panelSecreto.classList.add('active');
+                    fondoOscuro.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+
+                    // Reproducir sonido de secreto si existe
+                    const secretSound = document.getElementById('secret-sound');
+                    if (secretSound) {
+                        secretSound.currentTime = 0;
+                        secretSound.play().catch(e => console.log("Error al reproducir sonido:", e));
+                    }
+                }
+            }
+        });
+    </script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>
