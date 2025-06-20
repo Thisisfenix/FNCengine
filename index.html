@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Friday Night Cooking 0.1.7</title>
+    <title>Friday Night Cooking 0.1.8</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -12,6 +12,7 @@
             --color-menu: #f39c12;
             --color-menu-hover: #e67e22;
             --color-texto: #ffffff;
+            --color-texto-rgb: 255, 255, 255;
             --color-fondo: #121212;
             --color-fondo-panel: rgba(0, 0, 0, 0.85);
             --sombra-panel: 0 0 20px rgba(243, 156, 18, 0.3);
@@ -137,6 +138,7 @@
             margin-bottom: 15px;
             border-radius: 0 8px 8px 0;
             transition: var(--transicion-rapida);
+            color: var(--color-texto);
         }
 
         .update-item:hover {
@@ -205,6 +207,7 @@
         h4 {
             font-weight: 700;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            color: var(--color-texto);
         }
 
         h1 {
@@ -340,11 +343,13 @@
         .achievement-title {
             font-weight: bold;
             margin-bottom: 5px;
+            color: var(--color-texto);
         }
 
         .achievement-desc {
             font-size: 0.9rem;
             opacity: 0.8;
+            color: var(--color-texto);
         }
 
         .achievement-locked {
@@ -463,14 +468,19 @@
         }
 
         body.tema-claro {
-            --color-texto: #000000;
+            --color-texto: #333333;
+            --color-texto-rgb: 51, 51, 51;
             --color-fondo: #f5f5f5;
             --color-fondo-panel: rgba(255, 255, 255, 0.9);
         }
 
         body.tema-claro .update-item,
-        body.tema-claro footer {
-            color: #333333;
+        body.tema-claro footer,
+        body.tema-claro .creditos-container p,
+        body.tema-claro .creditos-container h4,
+        body.tema-claro .creditos-container h5,
+        body.tema-claro .text-muted {
+            color: #333333 !important;
         }
 
         body.tema-claro .close-btn {
@@ -657,10 +667,25 @@
         .creditos-container {
             max-height: 65vh;
             padding-bottom: 20px;
+            color: var(--color-texto);
         }
 
         .creditos-seccion {
             margin-bottom: 25px;
+            background-color: rgba(var(--color-texto-rgb), 0.03);
+            padding: 15px;
+            border-radius: 10px;
+            color: var(--color-texto);
+        }
+
+        .creditos-container p,
+        .creditos-container h4,
+        .creditos-container h5 {
+            color: var(--color-texto);
+        }
+
+        .text-muted {
+            color: rgba(var(--color-texto-rgb), 0.7) !important;
         }
 
         /* Estilos para el panel secreto */
@@ -700,6 +725,7 @@
             margin-bottom: 15px;
             border-radius: 0 8px 8px 0;
             position: relative;
+            color: var(--color-texto);
         }
 
         .secret-item.unlocked {
@@ -801,7 +827,7 @@
     <div id="fondo-oscuro"></div>
 
     <div id="update-banner">
-        ⚡ Actualización 0.1.7 - Haz clic para ver los cambios (o desaparecerá en 10 segundos)
+        ⚡ Actualización 0.1.8 - Haz clic para ver los cambios (o desaparecerá en 10 segundos)
     </div>
 
     <div id="color-picker-container">
@@ -831,7 +857,21 @@
             <h2 class="text-center mb-4">Últimas Actualizaciones</h2>
             <div class="update-container">
                 <div class="update-item">
-                    <h4>Versión 0.1.7 <span class="badge bg-success ms-2">Nuevo</span></h4>
+                    <h4>Versión 0.1.8 <span class="badge bg-success ms-2">Nuevo</span></h4>
+                    <ul>
+                        <li><strong>Correcciones:</strong>
+                            <ul>
+                                <li>Problema de visibilidad de texto en modo oscuro</li>
+                                <li>Mejoras en la legibilidad de los créditos</li>
+                                <li>Optimización del sistema de temas</li>
+                                <li>(Bugs arreglados y encontrados por soyrichard123)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <small class="text-muted">Publicado: 19/06/2025</small>
+                </div>
+                <div class="update-item">
+                    <h4>Versión 0.1.7</h4>
                     <ul>
                         <li><strong>Nuevas características:</strong>
                             <ul>
@@ -1233,25 +1273,13 @@
                         <img src="assets/images/c323129d4ccb30882fcb89814a94b9f8.png" class="creditos-avatar"
                             alt="Diseñador">
                         <h4>Less</h4>
-                        <p class="text-muted">Diseño & Arte</p>
-                    </div>
-                </div>
-
-                <div class="text-center mt-4">
-                    <h5>Colaboradores</h5>
-                    <div class="row justify-content-center">
-                        <div class="col-md-3 text-center">
-                            <p>Testers</p>
-                        </div>
-                        <div class="col-md-3 text-center">
-                            <p>Comunidad</p>
-                        </div>
+                        <p class="text-muted">Idea principal</p>
                     </div>
                 </div>
 
                 <div class="update-item mt-4">
                     <h5>Gracias por jugar</h5>
-                    <p class="mb-0">FNC Engine 0.1.7</p>
+                    <p class="mb-0">FNC Engine 0.1.8</p>
                     <small class="text-muted">© 2025 Todos los derechos reservados</small>
                 </div>
             </div>
@@ -1323,7 +1351,7 @@
     </main>
 
     <footer class="text-center py-3">
-        © FNC Engine 0.1.7 - Todos los derechos reservados
+        © FNC Engine 0.1.8 - Todos los derechos reservados
     </footer>
 
     <audio id="bg-music" loop>
