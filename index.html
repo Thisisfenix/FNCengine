@@ -4,18 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Friday Night Cooking 0.1.8</title>
+    <title>Friday Night Cooking 0.1.9</title>
+
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;700&display=swap"
+        rel="stylesheet">
+    .close
     <style>
+        /* Base Styles */
         :root {
-            --color-menu: #f39c12;
-            --color-menu-hover: #e67e22;
+            --color-menu: #e67e22;
+            --color-menu-hover: #d35400;
             --color-texto: #ffffff;
             --color-texto-rgb: 255, 255, 255;
-            --color-fondo: #121212;
-            --color-fondo-panel: rgba(0, 0, 0, 0.85);
-            --sombra-panel: 0 0 20px rgba(243, 156, 18, 0.3);
+            --color-fondo: #1a1a1a;
+            --color-fondo-panel: rgba(40, 40, 40, 0.95);
+            --sombra-panel: 0 0 20px rgba(230, 126, 34, 0.3);
             --transicion-rapida: all 0.25s ease;
         }
 
@@ -25,8 +33,10 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Roboto', sans-serif;
             overflow-x: hidden;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgwLDAsMCwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+            opacity: 1;
         }
 
         .hud-panel {
@@ -40,7 +50,7 @@
             border: 2px solid var(--color-menu);
             box-shadow: var(--sombra-panel);
             position: relative;
-            overflow: hidden;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJ3b29kIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDEzNSkiPjxyZWN0IHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgZmlsbD0icmdiYSgxMDQsIDY5LCAzMSwgMC4xKSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCN3b29kKSIvPjwvc3ZnPg==');
         }
 
         .hud-panel::before {
@@ -67,6 +77,9 @@
             letter-spacing: 0.5px;
             text-transform: uppercase;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            will-change: transform;
         }
 
         .btn-cocina:hover {
@@ -85,6 +98,27 @@
             background-color: #7f8c8d;
         }
 
+        .btn-cocina:hover::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+            animation: sizzle 1.5s linear infinite;
+        }
+
+        @keyframes sizzle {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
         #update-banner {
             background: linear-gradient(90deg, #17a2b8, #138496);
             color: white;
@@ -96,6 +130,7 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            will-change: transform;
         }
 
         #update-banner:hover {
@@ -109,10 +144,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg,
-                    transparent,
-                    rgba(255, 255, 255, 0.2),
-                    transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transform: translateX(-100%);
             transition: transform 0.6s ease;
         }
@@ -175,6 +207,7 @@
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease-out;
+            will-change: transform, opacity;
         }
 
         .popup-panel.active {
@@ -218,6 +251,7 @@
             background-clip: text;
             color: transparent;
             position: relative;
+            font-family: 'Pacifico', cursive;
         }
 
         h1::after {
@@ -352,14 +386,6 @@
             color: var(--color-texto);
         }
 
-        .achievement-locked {
-            opacity: 0.5;
-        }
-
-        .achievement-locked .achievement-icon {
-            background-color: #7f8c8d;
-        }
-
         .achievement-progress {
             height: 5px;
             background-color: rgba(255, 255, 255, 0.1);
@@ -376,10 +402,12 @@
         }
 
         @keyframes shake {
+
             0%,
             100% {
                 transform: translateX(0);
             }
+
             10%,
             30%,
             50%,
@@ -387,6 +415,7 @@
             90% {
                 transform: translateX(-5px);
             }
+
             20%,
             40%,
             60%,
@@ -472,6 +501,7 @@
             --color-texto-rgb: 51, 51, 51;
             --color-fondo: #f5f5f5;
             --color-fondo-panel: rgba(255, 255, 255, 0.9);
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgwLDAsMCwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
         }
 
         body.tema-claro .update-item,
@@ -542,6 +572,24 @@
             margin-bottom: 20px;
         }
 
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--color-texto);
+            font-size: 1.5rem;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+            transition: var(--transicion-rapida);
+            z-index: 2;
+        }
+
+        .close-btn:hover {
+            color: var(--color-menu);
+            transform: rotate(90deg);
+        }
+
         .secret-input {
             background-color: rgba(0, 0, 0, 0.5);
             border: 1px solid #8e44ad;
@@ -562,46 +610,137 @@
             border-radius: 5px;
         }
 
-        /* Estilos para el panel secreto en móviles */
-        @media (max-width: 768px) {
-            .secret-panel {
-                padding: 15px;
-            }
-
-            .secret-panel h3 {
-                font-size: 1.5rem;
-            }
-
-            #secret-password {
-                padding: 12px;
-                font-size: 1rem;
-            }
-
-            #submit-password {
-                padding: 12px;
-                font-size: 1rem;
-            }
+        /* Game Panel Styles */
+        #panel-juego {
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
-        /* Efecto visual al activar el panel secreto */
-        .popup-panel.active {
-            animation: secretReveal 0.5s ease-out;
+        .modo-juego {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--color-menu);
+            transition: var(--transicion-rapida);
+            cursor: pointer;
         }
 
-        @keyframes secretReveal {
-            0% {
-                transform: translate(-50%, -50%) scale(0.8);
-                opacity: 0;
-            }
-            70% {
-                transform: translate(-50%, -50%) scale(1.05);
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
+        .modo-juego:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
+        .modo-juego h3 {
+            color: var(--color-menu);
+            margin-bottom: 10px;
+        }
+
+        .modo-juego p {
+            margin-bottom: 0;
+        }
+
+        /* Game Screen Styles */
+        #game-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-fondo);
+            z-index: 2000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #game-header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+
+        #game-timer,
+        #game-score {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--color-menu);
+        }
+
+        #game-content {
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--color-fondo-panel);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid var(--color-menu);
+            box-shadow: var(--sombra-panel);
+            text-align: center;
+        }
+
+        #game-recipe {
+            margin-bottom: 20px;
+        }
+
+        #game-ingredients {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .ingredient {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 20px;
+            transition: var(--transicion-rapida);
+            cursor: pointer;
+        }
+
+        .ingredient:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .ingredient.selected {
+            background-color: var(--color-menu);
+            color: white;
+        }
+
+        #game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        #game-result {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            min-height: 30px;
+        }
+
+        #game-progress {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        #game-progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--color-menu);
+            transition: width 0.3s ease;
+        }
+
+        /* Mobile optimizations */
         @media (max-width: 768px) {
             .hud-panel {
                 padding: 1.5rem;
@@ -621,6 +760,20 @@
                 width: 35px;
                 height: 35px;
             }
+
+            #game-ingredients {
+                gap: 8px;
+            }
+
+            .ingredient {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+
+            #game-controls {
+                flex-direction: column;
+                gap: 8px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -636,29 +789,15 @@
                 width: 80px;
                 height: 80px;
             }
+
+            #game-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
         }
 
-        #panel-opciones {
-            max-height: 80vh;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        #panel-opciones::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        #panel-opciones::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
-
-        #panel-opciones::-webkit-scrollbar-thumb {
-            background-color: var(--color-menu);
-            border-radius: 10px;
-        }
-
-        /* NUEVOS ESTILOS PARA 0.1.7 */
+        /* NUEVOS ESTILOS PARA 0.1.9 */
         #panel-creditos {
             top: 45%;
             transform: translate(-50%, -50%) scale(0.95);
@@ -820,6 +959,83 @@
             font-size: 0.9rem;
             opacity: 0.8;
         }
+
+        /* Efecto de sartén para los botones */
+        .btn-cocina::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-cocina:hover::before {
+            opacity: 1;
+        }
+
+        /* Animación para notificaciones */
+        @keyframes slideIn {
+            from {
+                right: -400px;
+            }
+
+            to {
+                right: 20px;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                right: 20px;
+            }
+
+            to {
+                right: -400px;
+            }
+        }
+
+        .idioma-selector {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .btn-idioma {
+            background-color: var(--color-menu);
+            color: var(--color-texto);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: var(--transicion-rapida);
+        }
+
+        .btn-idioma:hover {
+            transform: scale(1.1);
+        }
+
+        #panel-opciones {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-height: 90vh;
+            overflow-y: auto;
+            width: 95%;
+            z-index: 1001;
+        }
     </style>
 </head>
 
@@ -827,16 +1043,16 @@
     <div id="fondo-oscuro"></div>
 
     <div id="update-banner">
-        ⚡ Actualización 0.1.8 - Haz clic para ver los cambios (o desaparecerá en 10 segundos)
+        ⚡ Actualización 0.1.9 - Haz clic para ver los cambios (o desaparecerá en 10 segundos)
     </div>
 
     <div id="color-picker-container">
         <label for="color-picker">Color del menú:</label>
-        <input type="color" id="color-picker" class="form-control form-control-color" value="#f39c12"
+        <input type="color" id="color-picker" class="form-control form-control-color" value="#e67e22"
             title="Elige el color del menú">
     </div>
 
-    <main class="container flex-grow-1 d-flex align-items-center justify-content-center">
+    <main class="container py-4">
         <section id="menu-principal" class="hud-panel w-100">
             <h1 class="text-center mb-4">Friday Night Cooking</h1>
             <div class="d-grid gap-2">
@@ -857,7 +1073,28 @@
             <h2 class="text-center mb-4">Últimas Actualizaciones</h2>
             <div class="update-container">
                 <div class="update-item">
-                    <h4>Versión 0.1.8 <span class="badge bg-success ms-2">Nuevo</span></h4>
+                    <h4>Versión 0.1.9 <span class="badge bg-success ms-2">Nuevo</span></h4>
+                    <ul>
+                        <li><strong>Mejoras visuales:</strong>
+                            <ul>
+                                <li>Nuevo estilo de cocina con texturas y efectos</li>
+                                <li>Mejor manejo de colores negro/blanco</li>
+                                <li>Nuevo logro "Nice Try" al usar colores extremos</li>
+                                <li>Mejoras en el sistema de secretos</li>
+                            </ul>
+                        </li>
+                        <li><strong>Correcciones:</strong>
+                            <ul>
+                                <li>Problema de visibilidad de texto en modo oscuro</li>
+                                <li>Mejoras en la legibilidad de los créditos</li>
+                                <li>Optimización del sistema de temas</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <small class="text-muted">Publicado: 20/06/2025</small>
+                </div>
+                <div class="update-item">
+                    <h4>Versión 0.1.8</h4>
                     <ul>
                         <li><strong>Correcciones:</strong>
                             <ul>
@@ -870,40 +1107,6 @@
                     </ul>
                     <small class="text-muted">Publicado: 19/06/2025</small>
                 </div>
-                <div class="update-item">
-                    <h4>Versión 0.1.7</h4>
-                    <ul>
-                        <li><strong>Nuevas características:</strong>
-                            <ul>
-                                <li>Sistema de secretos con contraseña</li>
-                                <li>4 nuevos logros desbloqueables</li>
-                                <li>Configuración de dificultad y controles</li>
-                            </ul>
-                        </li>
-                        <li><strong>Correcciones:</strong>
-                            <ul>
-                                <li>Sincronización de logros entre pantallas</li>
-                                <li>Mejoras en el panel de créditos</li>
-                                <li>Optimización del sistema de guardado</li>
-                                <li>Problema de redirección a game.html</li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <small class="text-muted">Publicado: 23/05/2025</small>
-                </div>
-                <div class="update-item">
-                    <h4>Versión 0.1.6</h4>
-                    <ul>
-                        <li><strong>Nuevas características:</strong>
-                            <ul>
-                                <li>Sistema de recetas ampliado</li>
-                                <li>3 ingredientes secretos</li>
-                                <li>Modo tiempo infinito</li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <small class="text-muted">Publicado: 22/05/2025</small>
-                </div>
             </div>
         </section>
 
@@ -911,6 +1114,20 @@
             <button id="btn-volver-menu-logros" class="close-btn">✕</button>
             <h2 class="text-center mb-4">Logros</h2>
             <div class="achievements-container">
+                <!-- Logro Nice Try -->
+                <div class="achievement" id="achievement-niceTry">
+                    <div class="achievement-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Nice Try</div>
+                        <div class="achievement-desc">Intentaste usar negro/blanco como color</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Logros del juego -->
                 <div class="achievement" id="achievement-firstRecipe" data-progress="0/1">
                     <div class="achievement-icon">
@@ -977,32 +1194,6 @@
                     </div>
                 </div>
 
-                <div class="achievement" id="achievement-masterChef" data-progress="0/1">
-                    <div class="achievement-icon">
-                        <i class="fas fa-hat-chef"></i>
-                    </div>
-                    <div class="achievement-info">
-                        <div class="achievement-title">Chef Maestro</div>
-                        <div class="achievement-desc">Completa todas las recetas</div>
-                        <div class="achievement-progress">
-                            <div class="achievement-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="achievement" id="achievement-speedRunner" data-progress="0/1">
-                    <div class="achievement-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <div class="achievement-info">
-                        <div class="achievement-title">Velocista</div>
-                        <div class="achievement-desc">Completa una receta en menos de 30 segundos</div>
-                        <div class="achievement-progress">
-                            <div class="achievement-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Logros del menú principal -->
                 <div class="achievement" id="achievement-firstLaunch">
                     <div class="achievement-icon">
@@ -1017,7 +1208,7 @@
                     </div>
                 </div>
 
-                <div class="achievement achievement-locked" id="achievement-updateChecker">
+                <div class="achievement" id="achievement-updateChecker">
                     <div class="achievement-icon">
                         <i class="fas fa-list-check"></i>
                     </div>
@@ -1030,7 +1221,7 @@
                     </div>
                 </div>
 
-                <div class="achievement achievement-locked" id="achievement-optionsExplorer">
+                <div class="achievement" id="achievement-optionsExplorer">
                     <div class="achievement-icon">
                         <i class="fas fa-sliders-h"></i>
                     </div>
@@ -1043,7 +1234,7 @@
                     </div>
                 </div>
 
-                <div class="achievement achievement-locked" id="achievement-musicLover">
+                <div class="achievement" id="achievement-musicLover">
                     <div class="achievement-icon">
                         <i class="fas fa-music"></i>
                     </div>
@@ -1056,7 +1247,7 @@
                     </div>
                 </div>
 
-                <div class="achievement achievement-locked" id="achievement-colorChanger">
+                <div class="achievement" id="achievement-colorChanger">
                     <div class="achievement-icon">
                         <i class="fas fa-palette"></i>
                     </div>
@@ -1069,65 +1260,13 @@
                     </div>
                 </div>
 
-                <div class="achievement achievement-locked" id="achievement-secretFinder">
+                <div class="achievement" id="achievement-secretFinder">
                     <div class="achievement-icon">
                         <i class="fas fa-key"></i>
                     </div>
                     <div class="achievement-info">
                         <div class="achievement-title">Buscador de secretos</div>
                         <div class="achievement-desc">Encuentra tu primer secreto</div>
-                        <div class="achievement-progress">
-                            <div class="achievement-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="achievement achievement-locked" id="achievement-musicExplorer">
-                    <div class="achievement-icon">
-                        <i class="fas fa-headphones"></i>
-                    </div>
-                    <div class="achievement-info">
-                        <div class="achievement-title">Explorador musical</div>
-                        <div class="achievement-desc">Escucha todas las canciones</div>
-                        <div class="achievement-progress">
-                            <div class="achievement-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="achievement achievement-locked" id="achievement-clickMaster">
-                    <div class="achievement-icon">
-                        <i class="fas fa-mouse"></i>
-                    </div>
-                    <div class="achievement-info">
-                        <div class="achievement-title">Maestro del clic</div>
-                        <div class="achievement-desc">Haz 100 clics en el juego</div>
-                        <div class="achievement-progress">
-                            <div class="achievement-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="achievement achievement-locked" id="achievement-timeTraveler">
-                    <div class="achievement-icon">
-                        <i class="fas fa-hourglass-half"></i>
-                    </div>
-                    <div class="achievement-info">
-                        <div class="achievement-title">Viajero del tiempo</div>
-                        <div class="achievement-desc">Juega en 5 horas diferentes</div>
-                        <div class="achievement-progress">
-                            <div class="achievement-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="achievement achievement-locked" id="achievement-secretMaster">
-                    <div class="achievement-icon">
-                        <i class="fas fa-user-secret"></i>
-                    </div>
-                    <div class="achievement-info">
-                        <div class="achievement-title">Maestro de secretos</div>
-                        <div class="achievement-desc">Descubre todos los secretos</div>
                         <div class="achievement-progress">
                             <div class="achievement-progress-bar" style="width: 0%"></div>
                         </div>
@@ -1154,15 +1293,6 @@
                     <option value="facil">Fácil</option>
                     <option value="normal" selected>Normal</option>
                     <option value="dificil">Difícil</option>
-                </select>
-            </div>
-
-            <div class="mb-4">
-                <label for="selector-controles" class="form-label">Controles:</label>
-                <select id="selector-controles" class="form-select">
-                    <option value="teclado" selected>Teclado</option>
-                    <option value="raton">Ratón</option>
-                    <option value="mixto">Mixto</option>
                 </select>
             </div>
 
@@ -1211,45 +1341,6 @@
                 </div>
             </div>
 
-            <div class="advanced-settings">
-                <h5 class="collapsed" id="toggle-advanced-settings">
-                    Configuración avanzada
-                    <i class="fas fa-chevron-down"></i>
-                </h5>
-                <div class="advanced-settings-content collapsed" id="advanced-settings-content">
-                    <div class="mb-3">
-                        <label class="form-label">Velocidad de animación:</label>
-                        <select id="animation-speed" class="form-select">
-                            <option value="0.5">Muy lenta</option>
-                            <option value="0.75">Lenta</option>
-                            <option value="1" selected>Normal</option>
-                            <option value="1.25">Rápida</option>
-                            <option value="1.5">Muy rápida</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Efectos de sonido:</label>
-                        <select id="sound-effects" class="form-select">
-                            <option value="full">Completos</option>
-                            <option value="minimal">Mínimos</option>
-                            <option value="none">Ninguno</option>
-                        </select>
-                    </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="enable-shake">
-                        <label class="form-check-label" for="enable-shake">Habilitar efecto de sacudida</label>
-                    </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="show-hints">
-                        <label class="form-check-label" for="show-hints">Mostrar pistas de logros</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="reset-confirm">
-                        <label class="form-check-label" for="reset-confirm">Confirmar antes de reiniciar</label>
-                    </div>
-                </div>
-            </div>
-
             <div class="text-center mt-4">
                 <button class="btn-cocina" id="btn-guardar-opciones">Guardar Configuración</button>
                 <button class="btn-cocina mt-2" id="btn-reset-opciones" style="background-color: #e74c3c;">Restablecer
@@ -1279,7 +1370,7 @@
 
                 <div class="update-item mt-4">
                     <h5>Gracias por jugar</h5>
-                    <p class="mb-0">FNC Engine 0.1.8</p>
+                    <p class="mb-0">FNC Engine 0.1.9</p>
                     <small class="text-muted">© 2025 Todos los derechos reservados</small>
                 </div>
             </div>
@@ -1290,7 +1381,6 @@
             <div class="secret-panel">
                 <h3>🔒 Área Secreta</h3>
 
-                <!-- Contenedor de logros secretos con scroll -->
                 <div class="secret-achievements-container">
                     <h4 class="text-center mb-3">Logros Secretos</h4>
 
@@ -1338,7 +1428,6 @@
                         </div>
                     </div>
 
-                    <!-- Controles de contraseña -->
                     <div class="secret-controls mt-4">
                         <input type="password" id="secret-password" class="form-control mb-3"
                             placeholder="Ingresa la contraseña secreta">
@@ -1348,12 +1437,40 @@
                 </div>
             </div>
         </section>
+
+        <section id="panel-juego" class="hud-panel popup-panel w-100" style="display: none;">
+            <button id="btn-volver-menu-juego" class="close-btn">✕</button>
+            <h2 class="text-center mb-4">Modos de Juego</h2>
+
+            <div class="modos-juego">
+                <div class="modo-juego" id="modo-clasico">
+                    <h3>Modo Clásico</h3>
+                    <p>Cocina recetas tradicionales con tiempo limitado. Completa tantas como puedas antes de que se
+                        acabe el tiempo.</p>
+                    <button class="btn-cocina mt-2" id="btn-jugar-clasico">Jugar</button>
+                </div>
+
+                <div class="modo-juego" id="modo-supervivencia">
+                    <h3>Modo Supervivencia</h3>
+                    <p>No hay límite de tiempo, pero los errores te costarán vidas. ¿Cuántas recetas podrás completar?
+                    </p>
+                    <button class="btn-cocina mt-2" id="btn-jugar-supervivencia">Jugar</button>
+                </div>
+
+                <div class="modo-juego" id="modo-desafio">
+                    <h3>Modo Desafío</h3>
+                    <p>Recetas difíciles con ingredientes especiales. Solo para chefs experimentados.</p>
+                    <button class="btn-cocina mt-2" id="btn-jugar-desafio">Jugar</button>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="text-center py-3">
-        © FNC Engine 0.1.8 - Todos los derechos reservados
+        © FNC Engine 0.1.9 - Todos los derechos reservados
     </footer>
 
+    <!-- Audio Elements -->
     <audio id="bg-music" loop>
         <source src="assets/music/lo-fi-1_04-15745.mp3" type="audio/mpeg">
     </audio>
@@ -1376,6 +1493,558 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Variables globales
+        let currentMusic = 0;
+        const musicElements = [
+            { element: document.getElementById('bg-music'), name: 'Lo-fi Cooking' },
+            { element: document.getElementById('bg-music-1'), name: 'Kitchen Groove' },
+            { element: document.getElementById('bg-music-2'), name: 'Midnight Snack' }
+        ];
+        let isMusicPlaying = false;
+        let secretUnlocked = false;
+
+        // Inicialización al cargar la página
+        document.addEventListener('DOMContentLoaded', function () {
+            // Cargar configuración guardada primero
+            loadSettings();
+
+            // Configurar eventos
+            setupEventListeners();
+
+            // Desbloquear logro de primer lanzamiento
+            unlockAchievement('achievement-firstLaunch');
+
+            // Configurar temporizador para el banner de actualización
+            setupUpdateBannerTimer();
+        });
+
+        // Configurar todos los event listeners
+        function setupEventListeners() {
+            // Navegación entre paneles
+            document.getElementById('btn-jugar').addEventListener('click', () => showPanel('panel-juego'));
+            document.getElementById('btn-actualizacion').addEventListener('click', () => showPanel('panel-actualizacion'));
+            document.getElementById('btn-logros').addEventListener('click', () => showPanel('panel-logros'));
+            document.getElementById('btn-opciones').addEventListener('click', () => showPanel('panel-opciones'));
+            document.getElementById('btn-creditos').addEventListener('click', () => showPanel('panel-creditos'));
+            document.getElementById('btn-secretos').addEventListener('click', () => showPanel('panel-secretos'));
+            document.getElementById('btn-salir').addEventListener('click', exitGame);
+
+            // Botones de volver
+            document.getElementById('btn-volver-menu-act').addEventListener('click', () => hidePanel('panel-actualizacion'));
+            document.getElementById('btn-volver-menu-logros').addEventListener('click', () => hidePanel('panel-logros'));
+            document.getElementById('btn-volver-menu').addEventListener('click', () => hidePanel('panel-opciones'));
+            document.getElementById('btn-cerrar-creditos').addEventListener('click', () => hidePanel('panel-creditos'));
+            document.getElementById('btn-cerrar-secretos').addEventListener('click', () => hidePanel('panel-secretos'));
+            document.getElementById('btn-volver-menu-juego').addEventListener('click', () => hidePanel('panel-juego'));
+
+            // Control de música
+            document.getElementById('btn-play-music').addEventListener('click', playMusic);
+            document.getElementById('btn-pause-music').addEventListener('click', pauseMusic);
+            document.getElementById('btn-stop-music').addEventListener('click', stopMusic);
+            document.getElementById('btn-prev-music').addEventListener('click', prevMusic);
+            document.getElementById('btn-next-music').addEventListener('click', nextMusic);
+            document.getElementById('select-music').addEventListener('change', changeMusic);
+            document.getElementById('volumen-musica').addEventListener('input', updateMusicVolume);
+            document.getElementById('volumen-sonido').addEventListener('input', updateSoundVolume);
+
+            // Selector de color
+            document.getElementById('color-picker').addEventListener('input', handleColorChange);
+
+            // Selector de tema
+            document.getElementById('selector-tema').addEventListener('change', function() {
+                applyTheme(this.value);
+                saveSettings();
+            });
+
+            // Guardar configuración
+            document.getElementById('btn-guardar-opciones').addEventListener('click', saveSettings);
+            document.getElementById('btn-reset-opciones').addEventListener('click', resetSettings);
+
+            // Banner de actualización
+            document.getElementById('update-banner').addEventListener('click', () => {
+                showPanel('panel-actualizacion');
+                clearTimeout(updateBannerTimer);
+                document.getElementById('update-banner').style.display = 'none';
+            });
+
+            // Verificación de contraseña secreta
+            document.getElementById('submit-password').addEventListener('click', checkSecretPassword);
+
+            // Botón de jugar (para el secreto de persistencia)
+            setupPressAndHold();
+
+            // Botones de juego
+            document.getElementById('btn-jugar-clasico').addEventListener('click', () => startGame('classic'));
+            document.getElementById('btn-jugar-supervivencia').addEventListener('click', () => startGame('survival'));
+            document.getElementById('btn-jugar-desafio').addEventListener('click', () => startGame('challenge'));
+        }
+
+        // Mostrar un panel específico
+        function showPanel(panelId) {
+            // Desbloquear logros relacionados
+            if (panelId === 'panel-actualizacion') {
+                unlockAchievement('achievement-updateChecker');
+            } else if (panelId === 'panel-opciones') {
+                unlockAchievement('achievement-optionsExplorer');
+            } else if (panelId === 'panel-juego') {
+                // Verificar si se han visitado todos los paneles para el secreto
+                checkAllPanelsVisited();
+            }
+
+            document.getElementById('fondo-oscuro').classList.add('active');
+            document.getElementById(panelId).style.display = 'block';
+            document.getElementById(panelId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Reproducir efecto de sonido
+            playSoundEffect();
+        }
+
+        // Ocultar un panel
+        function hidePanel(panelId) {
+            document.getElementById('fondo-oscuro').classList.remove('active');
+            document.getElementById(panelId).classList.remove('active');
+            setTimeout(() => {
+                document.getElementById(panelId).style.display = 'none';
+            }, 300);
+            document.body.style.overflow = 'auto';
+
+            // Reproducir efecto de sonido
+            playSoundEffect();
+        }
+
+        // Control de música
+        function playMusic() {
+            musicElements[currentMusic].element.play();
+            isMusicPlaying = true;
+            document.getElementById('btn-play-music').style.display = 'none';
+            document.getElementById('btn-pause-music').style.display = 'flex';
+            unlockAchievement('achievement-musicLover');
+        }
+
+        function pauseMusic() {
+            musicElements[currentMusic].element.pause();
+            isMusicPlaying = false;
+            document.getElementById('btn-play-music').style.display = 'flex';
+            document.getElementById('btn-pause-music').style.display = 'none';
+        }
+
+        function stopMusic() {
+            pauseMusic();
+            musicElements[currentMusic].element.currentTime = 0;
+        }
+
+        function nextMusic() {
+            stopMusic();
+            currentMusic = (currentMusic + 1) % musicElements.length;
+            updateMusicInfo();
+            if (isMusicPlaying) playMusic();
+        }
+
+        function prevMusic() {
+            stopMusic();
+            currentMusic = (currentMusic - 1 + musicElements.length) % musicElements.length;
+            updateMusicInfo();
+            if (isMusicPlaying) playMusic();
+        }
+
+        function changeMusic() {
+            stopMusic();
+            currentMusic = parseInt(document.getElementById('select-music').value);
+            updateMusicInfo();
+            if (isMusicPlaying) playMusic();
+        }
+
+        function updateMusicInfo() {
+            document.getElementById('nombre-musica').textContent = musicElements[currentMusic].name;
+            document.getElementById('select-music').value = currentMusic;
+        }
+
+        function updateMusicVolume() {
+            const volume = document.getElementById('volumen-musica').value / 100;
+            musicElements.forEach(music => {
+                music.element.volume = volume;
+            });
+            document.getElementById('valor-volumen-musica').textContent = document.getElementById('volumen-musica').value;
+        }
+
+        function updateSoundVolume() {
+            document.getElementById('valor-volumen-sonido').textContent = document.getElementById('volumen-sonido').value;
+        }
+
+        // Manejo del cambio de color
+        function handleColorChange(e) {
+            const color = e.target.value;
+
+            // Si el color es negro o blanco, cambiamos al inverso
+            if (color === '#000000' || color === '#ffffff') {
+                const inverseColor = color === '#000000' ? '#ffffff' : '#000000';
+                document.documentElement.style.setProperty('--color-menu', inverseColor);
+                document.documentElement.style.setProperty('--color-menu-hover', adjustColor(inverseColor, -20));
+
+                // Desbloquear logro "Nice Try"
+                unlockAchievement('achievement-niceTry');
+            } else {
+                document.documentElement.style.setProperty('--color-menu', color);
+                document.documentElement.style.setProperty('--color-menu-hover', adjustColor(color, -20));
+            }
+
+            // Desbloquear logro de cambiador de colores
+            unlockAchievement('achievement-colorChanger');
+
+            // Contar cambios de color para el secreto
+            countColorChanges();
+        }
+
+        function adjustColor(color, amount) {
+            return '#' + color.replace(/^#/, '').replace(/../g, color =>
+                ('0' + Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
+        }
+
+        // Contador de cambios de color para el secreto
+        let colorChangeCount = 0;
+        function countColorChanges() {
+            colorChangeCount++;
+            if (colorChangeCount >= 5) {
+                unlockSecret('secret-3');
+            }
+        }
+
+        // Guardar configuración
+        function saveSettings() {
+            const menuColor = document.getElementById('color-picker').value;
+            const menuHover = adjustColor(menuColor, -20); // genera el hover dinámico
+
+            const settings = {
+                theme: document.getElementById('selector-tema').value,
+                difficulty: document.getElementById('selector-dificultad').value,
+                musicVolume: document.getElementById('volumen-musica').value,
+                soundVolume: document.getElementById('volumen-sonido').value,
+                currentMusic: currentMusic,
+                autoPlay: document.getElementById('auto-play-music').checked,
+                menuColor: menuColor,
+                menuColorHover: menuHover,
+                achievements: getUnlockedAchievements(),
+                secrets: getUnlockedSecrets()
+            };
+
+            localStorage.setItem('fncSettings', JSON.stringify(settings));
+
+            // Mostrar feedback al usuario
+            showNotification('Configuración guardada correctamente');
+        }
+
+        // Cargar configuración
+        function loadSettings() {
+            const savedSettings = localStorage.getItem('fncSettings');
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+
+                // Aplicar configuración
+                document.getElementById('selector-tema').value = settings.theme || 'automatico';
+                document.getElementById('selector-dificultad').value = settings.difficulty || 'normal';
+                document.getElementById('volumen-musica').value = settings.musicVolume || 50;
+                document.getElementById('valor-volumen-musica').textContent = settings.musicVolume || 50;
+                document.getElementById('volumen-sonido').value = settings.soundVolume || 50;
+                document.getElementById('valor-volumen-sonido').textContent = settings.soundVolume || 50;
+                currentMusic = settings.currentMusic || 0;
+                document.getElementById('select-music').value = currentMusic;
+                document.getElementById('auto-play-music').checked = settings.autoPlay || false;
+                document.getElementById('color-picker').value = settings.menuColor || '#e67e22';
+
+                // Aplicar el tema primero
+                applyTheme(settings.theme || 'automatico', true);
+
+                // Aplicar color del menú después del tema
+                document.documentElement.style.setProperty('--color-menu', settings.menuColor || '#e67e22');
+                document.documentElement.style.setProperty('--color-menu-hover', settings.menuColorHover || adjustColor(settings.menuColor || '#e67e22', -20));
+
+                // Restaurar logros desbloqueados
+                if (settings.achievements) {
+                    restoreAchievements(settings.achievements);
+                }
+
+                // Restaurar secretos desbloqueados
+                if (settings.secrets && settings.secrets.length > 0) {
+                    settings.secrets.forEach(secretId => {
+                        unlockSecret(secretId);
+                    });
+                }
+
+                // Aplicar volumen
+                updateMusicVolume();
+
+                // Reproducir música automáticamente si está configurado
+                if (settings.autoPlay) {
+                    playMusic();
+                }
+
+                updateMusicInfo();
+            }
+        }
+
+        // Obtener logros desbloqueados
+        function getUnlockedAchievements() {
+            const unlocked = {};
+            document.querySelectorAll('.achievement').forEach(achievement => {
+                if (achievement.querySelector('.achievement-progress-bar').style.width === '100%') {
+                    unlocked[achievement.id.replace('achievement-', '')] = true;
+                }
+            });
+            return unlocked;
+        }
+
+        // Restaurar logros desbloqueados
+        function restoreAchievements(achievements) {
+            for (const achievementId in achievements) {
+                const element = document.getElementById(`achievement-${achievementId}`);
+                if (element) {
+                    element.querySelector('.achievement-progress-bar').style.width = '100%';
+                }
+            }
+        }
+
+        // Obtener secretos desbloqueados
+        function getUnlockedSecrets() {
+            const unlocked = [];
+            document.querySelectorAll('.secret-item.unlocked').forEach(secret => {
+                unlocked.push(secret.id);
+            });
+            return unlocked;
+        }
+
+        // Restablecer configuración
+        function resetSettings() {
+            if (confirm('¿Estás seguro de que quieres restablecer toda la configuración a los valores predeterminados?')) {
+                localStorage.removeItem('fncSettings');
+                showNotification('Configuración restablecida');
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }
+        }
+
+        // Manejo de temas
+        function applyTheme(theme, skipSaving = false) {
+            // Primero eliminar cualquier tema existente
+            document.body.classList.remove('tema-claro');
+            
+            // Guardar el tema en localStorage si no estamos en modo skipSaving
+            if (!skipSaving) {
+                localStorage.setItem('fnc-theme', theme);
+            }
+
+            // Aplicar el tema seleccionado
+            if (theme === 'automatico') {
+                // Usar la preferencia del sistema
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (!prefersDark) {
+                    document.body.classList.add('tema-claro');
+                }
+            } else if (theme === 'light') {
+                document.body.classList.add('tema-claro');
+            }
+            // 'dark' es el tema por defecto, no necesita clase adicional
+
+            // Configurar listener para cambios en el tema del sistema si es automático
+            if (theme === 'automatico') {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                    if (document.getElementById('selector-tema').value === 'automatico') {
+                        document.body.classList.toggle('tema-claro', !e.matches);
+                    }
+                });
+            }
+        }
+
+        // Banner de actualización
+        let updateBannerTimer;
+        function setupUpdateBannerTimer() {
+            updateBannerTimer = setTimeout(() => {
+                document.getElementById('update-banner').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('update-banner').style.display = 'none';
+                }, 500);
+            }, 10000);
+        }
+
+        // Función para desbloquear logros
+        function unlockAchievement(achievementId) {
+            const achievement = document.getElementById(achievementId);
+            if (achievement && achievement.querySelector('.achievement-progress-bar').style.width !== '100%') {
+                achievement.querySelector('.achievement-progress-bar').style.width = '100%';
+
+                // Mostrar notificación
+                showAchievementNotification(
+                    'Logro desbloqueado',
+                    achievement.querySelector('.achievement-title').textContent,
+                    achievement.querySelector('.achievement-desc').textContent
+                );
+
+                // Reproducir sonido de logro
+                playSoundEffect('achievement');
+
+                // Verificar si es un logro secreto
+                if (achievementId.startsWith('secret-')) {
+                    secretUnlocked = true;
+                    document.getElementById('btn-secretos').style.display = 'block';
+                    unlockAchievement('achievement-secretFinder');
+                }
+
+                // Guardar en localStorage
+                saveSettings();
+            }
+        }
+
+        // Función para desbloquear secretos
+        function unlockSecret(secretId) {
+            const secretItem = document.getElementById(secretId);
+            if (secretItem && !secretItem.classList.contains('unlocked')) {
+                secretItem.classList.add('unlocked');
+                secretItem.querySelector('.secret-status').textContent = '🔓 Desbloqueado';
+                secretItem.querySelector('.secret-status').classList.remove('locked');
+                secretItem.querySelector('.secret-status').classList.add('unlocked');
+
+                // Reproducir sonido de desbloqueo
+                playSoundEffect('secret');
+
+                // Mostrar notificación
+                showAchievementNotification(
+                    'Secreto desbloqueado',
+                    secretItem.querySelector('h5').textContent,
+                    secretItem.querySelector('p').textContent);
+
+                // Mostrar botón de secretos si está oculto
+                document.getElementById('btn-secretos').style.display = 'block';
+
+                // Desbloquear logro de buscador de secretos
+                unlockAchievement('achievement-secretFinder');
+
+                // Verificar si todos los secretos están desbloqueados
+                checkAllSecretsUnlocked();
+
+                // Guardar en localStorage
+                saveSettings();
+            }
+        }
+
+        function checkAllSecretsUnlocked() {
+            const allSecrets = document.querySelectorAll('.secret-item');
+            const unlockedSecrets = document.querySelectorAll('.secret-item.unlocked');
+
+            if (allSecrets.length === unlockedSecrets.length) {
+                unlockAchievement('achievement-secretMaster');
+            }
+        }
+
+        // Verificación de contraseña secreta
+        function checkSecretPassword() {
+            const password = document.getElementById('secret-password').value;
+            if (password.toLowerCase() === 'salsa') {
+                // Desbloquear un secreto aleatorio
+                const secrets = document.querySelectorAll('.secret-item:not(.unlocked)');
+                if (secrets.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * secrets.length);
+                    const secretId = secrets[randomIndex].id;
+                    unlockSecret(secretId);
+                }
+
+                document.getElementById('secret-password').value = '';
+                showNotification('¡Contraseña correcta! Secreto desbloqueado');
+            } else {
+                showNotification('Contraseña incorrecta', 'error');
+            }
+        }
+
+        // Configurar el evento de mantener presionado para el botón de jugar
+        function setupPressAndHold() {
+            const btn = document.getElementById('btn-jugar');
+            let pressTimer;
+
+            btn.addEventListener('mousedown', function () {
+                pressTimer = setTimeout(function () {
+                    unlockSecret('secret-6');
+                }, 10000); // 10 segundos
+            });
+
+            btn.addEventListener('mouseup', function () {
+                clearTimeout(pressTimer);
+            });
+
+            btn.addEventListener('mouseleave', function () {
+                clearTimeout(pressTimer);
+            });
+        }
+
+        // Mostrar notificación de logro
+        function showAchievementNotification(title, achievement, description) {
+            const notification = document.createElement('div');
+            notification.className = 'achievement-notification';
+            notification.innerHTML = `
+            <div class="achievement-notification-content">
+                <div class="achievement-notification-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="achievement-notification-text">
+                    <h4>${title}</h4>
+                    <h5>${achievement}</h5>
+                    <p>${description}</p>
+                </div>
+            </div>
+        `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 500);
+            }, 5000);
+        }
+
+        // Mostrar notificación genérica
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `achievement-notification ${type}`;
+            notification.innerHTML = `
+            <div class="achievement-notification-content">
+                <div class="achievement-notification-icon">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                </div>
+                <div class="achievement-notification-text">
+                    <p>${message}</p>
+                </div>
+            </div>
+        `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 500);
+            }, 3000);
+        }
+
+        // Reproducir efectos de sonido
+        function playSoundEffect(type = 'normal') {
+            const sound = document.getElementById(type === 'secret' ? 'secret-sound' : 'sound-effect');
+            if (sound) {
+                sound.volume = document.getElementById('volumen-sonido').value / 100;
+                sound.currentTime = 0;
+                sound.play().catch(e => console.log("Error al reproducir sonido:", e));
+            }
+        }
+
         // Detector de gesto táctil secreto (dibujar una "C" en pantalla)
         let touchStartPos = null;
         let touchPath = [];
@@ -1419,11 +2088,7 @@
                 document.body.style.overflow = 'hidden';
 
                 // Reproducir sonido de feedback
-                const secretSound = document.getElementById('secret-sound');
-                if (secretSound) {
-                    secretSound.currentTime = 0;
-                    secretSound.play().catch(e => console.log("Error al reproducir sonido:", e));
-                }
+                playSoundEffect('secret');
 
                 // Vibración (opcional, solo para móviles)
                 if (navigator.vibrate) {
@@ -1435,26 +2100,89 @@
         // Combinación de teclas para mostrar el panel secreto: Ctrl+Alt+C
         document.addEventListener('keydown', function (event) {
             if (event.ctrlKey && event.altKey && event.key.toLowerCase() === 'c') {
-                const panelSecreto = document.getElementById('panel-secretos');
-                const fondoOscuro = document.getElementById('fondo-oscuro');
+                showSecretPanel();
+            }
 
-                if (panelSecreto && fondoOscuro) {
-                    panelSecreto.style.display = 'block';
-                    panelSecreto.classList.add('active');
-                    fondoOscuro.classList.add('active');
-                    document.body.style.overflow = 'hidden';
+            // Código Konami: ↑↑↓↓←→←→BA
+            const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+            let konamiIndex = 0;
 
-                    // Reproducir sonido de secreto si existe
-                    const secretSound = document.getElementById('secret-sound');
-                    if (secretSound) {
-                        secretSound.currentTime = 0;
-                        secretSound.play().catch(e => console.log("Error al reproducir sonido:", e));
-                    }
+            if (event.key === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    // Código Konami completado
+                    unlockSecret('secret-4');
+                    konamiIndex = 0;
                 }
+            } else {
+                konamiIndex = 0;
             }
         });
+
+        // Verificar la hora para el secreto de las 3:33 AM
+        function checkTimeForSecret() {
+            const now = new Date();
+            if (now.getHours() === 3 && now.getMinutes() === 33) {
+                unlockSecret('secret-2');
+            }
+        }
+
+        // Verificar cada minuto
+        setInterval(checkTimeForSecret, 60000);
+        checkTimeForSecret(); // Comprobar al cargar
+
+        // Temporizador para el secreto de paciencia (5 minutos en el menú)
+        setTimeout(() => {
+            unlockSecret('secret-1');
+        }, 300000); // 5 minutos
+
+        // Verificar si se han visitado todos los paneles para el secreto
+        let visitedPanels = new Set();
+        function checkAllPanelsVisited() {
+            visitedPanels.add('panel-juego');
+
+            const allPanels = ['panel-actualizacion', 'panel-logros', 'panel-opciones', 'panel-creditos', 'panel-secretos'];
+            let allVisited = true;
+
+            for (const panel of allPanels) {
+                if (!visitedPanels.has(panel)) {
+                    allVisited = false;
+                    break;
+                }
+            }
+
+            if (allVisited) {
+                unlockSecret('secret-5');
+            }
+        }
+
+        // Registrar visitas a paneles
+        document.getElementById('btn-actualizacion').addEventListener('click', () => visitedPanels.add('panel-actualizacion'));
+        document.getElementById('btn-logros').addEventListener('click', () => visitedPanels.add('panel-logros'));
+        document.getElementById('btn-opciones').addEventListener('click', () => visitedPanels.add('panel-opciones'));
+        document.getElementById('btn-creditos').addEventListener('click', () => visitedPanels.add('panel-creditos'));
+        document.getElementById('btn-secretos').addEventListener('click', () => visitedPanels.add('panel-secretos'));
+
+        // Función para iniciar el juego
+        function startGame(mode) {
+            // Redirigir a los HTMLs específicos para cada modo
+            if (mode === 'classic') {
+                window.location.href = 'memorama.html';
+            } else if (mode === 'survival') {
+                window.location.href = 'pollolito.html';
+            } else if (mode === 'challenge') {
+                window.location.href = 'desafio.html';
+            }
+        }
+
+        // Salir del juego
+        function exitGame() {
+            // Puedes personalizar esto según lo que necesites
+            window.close(); // Esto solo funciona si la ventana fue abierta con JavaScript
+            // Otra opción es redirigir a una página de salida
+            // window.location.href = 'salida.html';
+        }
     </script>
-    <script src="js/main.js"></script>
 </body>
 
 </html>
