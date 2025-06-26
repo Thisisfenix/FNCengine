@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Friday Night Cooking 0.1.9</title>
+    <title>Friday Night Cooking 0.2.0</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -13,7 +13,6 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;700&display=swap"
         rel="stylesheet">
-    .close
     <style>
         /* Base Styles */
         :root {
@@ -176,6 +175,1188 @@
         .update-item:hover {
             background-color: rgba(255, 255, 255, 0.15);
             transform: translateX(5px);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--color-texto);
+            font-size: 1.5rem;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+            transition: var(--transicion-rapida);
+            z-index: 2;
+        }
+
+        .close-btn:hover {
+            color: var(--color-menu);
+            transform: rotate(90deg);
+        }
+
+        .popup-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            z-index: 1001;
+            width: 95%;
+            max-width: 600px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-out;
+            will-change: transform, opacity;
+        }
+
+        .popup-panel.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #fondo-oscuro {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            transition: opacity 0.3s ease;
+        }
+
+        #fondo-oscuro.active {
+            display: block;
+            opacity: 1;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            color: var(--color-texto);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--color-menu), #f1c40f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            font-family: 'Pacifico', cursive;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--color-menu);
+            margin: 10px auto;
+            border-radius: 2px;
+        }
+
+        .creditos-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--color-menu);
+            margin-bottom: 15px;
+            transition: var(--transicion-rapida);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .creditos-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .music-controls-container {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid var(--color-menu);
+        }
+
+        .music-info {
+            text-align: center;
+            margin-bottom: 15px;
+            font-style: italic;
+            color: var(--color-menu);
+        }
+
+        .music-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .music-btn {
+            background: var(--color-menu);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transicion-rapida);
+            color: white;
+        }
+
+        .music-btn:hover {
+            background: var(--color-menu-hover);
+            transform: scale(1.1);
+        }
+
+        #panel-actualizacion {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .achievements-container {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .achievement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: var(--transicion-rapida);
+            cursor: help;
+            position: relative;
+        }
+
+        .achievement:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .achievement:hover::after {
+            content: attr(data-progress);
+            position: absolute;
+            right: 10px;
+            bottom: 5px;
+            font-size: 0.8rem;
+            color: var(--color-menu);
+        }
+
+        .achievement-icon {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+            border-radius: 8px;
+            background-color: var(--color-menu);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--color-texto);
+        }
+
+        .achievement-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            color: var(--color-texto);
+        }
+
+        .achievement-progress {
+            height: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .achievement-progress-bar {
+            height: 100%;
+            background-color: var(--color-menu);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-5px);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(5px);
+            }
+        }
+
+        .music-selector {
+            margin: 15px 0;
+            width: 100%;
+        }
+
+        .music-selector select {
+            background-color: rgba(0, 0, 0, 0.2);
+            color: var(--color-texto);
+            border: 1px solid var(--color-menu);
+            border-radius: 5px;
+            padding: 8px;
+            width: 100%;
+        }
+
+        .secrets-container {
+            max-height: 40vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .secret-item {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-left: 4px solid var(--color-menu);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+            transition: var(--transicion-rapida);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .secret-item::before {
+            content: '🔒 SECRETO';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--color-menu);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 0 0 0 5px;
+        }
+
+        .secret-item.unlocked::before {
+            content: '🔓 SECRETO';
+            background-color: #2ecc71;
+        }
+
+        .secret-item:hover {
+            background-color: rgba(243, 156, 18, 0.15);
+        }
+
+        .achievements-container::-webkit-scrollbar,
+        .secrets-container::-webkit-scrollbar,
+        #panel-actualizacion::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .achievements-container::-webkit-scrollbar-track,
+        .secrets-container::-webkit-scrollbar-track,
+        #panel-actualizacion::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .achievements-container::-webkit-scrollbar-thumb,
+        .secrets-container::-webkit-scrollbar-thumb,
+        #panel-actualizacion::-webkit-scrollbar-thumb {
+            background-color: var(--color-menu);
+            border-radius: 10px;
+        }
+
+        body.tema-claro {
+            --color-texto: #333333;
+            --color-texto-rgb: 51, 51, 51;
+            --color-fondo: #f5f5f5;
+            --color-fondo-panel: rgba(255, 255, 255, 0.9);
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgwLDAsMCwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+        }
+
+        body.tema-claro .update-item,
+        body.tema-claro footer,
+        body.tema-claro .creditos-container p,
+        body.tema-claro .creditos-container h4,
+        body.tema-claro .creditos-container h5,
+        body.tema-claro .text-muted {
+            color: #333333 !important;
+        }
+
+        body.tema-claro .close-btn {
+            color: #333333;
+        }
+
+        body.tema-claro .close-btn:hover {
+            color: var(--color-menu);
+        }
+
+        body.tema-claro .music-info {
+            color: var(--color-menu-hover);
+        }
+
+        .advanced-settings {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px dashed var(--color-menu);
+        }
+
+        .advanced-settings h5 {
+            color: var(--color-menu);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .advanced-settings h5 i {
+            transition: transform 0.3s ease;
+        }
+
+        .advanced-settings h5.collapsed i {
+            transform: rotate(-90deg);
+        }
+
+        .advanced-settings-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .advanced-settings-content.collapsed {
+            max-height: 0 !important;
+        }
+
+        .secret-panel {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #8e44ad;
+        }
+
+        .secret-panel h3 {
+            color: #8e44ad;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--color-texto);
+            font-size: 1.5rem;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+            transition: var(--transicion-rapida);
+            z-index: 2;
+        }
+
+        .close-btn:hover {
+            color: var(--color-menu);
+            transform: rotate(90deg);
+        }
+
+        .popup-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            z-index: 1001;
+            width: 95%;
+            max-width: 600px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-out;
+            will-change: transform, opacity;
+        }
+
+        .popup-panel.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #fondo-oscuro {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            transition: opacity 0.3s ease;
+        }
+
+        #fondo-oscuro.active {
+            display: block;
+            opacity: 1;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            color: var(--color-texto);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--color-menu), #f1c40f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            font-family: 'Pacifico', cursive;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--color-menu);
+            margin: 10px auto;
+            border-radius: 2px;
+        }
+
+        .creditos-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--color-menu);
+            margin-bottom: 15px;
+            transition: var(--transicion-rapida);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .creditos-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .music-controls-container {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid var(--color-menu);
+        }
+
+        .music-info {
+            text-align: center;
+            margin-bottom: 15px;
+            font-style: italic;
+            color: var(--color-menu);
+        }
+
+        .music-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .music-btn {
+            background: var(--color-menu);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transicion-rapida);
+            color: white;
+        }
+
+        .music-btn:hover {
+            background: var(--color-menu-hover);
+            transform: scale(1.1);
+        }
+
+        #panel-actualizacion {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .achievements-container {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .achievement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: var(--transicion-rapida);
+            cursor: help;
+            position: relative;
+        }
+
+        .achievement:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .achievement:hover::after {
+            content: attr(data-progress);
+            position: absolute;
+            right: 10px;
+            bottom: 5px;
+            font-size: 0.8rem;
+            color: var(--color-menu);
+        }
+
+        .achievement-icon {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+            border-radius: 8px;
+            background-color: var(--color-menu);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--color-texto);
+        }
+
+        .achievement-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            color: var(--color-texto);
+        }
+
+        .achievement-progress {
+            height: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .achievement-progress-bar {
+            height: 100%;
+            background-color: var(--color-menu);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-5px);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(5px);
+            }
+        }
+
+        .music-selector {
+            margin: 15px 0;
+            width: 100%;
+        }
+
+        .music-selector select {
+            background-color: rgba(0, 0, 0, 0.2);
+            color: var(--color-texto);
+            border: 1px solid var(--color-menu);
+            border-radius: 5px;
+            padding: 8px;
+            width: 100%;
+        }
+
+        .secrets-container {
+            max-height: 40vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .secret-item {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-left: 4px solid var(--color-menu);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+            transition: var(--transicion-rapida);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .secret-item::before {
+            content: '🔒 SECRETO';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--color-menu);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 0 0 0 5px;
+        }
+
+        .secret-item.unlocked::before {
+            content: '🔓 SECRETO';
+            background-color: #2ecc71;
+        }
+
+        .secret-item:hover {
+            background-color: rgba(243, 156, 18, 0.15);
+        }
+
+        .achievements-container::-webkit-scrollbar,
+        .secrets-container::-webkit-scrollbar,
+        #panel-actualizacion::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .achievements-container::-webkit-scrollbar-track,
+        .secrets-container::-webkit-scrollbar-track,
+        #panel-actualizacion::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .achievements-container::-webkit-scrollbar-thumb,
+        .secrets-container::-webkit-scrollbar-thumb,
+        #panel-actualizacion::-webkit-scrollbar-thumb {
+            background-color: var(--color-menu);
+            border-radius: 10px;
+        }
+
+        body.tema-claro {
+            --color-texto: #333333;
+            --color-texto-rgb: 51, 51, 51;
+            --color-fondo: #f5f5f5;
+            --color-fondo-panel: rgba(255, 255, 255, 0.9);
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgwLDAsMCwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+        }
+
+        body.tema-claro .update-item,
+        body.tema-claro footer,
+        body.tema-claro .creditos-container p,
+        body.tema-claro .creditos-container h4,
+        body.tema-claro .creditos-container h5,
+        body.tema-claro .text-muted {
+            color: #333333 !important;
+        }
+
+        body.tema-claro .close-btn {
+            color: #333333;
+        }
+
+        body.tema-claro .close-btn:hover {
+            color: var(--color-menu);
+        }
+
+        body.tema-claro .music-info {
+            color: var(--color-menu-hover);
+        }
+
+        .advanced-settings {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px dashed var(--color-menu);
+        }
+
+        .advanced-settings h5 {
+            color: var(--color-menu);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .advanced-settings h5 i {
+            transition: transform 0.3s ease;
+        }
+
+        .advanced-settings h5.collapsed i {
+            transform: rotate(-90deg);
+        }
+
+        .advanced-settings-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .advanced-settings-content.collapsed {
+            max-height: 0 !important;
+        }
+
+        .secret-panel {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #8e44ad;
+        }
+
+        .secret-panel h3 {
+            color: #8e44ad;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--color-texto);
+            font-size: 1.5rem;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+            transition: var(--transicion-rapida);
+            z-index: 2;
+        }
+
+        .close-btn:hover {
+            color: var(--color-menu);
+            transform: rotate(90deg);
+        }
+
+        .popup-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            z-index: 1001;
+            width: 95%;
+            max-width: 600px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-out;
+            will-change: transform, opacity;
+        }
+
+        .popup-panel.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #fondo-oscuro {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            transition: opacity 0.3s ease;
+        }
+
+        #fondo-oscuro.active {
+            display: block;
+            opacity: 1;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            color: var(--color-texto);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--color-menu), #f1c40f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            font-family: 'Pacifico', cursive;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--color-menu);
+            margin: 10px auto;
+            border-radius: 2px;
+        }
+
+        .creditos-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--color-menu);
+            margin-bottom: 15px;
+            transition: var(--transicion-rapida);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .creditos-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .music-controls-container {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid var(--color-menu);
+        }
+
+        .music-info {
+            text-align: center;
+            margin-bottom: 15px;
+            font-style: italic;
+            color: var(--color-menu);
+        }
+
+        .music-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .music-btn {
+            background: var(--color-menu);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transicion-rapida);
+            color: white;
+        }
+
+        .music-btn:hover {
+            background: var(--color-menu-hover);
+            transform: scale(1.1);
+        }
+
+        #panel-actualizacion {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .achievements-container {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .achievement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: var(--transicion-rapida);
+            cursor: help;
+            position: relative;
+        }
+
+        .achievement:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .achievement:hover::after {
+            content: attr(data-progress);
+            position: absolute;
+            right: 10px;
+            bottom: 5px;
+            font-size: 0.8rem;
+            color: var(--color-menu);
+        }
+
+        .achievement-icon {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+            border-radius: 8px;
+            background-color: var(--color-menu);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--color-texto);
+        }
+
+        .achievement-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            color: var(--color-texto);
+        }
+
+        .achievement-progress {
+            height: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .achievement-progress-bar {
+            height: 100%;
+            background-color: var(--color-menu);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-5px);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(5px);
+            }
+        }
+
+        .music-selector {
+            margin: 15px 0;
+            width: 100%;
+        }
+
+        .music-selector select {
+            background-color: rgba(0, 0, 0, 0.2);
+            color: var(--color-texto);
+            border: 1px solid var(--color-menu);
+            border-radius: 5px;
+            padding: 8px;
+            width: 100%;
+        }
+
+        .secrets-container {
+            max-height: 40vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .secret-item {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-left: 4px solid var(--color-menu);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+            transition: var(--transicion-rapida);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .secret-item::before {
+            content: '🔒 SECRETO';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--color-menu);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 0 0 0 5px;
+        }
+
+        .secret-item.unlocked::before {
+            content: '🔓 SECRETO';
+            background-color: #2ecc71;
+        }
+
+        .secret-item:hover {
+            background-color: rgba(243, 156, 18, 0.15);
+        }
+
+        .achievements-container::-webkit-scrollbar,
+        .secrets-container::-webkit-scrollbar,
+        #panel-actualizacion::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .achievements-container::-webkit-scrollbar-track,
+        .secrets-container::-webkit-scrollbar-track,
+        #panel-actualizacion::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .achievements-container::-webkit-scrollbar-thumb,
+        .secrets-container::-webkit-scrollbar-thumb,
+        #panel-actualizacion::-webkit-scrollbar-thumb {
+            background-color: var(--color-menu);
+            border-radius: 10px;
+        }
+
+        body.tema-claro {
+            --color-texto: #333333;
+            --color-texto-rgb: 51, 51, 51;
+            --color-fondo: #f5f5f5;
+            --color-fondo-panel: rgba(255, 255, 255, 0.9);
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgwLDAsMCwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+        }
+
+        body.tema-claro .update-item,
+        body.tema-claro footer,
+        body.tema-claro .creditos-container p,
+        body.tema-claro .creditos-container h4,
+        body.tema-claro .creditos-container h5,
+        body.tema-claro .text-muted {
+            color: #333333 !important;
+        }
+
+        body.tema-claro .close-btn {
+            color: #333333;
+        }
+
+        body.tema-claro .close-btn:hover {
+            color: var(--color-menu);
+        }
+
+        body.tema-claro .music-info {
+            color: var(--color-menu-hover);
+        }
+
+        .advanced-settings {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px dashed var(--color-menu);
+        }
+
+        .advanced-settings h5 {
+            color: var(--color-menu);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .advanced-settings h5 i {
+            transition: transform 0.3s ease;
+        }
+
+        .advanced-settings h5.collapsed i {
+            transform: rotate(-90deg);
+        }
+
+        .advanced-settings-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .advanced-settings-content.collapsed {
+            max-height: 0 !important;
+        }
+
+        .secret-panel {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #8e44ad;
+        }
+
+        .secret-panel h3 {
+            color: #8e44ad;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         .close-btn {
@@ -797,7 +1978,30 @@
             }
         }
 
-        /* NUEVOS ESTILOS PARA 0.1.9 */
+        /* NUEVOS ESTILOS PARA 0.2.0 */
+        #panel-opciones {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2100;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        .konami-code {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            font-size: 0.8rem;
+            opacity: 0.3;
+            z-index: 100;
+        }
+
         #panel-creditos {
             top: 45%;
             transform: translate(-50%, -50%) scale(0.95);
@@ -1041,9 +2245,11 @@
 
 <body>
     <div id="fondo-oscuro"></div>
+    <div class="notification-container"></div>
+    <div class="konami-code">↑↑↓↓←→←→BA</div>
 
     <div id="update-banner">
-        ⚡ Actualización 0.1.9 - Haz clic para ver los cambios (o desaparecerá en 10 segundos)
+        ⚡ Actualización 0.2.0 - Haz clic para ver los cambios (o desaparecerá en 10 segundos)
     </div>
 
     <div id="color-picker-container">
@@ -1073,7 +2279,29 @@
             <h2 class="text-center mb-4">Últimas Actualizaciones</h2>
             <div class="update-container">
                 <div class="update-item">
-                    <h4>Versión 0.1.9 <span class="badge bg-success ms-2">Nuevo</span></h4>
+                    <h4>Versión 0.2.0 <span class="badge bg-success ms-2">Nuevo</span></h4>
+                    <ul>
+                        <li><strong>Mejoras generales:</strong>
+                            <ul>
+                                <li>Corrección del problema de scroll en opciones</li>
+                                <li>Solución a notificaciones duplicadas</li>
+                                <li>Mejoras en el sistema de temas</li>
+                                <li>Código Konami ahora funciona correctamente</li>
+                                <li>Optimizaciones de rendimiento</li>
+                            </ul>
+                        </li>
+                        <li><strong>Nuevas características:</strong>
+                            <ul>
+                                <li>Sistema de notificaciones centralizado</li>
+                                <li>Debounce para guardado de configuración</li>
+                                <li>Mejor manejo de paneles visitados</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <small class="text-muted">Publicado: 26/06/2025</small>
+                </div>
+                <div class="update-item">
+                    <h4>Versión 0.1.9</h4>
                     <ul>
                         <li><strong>Mejoras visuales:</strong>
                             <ul>
@@ -1092,20 +2320,6 @@
                         </li>
                     </ul>
                     <small class="text-muted">Publicado: 20/06/2025</small>
-                </div>
-                <div class="update-item">
-                    <h4>Versión 0.1.8</h4>
-                    <ul>
-                        <li><strong>Correcciones:</strong>
-                            <ul>
-                                <li>Problema de visibilidad de texto en modo oscuro</li>
-                                <li>Mejoras en la legibilidad de los créditos</li>
-                                <li>Optimización del sistema de temas</li>
-                                <li>(Bugs arreglados y encontrados por soyrichard123)</li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <small class="text-muted">Publicado: 19/06/2025</small>
                 </div>
             </div>
         </section>
@@ -1370,7 +2584,7 @@
 
                 <div class="update-item mt-4">
                     <h5>Gracias por jugar</h5>
-                    <p class="mb-0">FNC Engine 0.1.9</p>
+                    <p class="mb-0">FNC Engine 0.2.0</p>
                     <small class="text-muted">© 2025 Todos los derechos reservados</small>
                 </div>
             </div>
@@ -1467,7 +2681,7 @@
     </main>
 
     <footer class="text-center py-3">
-        © FNC Engine 0.1.9 - Todos los derechos reservados
+        © FNC Engine 0.2.0 - Todos los derechos reservados
     </footer>
 
     <!-- Audio Elements -->
@@ -1502,6 +2716,11 @@
         ];
         let isMusicPlaying = false;
         let secretUnlocked = false;
+        let konamiIndex = 0;
+        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        let notificationTimeout;
+        let settingsSaveTimeout;
+        let visitedPanels = new Set();
 
         // Inicialización al cargar la página
         document.addEventListener('DOMContentLoaded', function () {
@@ -1516,15 +2735,27 @@
 
             // Configurar temporizador para el banner de actualización
             setupUpdateBannerTimer();
+
+            // Configurar el sistema de temas
+            setupThemeSystem();
+
+            // Verificar si hay secretos desbloqueados para mostrar el botón
+            checkSecretsUnlocked();
         });
 
         // Configurar todos los event listeners
         function setupEventListeners() {
             // Navegación entre paneles
             document.getElementById('btn-jugar').addEventListener('click', () => showPanel('panel-juego'));
-            document.getElementById('btn-actualizacion').addEventListener('click', () => showPanel('panel-actualizacion'));
+            document.getElementById('btn-actualizacion').addEventListener('click', () => {
+                showPanel('panel-actualizacion');
+                unlockAchievement('achievement-updateChecker');
+            });
             document.getElementById('btn-logros').addEventListener('click', () => showPanel('panel-logros'));
-            document.getElementById('btn-opciones').addEventListener('click', () => showPanel('panel-opciones'));
+            document.getElementById('btn-opciones').addEventListener('click', () => {
+                showPanel('panel-opciones');
+                unlockAchievement('achievement-optionsExplorer');
+            });
             document.getElementById('btn-creditos').addEventListener('click', () => showPanel('panel-creditos'));
             document.getElementById('btn-secretos').addEventListener('click', () => showPanel('panel-secretos'));
             document.getElementById('btn-salir').addEventListener('click', exitGame);
@@ -1553,11 +2784,11 @@
             // Selector de tema
             document.getElementById('selector-tema').addEventListener('change', function() {
                 applyTheme(this.value);
-                saveSettings();
+                debouncedSaveSettings();
             });
 
             // Guardar configuración
-            document.getElementById('btn-guardar-opciones').addEventListener('click', saveSettings);
+            document.getElementById('btn-guardar-opciones').addEventListener('click', debouncedSaveSettings);
             document.getElementById('btn-reset-opciones').addEventListener('click', resetSettings);
 
             // Banner de actualización
@@ -1577,27 +2808,66 @@
             document.getElementById('btn-jugar-clasico').addEventListener('click', () => startGame('classic'));
             document.getElementById('btn-jugar-supervivencia').addEventListener('click', () => startGame('survival'));
             document.getElementById('btn-jugar-desafio').addEventListener('click', () => startGame('challenge'));
+
+            // Eventos de teclado
+            document.addEventListener('keydown', handleKeyDown);
+        }
+
+        // Configurar el sistema de temas
+        function setupThemeSystem() {
+            const savedTheme = localStorage.getItem('fnc-theme') || 'automatico';
+            document.getElementById('selector-tema').value = savedTheme;
+            applyTheme(savedTheme, true);
+
+            // Escuchar cambios en la preferencia del sistema
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (document.getElementById('selector-tema').value === 'automatico') {
+                    document.body.classList.toggle('tema-claro', !e.matches);
+                }
+            });
+        }
+
+        // Función debounce para guardar configuración
+        function debouncedSaveSettings() {
+            clearTimeout(settingsSaveTimeout);
+            settingsSaveTimeout = setTimeout(() => {
+                saveSettings();
+            }, 500);
+        }
+
+        // Manejo de teclas para el código Konami
+        function handleKeyDown(event) {
+            // Combinación de teclas para panel secreto
+            if (event.ctrlKey && event.altKey && event.key.toLowerCase() === 'c') {
+                showSecretPanel();
+                return;
+            }
+
+            // Código Konami
+            if (event.key === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    unlockSecret('secret-4');
+                    konamiIndex = 0;
+                }
+            } else {
+                konamiIndex = 0;
+            }
         }
 
         // Mostrar un panel específico
         function showPanel(panelId) {
-            // Desbloquear logros relacionados
-            if (panelId === 'panel-actualizacion') {
-                unlockAchievement('achievement-updateChecker');
-            } else if (panelId === 'panel-opciones') {
-                unlockAchievement('achievement-optionsExplorer');
-            } else if (panelId === 'panel-juego') {
-                // Verificar si se han visitado todos los paneles para el secreto
-                checkAllPanelsVisited();
-            }
-
             document.getElementById('fondo-oscuro').classList.add('active');
             document.getElementById(panelId).style.display = 'block';
             document.getElementById(panelId).classList.add('active');
             document.body.style.overflow = 'hidden';
-
-            // Reproducir efecto de sonido
             playSoundEffect();
+
+            // Registrar panel visitado
+            if (panelId !== 'panel-juego') {
+                visitedPanels.add(panelId);
+                checkAllPanelsVisited();
+            }
         }
 
         // Ocultar un panel
@@ -1608,8 +2878,6 @@
                 document.getElementById(panelId).style.display = 'none';
             }, 300);
             document.body.style.overflow = 'auto';
-
-            // Reproducir efecto de sonido
             playSoundEffect();
         }
 
@@ -1713,7 +2981,7 @@
         // Guardar configuración
         function saveSettings() {
             const menuColor = document.getElementById('color-picker').value;
-            const menuHover = adjustColor(menuColor, -20); // genera el hover dinámico
+            const menuHover = adjustColor(menuColor, -20);
 
             const settings = {
                 theme: document.getElementById('selector-tema').value,
@@ -1725,13 +2993,16 @@
                 menuColor: menuColor,
                 menuColorHover: menuHover,
                 achievements: getUnlockedAchievements(),
-                secrets: getUnlockedSecrets()
+                secrets: getUnlockedSecrets(),
+                visitedPanels: Array.from(visitedPanels)
             };
 
             localStorage.setItem('fncSettings', JSON.stringify(settings));
-
-            // Mostrar feedback al usuario
-            showNotification('Configuración guardada correctamente');
+            
+            // Mostrar feedback solo cuando es explícito (no en autoguardados)
+            if (!settingsSaveTimeout) {
+                showNotification('Configuración guardada correctamente');
+            }
         }
 
         // Cargar configuración
@@ -1752,10 +3023,10 @@
                 document.getElementById('auto-play-music').checked = settings.autoPlay || false;
                 document.getElementById('color-picker').value = settings.menuColor || '#e67e22';
 
-                // Aplicar el tema primero
+                // Aplicar el tema
                 applyTheme(settings.theme || 'automatico', true);
 
-                // Aplicar color del menú después del tema
+                // Aplicar color del menú
                 document.documentElement.style.setProperty('--color-menu', settings.menuColor || '#e67e22');
                 document.documentElement.style.setProperty('--color-menu-hover', settings.menuColorHover || adjustColor(settings.menuColor || '#e67e22', -20));
 
@@ -1767,8 +3038,20 @@
                 // Restaurar secretos desbloqueados
                 if (settings.secrets && settings.secrets.length > 0) {
                     settings.secrets.forEach(secretId => {
-                        unlockSecret(secretId);
+                        const secretItem = document.getElementById(secretId);
+                        if (secretItem && !secretItem.classList.contains('unlocked')) {
+                            secretItem.classList.add('unlocked');
+                            secretItem.querySelector('.secret-status').textContent = '🔓 Desbloqueado';
+                            secretItem.querySelector('.secret-status').classList.remove('locked');
+                            secretItem.querySelector('.secret-status').classList.add('unlocked');
+                        }
                     });
+                }
+
+                // Restaurar paneles visitados
+                if (settings.visitedPanels) {
+                    visitedPanels = new Set(settings.visitedPanels);
+                    checkAllPanelsVisited();
                 }
 
                 // Aplicar volumen
@@ -1813,6 +3096,14 @@
             return unlocked;
         }
 
+        // Verificar si hay secretos desbloqueados para mostrar el botón
+        function checkSecretsUnlocked() {
+            const secrets = document.querySelectorAll('.secret-item.unlocked');
+            if (secrets.length > 0) {
+                document.getElementById('btn-secretos').style.display = 'block';
+            }
+        }
+
         // Restablecer configuración
         function resetSettings() {
             if (confirm('¿Estás seguro de que quieres restablecer toda la configuración a los valores predeterminados?')) {
@@ -1845,15 +3136,6 @@
                 document.body.classList.add('tema-claro');
             }
             // 'dark' es el tema por defecto, no necesita clase adicional
-
-            // Configurar listener para cambios en el tema del sistema si es automático
-            if (theme === 'automatico') {
-                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-                    if (document.getElementById('selector-tema').value === 'automatico') {
-                        document.body.classList.toggle('tema-claro', !e.matches);
-                    }
-                });
-            }
         }
 
         // Banner de actualización
@@ -1883,15 +3165,8 @@
                 // Reproducir sonido de logro
                 playSoundEffect('achievement');
 
-                // Verificar si es un logro secreto
-                if (achievementId.startsWith('secret-')) {
-                    secretUnlocked = true;
-                    document.getElementById('btn-secretos').style.display = 'block';
-                    unlockAchievement('achievement-secretFinder');
-                }
-
                 // Guardar en localStorage
-                saveSettings();
+                debouncedSaveSettings();
             }
         }
 
@@ -1923,7 +3198,7 @@
                 checkAllSecretsUnlocked();
 
                 // Guardar en localStorage
-                saveSettings();
+                debouncedSaveSettings();
             }
         }
 
@@ -1977,61 +3252,59 @@
 
         // Mostrar notificación de logro
         function showAchievementNotification(title, achievement, description) {
+            const container = document.querySelector('.notification-container');
+            
+            // Limpiar notificaciones anteriores
+            clearTimeout(notificationTimeout);
+            container.innerHTML = '';
+
             const notification = document.createElement('div');
             notification.className = 'achievement-notification';
             notification.innerHTML = `
-            <div class="achievement-notification-content">
-                <div class="achievement-notification-icon">
-                    <i class="fas fa-trophy"></i>
+                <div class="achievement-notification-content">
+                    <div class="achievement-notification-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="achievement-notification-text">
+                        <h4>${title}</h4>
+                        <h5>${achievement}</h5>
+                        <p>${description}</p>
+                    </div>
                 </div>
-                <div class="achievement-notification-text">
-                    <h4>${title}</h4>
-                    <h5>${achievement}</h5>
-                    <p>${description}</p>
-                </div>
-            </div>
-        `;
+            `;
 
-            document.body.appendChild(notification);
+            container.appendChild(notification);
 
-            setTimeout(() => {
-                notification.classList.add('show');
-            }, 100);
-
-            setTimeout(() => {
-                notification.classList.remove('show');
-                setTimeout(() => {
-                    notification.remove();
-                }, 500);
+            notificationTimeout = setTimeout(() => {
+                notification.remove();
             }, 5000);
         }
 
         // Mostrar notificación genérica
         function showNotification(message, type = 'success') {
+            const container = document.querySelector('.notification-container');
+            
+            // Limpiar notificaciones anteriores
+            clearTimeout(notificationTimeout);
+            container.innerHTML = '';
+
             const notification = document.createElement('div');
             notification.className = `achievement-notification ${type}`;
             notification.innerHTML = `
-            <div class="achievement-notification-content">
-                <div class="achievement-notification-icon">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <div class="achievement-notification-content">
+                    <div class="achievement-notification-icon">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                    </div>
+                    <div class="achievement-notification-text">
+                        <p>${message}</p>
+                    </div>
                 </div>
-                <div class="achievement-notification-text">
-                    <p>${message}</p>
-                </div>
-            </div>
-        `;
+            `;
 
-            document.body.appendChild(notification);
+            container.appendChild(notification);
 
-            setTimeout(() => {
-                notification.classList.add('show');
-            }, 100);
-
-            setTimeout(() => {
-                notification.classList.remove('show');
-                setTimeout(() => {
-                    notification.remove();
-                }, 500);
+            notificationTimeout = setTimeout(() => {
+                notification.remove();
             }, 3000);
         }
 
@@ -2044,37 +3317,6 @@
                 sound.play().catch(e => console.log("Error al reproducir sonido:", e));
             }
         }
-
-        // Detector de gesto táctil secreto (dibujar una "C" en pantalla)
-        let touchStartPos = null;
-        let touchPath = [];
-
-        document.addEventListener('touchstart', (e) => {
-            touchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-            touchPath = [];
-        });
-
-        document.addEventListener('touchmove', (e) => {
-            if (touchStartPos) {
-                touchPath.push({
-                    x: e.touches[0].clientX,
-                    y: e.touches[0].clientY
-                });
-            }
-        });
-
-        document.addEventListener('touchend', () => {
-            if (touchPath.length > 20) { // Mínimo de puntos para considerar un gesto
-                const deltaX = touchPath[touchPath.length - 1].x - touchStartPos.x;
-                const deltaY = touchPath[touchPath.length - 1].y - touchStartPos.y;
-
-                // Verificar si el gesto se parece a una "C" (movimiento semicircular)
-                if (Math.abs(deltaX) > 100 && Math.abs(deltaY) > 50) {
-                    showSecretPanel();
-                }
-            }
-            touchStartPos = null;
-        });
 
         // Método para mostrar el panel secreto
         function showSecretPanel() {
@@ -2097,28 +3339,6 @@
             }
         }
 
-        // Combinación de teclas para mostrar el panel secreto: Ctrl+Alt+C
-        document.addEventListener('keydown', function (event) {
-            if (event.ctrlKey && event.altKey && event.key.toLowerCase() === 'c') {
-                showSecretPanel();
-            }
-
-            // Código Konami: ↑↑↓↓←→←→BA
-            const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-            let konamiIndex = 0;
-
-            if (event.key === konamiCode[konamiIndex]) {
-                konamiIndex++;
-                if (konamiIndex === konamiCode.length) {
-                    // Código Konami completado
-                    unlockSecret('secret-4');
-                    konamiIndex = 0;
-                }
-            } else {
-                konamiIndex = 0;
-            }
-        });
-
         // Verificar la hora para el secreto de las 3:33 AM
         function checkTimeForSecret() {
             const now = new Date();
@@ -2137,10 +3357,7 @@
         }, 300000); // 5 minutos
 
         // Verificar si se han visitado todos los paneles para el secreto
-        let visitedPanels = new Set();
         function checkAllPanelsVisited() {
-            visitedPanels.add('panel-juego');
-
             const allPanels = ['panel-actualizacion', 'panel-logros', 'panel-opciones', 'panel-creditos', 'panel-secretos'];
             let allVisited = true;
 
@@ -2155,13 +3372,6 @@
                 unlockSecret('secret-5');
             }
         }
-
-        // Registrar visitas a paneles
-        document.getElementById('btn-actualizacion').addEventListener('click', () => visitedPanels.add('panel-actualizacion'));
-        document.getElementById('btn-logros').addEventListener('click', () => visitedPanels.add('panel-logros'));
-        document.getElementById('btn-opciones').addEventListener('click', () => visitedPanels.add('panel-opciones'));
-        document.getElementById('btn-creditos').addEventListener('click', () => visitedPanels.add('panel-creditos'));
-        document.getElementById('btn-secretos').addEventListener('click', () => visitedPanels.add('panel-secretos'));
 
         // Función para iniciar el juego
         function startGame(mode) {
@@ -2184,5 +3394,4 @@
         }
     </script>
 </body>
-
 </html>
