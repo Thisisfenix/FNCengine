@@ -1080,6 +1080,11 @@
         let menuActionsCompleted = 0;
         let menuSpeedrunStartTime = 0;
         const SECRET_CODE = "AbelitoJAJASALUDOS";
+        
+        // Variables para el atajo Shift+Alt+S
+        let shiftPressed = false;
+        let altPressed = false;
+        let sPressed = false;
 
         // Inicialización al cargar la página
         document.addEventListener('DOMContentLoaded', function () {
@@ -1179,6 +1184,7 @@
 
             // Eventos de teclado
             document.addEventListener('keydown', handleKeyDown);
+            document.addEventListener('keyup', handleKeyUp);
             
             // Verificación de código secreto
             document.getElementById('btn-verificar-codigo').addEventListener('click', verifySecretCode);
@@ -1187,6 +1193,80 @@
                     verifySecretCode();
                 }
             });
+            
+            // Eventos táctiles para móviles
+            setupTouchEvents();
+        }
+
+        // Configurar eventos táctiles para móviles
+        function setupTouchEvents() {
+            // Doble toque para activar el modo secreto (alternativa a Shift+Alt+S)
+            let lastTap = 0;
+            document.addEventListener('touchend', function(e) {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTap;
+                
+                if (tapLength < 300 && tapLength > 0) {
+                    // Doble toque detectado
+                    if (!secretModeUnlocked) {
+                        secretModeAttempts++;
+                        if (secretModeAttempts >= 3) {
+                            unlockAchievement('achievement-secretHunter');
+                        }
+                    }
+                    
+                    // Mostrar el panel secreto
+                    showPanel('panel-secreto');
+                }
+                
+                lastTap = currentTime;
+            });
+        }
+
+        // Manejar tecla presionada
+        function handleKeyDown(event) {
+            // Código Konami
+            if (event.key === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    showNotification('¡Código Konami activado!', 'success');
+                    konamiIndex = 0;
+                }
+            } else {
+                konamiIndex = 0;
+            }
+            
+            // Detectar Shift+Alt+S
+            if (event.key === 'Shift' || event.key === 'Alt' || event.key === 's' || event.key === 'S') {
+                if (event.key === 'Shift') shiftPressed = true;
+                if (event.key === 'Alt') altPressed = true;
+                if (event.key.toLowerCase() === 's') sPressed = true;
+                
+                // Verificar si todas las teclas están presionadas
+                if (shiftPressed && altPressed && sPressed) {
+                    // Mostrar el panel secreto
+                    showPanel('panel-secreto');
+                    
+                    if (!secretModeUnlocked) {
+                        secretModeAttempts++;
+                        if (secretModeAttempts >= 3) {
+                            unlockAchievement('achievement-secretHunter');
+                        }
+                    }
+                    
+                    // Resetear las teclas
+                    shiftPressed = false;
+                    altPressed = false;
+                    sPressed = false;
+                }
+            }
+        }
+
+        // Manejar tecla liberada
+        function handleKeyUp(event) {
+            if (event.key === 'Shift') shiftPressed = false;
+            if (event.key === 'Alt') altPressed = false;
+            if (event.key.toLowerCase() === 's') sPressed = false;
         }
 
         // Configurar el sistema de temas
@@ -1219,20 +1299,6 @@
             settingsSaveTimeout = setTimeout(() => {
                 saveSettings();
             }, 500);
-        }
-
-        // Manejo de teclas para el código Konami
-        function handleKeyDown(event) {
-            // Código Konami
-            if (event.key === konamiCode[konamiIndex]) {
-                konamiIndex++;
-                if (konamiIndex === konamiCode.length) {
-                    showNotification('¡Código Konami activado!', 'success');
-                    konamiIndex = 0;
-                }
-            } else {
-                konamiIndex = 0;
-            }
         }
 
         // Mostrar un panel específico con animación
