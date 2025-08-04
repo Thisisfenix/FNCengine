@@ -3,965 +3,2751 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Friday Night Cooking - Juego</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Circle Bounce Coins Ultimate</title>
     <style>
-        :root {
-            --color-menu: #f39c12;
-            --color-menu-hover: #e67e22;
-            --color-texto: #ffffff;
-            --color-fondo: #121212;
-            --color-fondo-panel: rgba(0, 0, 0, 0.85);
-            --sombra-panel: 0 0 20px rgba(243, 156, 18, 0.3);
-            --transicion-rapida: all 0.25s ease;
-        }
-
         body {
-            background-color: var(--color-fondo);
-            color: var(--color-texto);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
             margin: 0;
-            padding: 0;
-            height: 100vh;
-        }
-
-        .game-container {
-            position: relative;
-            width: 100%;
-            height: 100vh;
             overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            transition: all 0.5s;
         }
-
-        .game-hud {
+        canvas {
+            display: block;
+            background-color: #222;
+            transition: background-color 0.5s;
+        }
+        #ui {
             position: absolute;
             top: 10px;
             left: 10px;
-            right: 10px;
-            display: flex;
-            justify-content: space-between;
-            z-index: 100;
-            pointer-events: none;
-        }
-
-        .hud-panel {
-            background-color: var(--color-fondo-panel);
-            border-radius: 10px;
-            padding: 10px 15px;
-            color: var(--color-texto);
-            border: 2px solid var(--color-menu);
-            box-shadow: var(--sombra-panel);
-            pointer-events: auto;
-        }
-
-        .ingredient {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            cursor: pointer;
-            transition: transform 0.2s ease, opacity 0.3s ease;
-            z-index: 10;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-        }
-
-        .ingredient:hover {
-            transform: scale(1.15) rotate(5deg);
-        }
-
-        .ingredient:active {
-            transform: scale(0.95);
-        }
-
-        .recipe-panel {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--color-fondo-panel);
-            border-radius: 15px;
-            padding: 15px 20px;
-            border: 2px solid var(--color-menu);
-            box-shadow: var(--sombra-panel);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 100;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        .recipe-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            width: 100%;
-        }
-
-        .recipe-item img {
-            width: 32px;
-            height: 32px;
-            margin-right: 12px;
-            object-fit: contain;
-        }
-
-        .progress-container {
-            width: 100%;
-            height: 12px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            margin: 10px 0 5px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--color-menu), #f1c40f);
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
-        .btn-game {
-            background-color: var(--color-menu);
-            border: none;
-            color: var(--color-texto);
-            padding: 8px 16px;
-            margin: 5px;
-            border-radius: 8px;
-            transition: var(--transicion-rapida);
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .btn-game:hover {
-            background-color: var(--color-menu-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--color-menu);
             color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            transform: translate(-50%, -20px);
-            max-width: 90%;
-            text-align: center;
+            font-size: 18px;
+            text-shadow: 1px 1px 2px black;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+            transition: all 0.3s;
         }
-
-        .notification.show {
-            opacity: 1;
-            transform: translate(-50%, 0);
+        #shop {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 300px;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
         }
-
-        .achievement-unlocked {
-            position: fixed;
+        #config {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 300px;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+        #achievements {
+            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, rgba(0,0,0,0.9), rgba(30,30,30,0.95));
-            border: 3px solid var(--color-menu);
-            border-radius: 15px;
-            padding: 25px;
-            width: 85%;
-            max-width: 350px;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            width: 300px;
             text-align: center;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            backdrop-filter: blur(5px);
+            box-shadow: 0 0 20px rgba(0,255,255,0.7);
+            z-index: 100;
+            animation: achievementPop 0.5s;
         }
-
-        .achievement-unlocked.show {
-            opacity: 1;
+        @keyframes achievementPop {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            80% { transform: translate(-50%, -50%) scale(1.1); }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
-
-        .achievement-icon-large {
-            font-size: 3.5rem;
-            color: var(--color-menu);
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 5px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.7);
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .tab {
+            overflow: hidden;
+            border: 1px solid #444;
+            background-color: #333;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 10px 16px;
+            transition: 0.3s;
+            color: white;
+            border-radius: 0;
+        }
+        .tab button:hover {
+            background-color: #555;
+        }
+        .tab button.active {
+            background-color: #4CAF50;
+        }
+        .tabcontent {
+            display: none;
+            padding: 10px 0;
+            animation: fadeEffect 0.5s;
+        }
+        @keyframes fadeEffect {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+        .upgrade {
             margin-bottom: 15px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
         }
-
-        .secret-found {
+        .upgrade h3 {
+            margin-top: 0;
+            color: #4CAF50;
+        }
+        .powerup {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 3s infinite ease-in-out;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .combo-display {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: gold;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255,215,0,0.7);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .obstacle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+        }
+        .skin-option {
+            display: inline-block;
+            margin: 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        .skin-option:hover, .skin-option.selected {
+            border-color: #4CAF50;
+            transform: scale(1.1);
+        }
+        .skin-preview {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        #darkModeToggle {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: #333;
+            color: white;
+        }
+        .premium-feature {
+            position: relative;
+        }
+        .premium-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: gold;
+            color: black;
+            font-size: 10px;
+            padding: 2px 5px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        #premiumShop {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(255,215,0,0.7);
+        }
+        #premiumShop button {
+            margin-top: 15px;
+            background-color: gold;
+            color: black;
+            font-weight: bold;
+        }
+        #statsPanel {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: none;
+        }
+        #bossHealth {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 20px;
+            background-color: rgba(255, 0, 0, 0.3);
+            border-radius: 10px;
+            display: none;
+        }
+        #bossHealthBar {
+            height: 100%;
+            width: 100%;
+            background-color: red;
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+        #abilityButton {
+            position: absolute;
+            bottom: 50px;
+            left: 10px;
+            background-color: #ff9900;
+            color: white;
+            font-weight: bold;
+            display: none;
+        }
+        #missions {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            width: 250px;
+            max-height: 60vh;
+            overflow-y: auto;
+            display: none;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+        .mission {
+            margin-bottom: 10px;
+            padding: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+        .mission.completed {
+            border-left: 3px solid #4CAF50;
+        }
+        #missionToggle {
+            position: absolute;
+            top: 10px;
+            left: 120px;
+        }
+        #loadingScreen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.85);
+            background-color: #111;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
+            z-index: 10000;
+            color: white;
+            font-family: Arial, sans-serif;
         }
-
-        .secret-found.show {
-            opacity: 1;
-            pointer-events: auto;
+        #loadingProgress {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin: 20px;
         }
-
-        .secret-content {
-            background: linear-gradient(135deg, rgba(30,30,30,0.95), rgba(0,0,0,0.9));
-            border: 3px solid #27ae60;
-            border-radius: 15px;
-            padding: 25px;
-            width: 85%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        #loadingCircle {
+            width: 100%;
+            height: 100%;
+            border: 10px solid #333;
+            border-top-color: #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
-
-        .secret-title {
-            color: #2ecc71;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        #loadingPercent {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 30px;
+            font-weight: bold;
         }
-
-        /* Tema claro */
-        body.tema-claro {
-            --color-texto: #2c3e50;
-            --color-fondo: #f5f5f5;
-            --color-fondo-panel: rgba(255,255,255,0.95);
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-
-        body.tema-claro .hud-panel,
-        body.tema-claro .recipe-panel {
-            color: #2c3e50;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        #hudColor {
+            position: absolute;
+            bottom: 50px;
+            left: 120px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid white;
         }
-
-        /* Animaciones */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        #hudColorPicker {
+            position: absolute;
+            bottom: 90px;
+            left: 120px;
+            display: none;
         }
-
-        .ingredient-float {
-            animation: float 3s ease-in-out infinite;
-        }
-
-        /* Responsive */
-        @media (max-width: 576px) {
-            .ingredient {
-                width: 50px;
-                height: 50px;
-            }
-            
-            .recipe-panel {
-                padding: 12px 15px;
-                width: 95%;
-            }
+        #multiBallButton {
+            position: absolute;
+            bottom: 50px;
+            left: 170px;
+            background-color: #9b59b6;
+            color: white;
+            font-weight: bold;
+            display: none;
         }
     </style>
 </head>
-
 <body>
-    <div class="game-container">
-        <!-- Fondo del juego -->
-        <div id="game-background" style="width:100%; height:100%; background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Kitchen_Interior_%2848965003881%29.jpg/1920px-Kitchen_Interior_%2848965003881%29.jpg'); background-size:cover; background-position:center;"></div>
-
-        <!-- HUD del juego -->
-        <div class="game-hud">
-            <div class="hud-panel">
-                <div><i class="fas fa-clock"></i> <span id="game-time">60</span>s</div>
-                <div><i class="fas fa-star"></i> <span id="game-score">0</span></div>
+    <div id="loadingScreen">
+        <h1>Circle Bounce Coins Ultimate</h1>
+        <div id="loadingProgress">
+            <div id="loadingCircle"></div>
+            <div id="loadingPercent">0%</div>
+        </div>
+        <p>Cargando recursos...</p>
+    </div>
+    
+    <canvas id="gameCanvas"></canvas>
+    
+    <div id="ui">
+        <div>ReboteCoins: <span id="coins">0</span> <span id="coinMultiplier"></span></div>
+        <div>Rebotes: <span id="bounces">0</span></div>
+        <div>Combo: <span id="combo">1x</span></div>
+        <div>Nivel: <span id="level">1</span></div>
+        <div>Récord: <span id="highscore">0</span></div>
+        <button id="shopBtn">Tienda</button>
+        <button id="configBtn">Configuración</button>
+        <button id="pauseBtn">Pausa</button>
+        <button id="statsBtn">Estadísticas</button>
+        <button id="missionToggle">Misiones</button>
+    </div>
+    
+    <div class="combo-display" id="comboDisplay"></div>
+    
+    <div id="shop">
+        <div class="tab">
+            <button class="tablinks active" onclick="openTab(event, 'upgrades')">Mejoras</button>
+            <button class="tablinks" onclick="openTab(event, 'particles')">Partículas</button>
+            <button class="tablinks" onclick="openTab(event, 'skins')">Skins</button>
+            <button class="tablinks" onclick="openTab(event, 'premium')">Premium</button>
+        </div>
+        
+        <div id="upgrades" class="tabcontent" style="display: block;">
+            <div class="upgrade">
+                <h3>Duplicar Coins <span id="doubleLevel">(Nivel 0)</span></h3>
+                <p>Aumenta el multiplicador de coins por rebote</p>
+                <p>Costo: <span class="cost">200</span> coins</p>
+                <button id="buyDouble" onclick="buyUpgrade('double')">Comprar</button>
             </div>
-            <div class="hud-panel">
-                <button id="btn-pause" class="btn-game" title="Pausar"><i class="fas fa-pause"></i></button>
-                <button id="btn-exit" class="btn-game" title="Salir"><i class="fas fa-sign-out-alt"></i></button>
+            <div class="upgrade">
+                <h3>Velocidad <span id="speedLevel">(Nivel 0)</span></h3>
+                <p>Aumenta la velocidad de la bola</p>
+                <p>Costo: <span class="cost">300</span> coins</p>
+                <button id="buySpeed" onclick="buyUpgrade('speed')">Comprar</button>
+            </div>
+            <div class="upgrade">
+                <h3>Tamaño <span id="sizeLevel">(Nivel 0)</span></h3>
+                <p>Aumenta el tamaño de la bola</p>
+                <p>Costo: <span class="cost">250</span> coins</p>
+                <button id="buySize" onclick="buyUpgrade('size')">Comprar</button>
+            </div>
+            <div class="upgrade">
+                <h3>Power-ups+ <span id="powerupsLevel">(Nivel 0)</span></h3>
+                <p>Aumenta la frecuencia de power-ups</p>
+                <p>Costo: <span class="cost">400</span> coins</p>
+                <button id="buyPowerups" onclick="buyUpgrade('powerups')">Comprar</button>
+            </div>
+            <div class="upgrade">
+                <h3>Combo+ <span id="comboLevel">(Nivel 0)</span></h3>
+                <p>Aumenta la duración del combo</p>
+                <p>Costo: <span class="cost">350</span> coins</p>
+                <button id="buyCombo" onclick="buyUpgrade('combo')">Comprar</button>
+            </div>
+            <div class="upgrade">
+                <h3>Magnetismo <span id="magnetLevel">(Nivel 0)</span></h3>
+                <p>Atrae power-ups hacia ti</p>
+                <p>Costo: <span class="cost">500</span> coins</p>
+                <button id="buyMagnet" onclick="buyUpgrade('magnet')">Comprar</button>
+            </div>
+            <div class="upgrade">
+                <h3>Rebote Crítico <span id="criticalLevel">(Nivel 0)</span></h3>
+                <p>Aumenta chance de rebote crítico (x5 coins)</p>
+                <p>Costo: <span class="cost">600</span> coins</p>
+                <button id="buyCritical" onclick="buyUpgrade('critical')">Comprar</button>
+            </div>
+            <div class="upgrade premium-feature">
+                <div class="premium-badge">PREMIUM</div>
+                <h3>Bolas Múltiples</h3>
+                <p>Añade una bola adicional al juego</p>
+                <p>Costo: <span class="cost">1000</span> coins</p>
+                <button id="buyMultiBall" onclick="buyUpgrade('multiBall')" disabled>Comprar</button>
+            </div>
+            <div class="upgrade premium-feature">
+                <div class="premium-badge">PREMIUM</div>
+                <h3>Habilidad Especial</h3>
+                <p>Desbloquea una habilidad especial activable</p>
+                <p>Costo: <span class="cost">1200</span> coins</p>
+                <button id="buyAbility" onclick="buyUpgrade('ability')" disabled>Comprar</button>
             </div>
         </div>
-
-        <!-- Ingredientes aparecerán aquí dinámicamente -->
-
-        <!-- Panel de receta -->
-        <div class="recipe-panel">
-            <h4 style="margin-bottom: 10px;"><i class="fas fa-utensils"></i> Receta Actual</h4>
-            <div id="current-recipe" style="width: 100%;"></div>
-            <div class="progress-container">
-                <div class="progress-bar" id="recipe-progress"></div>
-            </div>
-            <small style="margin-top: 5px; opacity: 0.8;">Recolecta los ingredientes necesarios</small>
-        </div>
-
-        <!-- Notificación -->
-        <div class="notification" id="notification"></div>
-
-        <!-- Logro desbloqueado -->
-        <div class="achievement-unlocked" id="achievement-unlocked">
-            <div class="achievement-icon-large">
-                <i class="fas fa-trophy"></i>
-            </div>
-            <h3 style="color: var(--color-menu); margin-bottom: 10px;">¡Logro Desbloqueado!</h3>
-            <h4 id="achievement-name" style="margin-bottom: 10px;">Nombre del logro</h4>
-            <p id="achievement-desc" style="margin-bottom: 20px;">Descripción del logro</p>
-            <button class="btn-game" id="btn-close-achievement" style="width: 100%;">Continuar</button>
-        </div>
-
-        <!-- Secreto encontrado -->
-        <div class="secret-found" id="secret-found">
-            <div class="secret-content">
-                <h3 class="secret-title"><i class="fas fa-lock-open"></i> ¡SECRETO DESCUBIERTO!</h3>
-                <h4 id="secret-name" style="color: #fff; margin-bottom: 15px;">Nombre del secreto</h4>
-                <p id="secret-desc" style="margin-bottom: 20px; color: #ecf0f1;">Descripción del secreto</p>
-                <button class="btn-game" id="btn-close-secret" style="background-color: #2ecc71; width: 100%;">
-                    <i class="fas fa-check"></i> Continuar
-                </button>
-            </div>
-        </div>
-
-        <!-- Menú de pausa -->
-        <div class="secret-found" id="pause-menu">
-            <div class="secret-content">
-                <h3 style="color: var(--color-menu); margin-bottom: 20px;"><i class="fas fa-pause"></i> JUEGO EN PAUSA</h3>
-                <div class="d-grid gap-2">
-                    <button class="btn-game" id="btn-resume"><i class="fas fa-play"></i> Continuar</button>
-                    <button class="btn-game" id="btn-restart"><i class="fas fa-redo"></i> Reiniciar</button>
-                    <button class="btn-game" id="btn-exit-menu"><i class="fas fa-home"></i> Menú Principal</button>
+        
+        <div id="particles" class="tabcontent">
+            <div class="upgrade">
+                <h3>Tipo de Partículas</h3>
+                <div class="particle-option">
+                    <input type="radio" id="particle1" name="particle" value="circles" checked>
+                    <label for="particle1">Círculos simples</label>
                 </div>
+                <div class="particle-option">
+                    <input type="radio" id="particle2" name="particle" value="squares">
+                    <label for="particle2">Cuadrados</label>
+                </div>
+                <div class="particle-option">
+                    <input type="radio" id="particle3" name="particle" value="stars">
+                    <label for="particle3">Estrellas</label>
+                </div>
+                <div class="particle-option">
+                    <input type="radio" id="particle4" name="particle" value="mixed">
+                    <label for="particle4">Mezclado</label>
+                </div>
+                <div class="particle-option">
+                    <input type="radio" id="particle5" name="particle" value="hearts">
+                    <label for="particle5">Corazones</label>
+                </div>
+            </div>
+            
+            <div class="upgrade">
+                <h3>Efectos de Partículas</h3>
+                <div>
+                    <input type="checkbox" id="trailEffect" checked>
+                    <label for="trailEffect">Estela de partículas</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="burstEffect" checked>
+                    <label for="burstEffect">Explosión al rebotar</label>
+                </div>
+            </div>
+            
+            <div class="upgrade premium-feature">
+                <div class="premium-badge">PREMIUM</div>
+                <h3>Efectos Especiales</h3>
+                <div>
+                    <input type="checkbox" id="glowEffect" disabled>
+                    <label for="glowEffect">Resplandor de la bola</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="screenShake" disabled>
+                    <label for="screenShake">Vibración en rebotes</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="rainEffect" disabled>
+                    <label for="rainEffect">Lluvia de partículas</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="trailRainbow" disabled>
+                    <label for="trailRainbow">Estela arcoíris</label>
+                </div>
+                <button onclick="showPremiumShop()">Desbloquear Premium</button>
+            </div>
+        </div>
+        
+        <div id="skins" class="tabcontent">
+            <h3>Selecciona una Skin</h3>
+            <div>
+                <div class="skin-option selected" onclick="selectSkin('default')">
+                    <div class="skin-preview" style="background: radial-gradient(circle at 30% 30%, #ff0000, #aa0000);"></div>
+                    <div>Predeterminado</div>
+                </div>
+                <div class="skin-option" onclick="selectSkin('fire')">
+                    <div class="skin-preview" style="background: radial-gradient(circle at 30% 30%, #ff9900, #ff3300);"></div>
+                    <div>Fuego</div>
+                </div>
+                <div class="skin-option" onclick="selectSkin('ice')">
+                    <div class="skin-preview" style="background: radial-gradient(circle at 30% 30%, #00ccff, #0066ff);"></div>
+                    <div>Hielo</div>
+                </div>
+                <div class="skin-option" onclick="selectSkin('earth')">
+                    <div class="skin-preview" style="background: radial-gradient(circle at 30% 30%, #00aa00, #006600);"></div>
+                    <div>Tierra</div>
+                </div>
+                <div class="skin-option" onclick="selectSkin('galaxy')">
+                    <div class="skin-preview" style="background: radial-gradient(circle at 30% 30%, #9900ff, #330066);"></div>
+                    <div>Galaxia</div>
+                </div>
+                <div class="skin-option" onclick="selectSkin('sun')">
+                    <div class="skin-preview" style="background: radial-gradient(circle at 30% 30%, #ffff00, #ff9900);"></div>
+                    <div>Sol</div>
+                </div>
+                <div class="skin-option premium-feature" onclick="selectSkin('dragon')">
+                    <div class="premium-badge">PREMIUM</div>
+                    <div class="skin-preview" style="background: radial-gradient(circle at 30% 30%, #ff3366, #990033);"></div>
+                    <div>Dragón</div>
+                </div>
+                <div class="skin-option premium-feature" onclick="selectSkin('rainbow')">
+                    <div class="premium-badge">PREMIUM</div>
+                    <div class="skin-preview" style="background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);"></div>
+                    <div>Arcoíris</div>
+                </div>
+                <div class="skin-option premium-feature" onclick="selectSkin('nebula')">
+                    <div class="premium-badge">PREMIUM</div>
+                    <div class="skin-preview" style="background: radial-gradient(circle at 30% 30%, #9b59b6, #3498db, #2ecc71);"></div>
+                    <div>Nebulosa</div>
+                </div>
+                <div class="skin-option premium-feature" onclick="selectSkin('golden')">
+                    <div class="premium-badge">PREMIUM</div>
+                    <div class="skin-preview" style="background: radial-gradient(circle at 30% 30%, #ffd700, #c5a000);"></div>
+                    <div>Dorada</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="premium" class="tabcontent">
+            <div class="upgrade">
+                <h3>Desbloquear Premium</h3>
+                <p>Accede a todas las características premium:</p>
+                <ul>
+                    <li>Skins exclusivas</li>
+                    <li>Efectos visuales avanzados</li>
+                    <li>Personalización de colores</li>
+                    <li>Estadísticas detalladas</li>
+                    <li>Eventos especiales</li>
+                    <li>Habilidad especial</li>
+                    <li>Bolas múltiples</li>
+                    <li>Partículas premium</li>
+                </ul>
+                <p>Costo: <span class="cost">5000</span> coins</p>
+                <button id="buyPremium" onclick="buyPremium()">Comprar Premium</button>
+            </div>
+            
+            <div class="upgrade">
+                <h3>Evento Especial: Jefe Final</h3>
+                <p>Desbloquea un jefe final cada 10 niveles</p>
+                <p>Costo: <span class="cost">1000</span> coins</p>
+                <button id="buyBossEvent" onclick="buyUpgrade('bossEvent')">Desbloquear</button>
+            </div>
+            
+            <div class="upgrade">
+                <h3>Misiones Diarias</h3>
+                <p>Desbloquea misiones diarias con recompensas</p>
+                <p>Costo: <span class="cost">800</span> coins</p>
+                <button id="buyMissions" onclick="buyUpgrade('missions')">Desbloquear</button>
             </div>
         </div>
     </div>
+    
+    <div id="config">
+        <h3>Configuración</h3>
+        <div class="premium-feature">
+            <div class="premium-badge">PREMIUM</div>
+            <label for="ballColor">Color de la bola: </label>
+            <input type="color" id="ballColor" value="#ff0000" disabled>
+        </div>
+        <div class="premium-feature">
+            <div class="premium-badge">PREMIUM</div>
+            <label for="bgColor">Color de fondo: </label>
+            <input type="color" id="bgColor" value="#222222" disabled>
+        </div>
+        <div class="premium-feature">
+            <div class="premium-badge">PREMIUM</div>
+            <label for="particleColor">Color de partículas: </label>
+            <input type="color" id="particleColor" value="#ffffff" disabled>
+        </div>
+        <div class="premium-feature">
+            <div class="premium-badge">PREMIUM</div>
+            <label for="hudColor">Color del HUD: </label>
+            <input type="color" id="hudColorPicker" value="#4CAF50">
+            <div id="hudColor" style="background-color: #4CAF50;"></div>
+        </div>
+        <div>
+            <label for="difficulty">Dificultad: </label>
+            <select id="difficulty">
+                <option value="easy">Fácil</option>
+                <option value="normal" selected>Normal</option>
+                <option value="hard">Difícil</option>
+                <option value="extreme">Extremo</option>
+            </select>
+        </div>
+        <div>
+            <input type="checkbox" id="soundToggle" checked>
+            <label for="soundToggle">Sonidos activados</label>
+        </div>
+        <button onclick="applyConfig()">Aplicar</button>
+        <button onclick="resetGame()">Reiniciar Juego</button>
+    </div>
+    
+    <div id="achievements"></div>
+    
+    <div id="premiumShop">
+        <h2>¡Desbloquea Premium!</h2>
+        <p>Obtén acceso a todas las características premium por solo 5000 coins</p>
+        <button onclick="buyPremium()">Comprar Ahora</button>
+        <button onclick="hidePremiumShop()">Más Tarde</button>
+    </div>
+    
+    <div id="statsPanel">
+        FPS: <span id="fpsCounter">0</span> | Partículas: <span id="particleCounter">0</span>
+    </div>
+    
+    <div id="bossHealth">
+        <div id="bossHealthBar"></div>
+    </div>
+    
+    <button id="darkModeToggle">Modo Oscuro</button>
+    <button id="abilityButton" disabled>Habilidad Especial</button>
+    <button id="multiBallButton" disabled>Bolas: 1</button>
+    
+    <div id="missions">
+        <h3>Misiones Diarias</h3>
+        <div id="missionList"></div>
+    </div>
 
-    <!-- Audio para efectos de sonido -->
-    <audio id="collect-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3"></audio>
-    <audio id="complete-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3"></audio>
-    <audio id="achievement-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"></audio>
-    <audio id="secret-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-magic-sparkles-1681.mp3"></audio>
-
+    <audio id="bounceSound" src="https://assets.mixkit.co/sfx/preview/mixkit-game-ball-tap-2073.mp3" preload="auto"></audio>
+    <audio id="coinSound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3" preload="auto"></audio>
+    <audio id="powerupSound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3" preload="auto"></audio>
+    <audio id="bossSound" src="https://assets.mixkit.co/sfx/preview/mixkit-ominous-drums-227.mp3" preload="auto"></audio>
+    <audio id="criticalSound" src="https://assets.mixkit.co/sfx/preview/mixkit-extra-bonus-in-a-video-game-2065.mp3" preload="auto"></audio>
+    <audio id="abilitySound" src="https://assets.mixkit.co/sfx/preview/mixkit-magic-spell-675.mp3" preload="auto"></audio>
+    
     <script>
-        // 1. CONFIGURACIÓN DEL JUEGO
-        const gameConfig = {
-            timeLimit: 90,  // 1.5 minutos
-            ingredientSpawnRate: 2000,  // Cada 2 segundos
-            maxIngredients: 8,
-            basePoints: 10,
-            difficultyIncrease: 0.2,  // 20% más difícil por receta
-            recipes: [
-                {
-                    name: "Ensalada Simple",
-                    ingredients: ["Lechuga", "Tomate", "Pepino"],
-                    difficulty: 1,
-                    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Salad_platter.jpg/320px-Salad_platter.jpg"
-                },
-                {
-                    name: "Sándwich Clásico",
-                    ingredients: ["Pan", "Jamón", "Queso", "Lechuga"],
-                    difficulty: 2,
-                    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Sandwich.jpg/320px-Sandwich.jpg"
-                },
-                {
-                    name: "Pasta Básica",
-                    ingredients: ["Pasta", "Salsa de Tomate", "Queso"],
-                    difficulty: 3,
-                    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Pasta_e_fagioli.jpg/320px-Pasta_e_fagioli.jpg"
-                },
-                {
-                    name: "Pizza Simple",
-                    ingredients: ["Masa", "Salsa de Tomate", "Queso"],
-                    difficulty: 4,
-                    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg/320px-Eq_it-na_pizza-margherita_sep2005_sml.jpg"
+        // Variables del juego
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Variables de la bola
+        let balls = [{
+            x: width / 2,
+            y: height / 2,
+            radius: 20,
+            dx: 5,
+            dy: 5,
+            color: '#ff0000',
+            skin: 'default',
+            trail: [],
+            isInvincible: false,
+            magnetRadius: 0,
+            abilityActive: false,
+            abilityCooldown: 0
+        }];
+        
+        // Variables del juego
+        let coins = 0;
+        let bounces = 0;
+        let highscore = 0;
+        let coinsMultiplier = 1;
+        let particles = [];
+        let particleType = 'circles';
+        let particleColor = '#ffffff';
+        let bgColor = '#222222';
+        let hudColor = '#4CAF50';
+        let difficulty = 'normal';
+        let gamePaused = false;
+        let lastBounceTime = 0;
+        let combo = 1;
+        let comboTimeout = null;
+        let comboTime = 2000; // 2 segundos para mantener el combo
+        let level = 1;
+        let bouncesToNextLevel = 50;
+        let powerups = [];
+        let obstacles = [];
+        let darkMode = false;
+        let soundEnabled = true;
+        let premiumUnlocked = false;
+        let lastFrameTime = 0;
+        let fps = 0;
+        let frameCount = 0;
+        let lastFpsUpdate = 0;
+        let bossActive = false;
+        let bossHealth = 0;
+        let bossMaxHealth = 0;
+        let boss = null;
+        let criticalChance = 0;
+        let missionsUnlocked = false;
+        let missions = [];
+        let rainParticles = [];
+        let rainInterval = null;
+        let loadingProgress = 0;
+        let loadingInterval = null;
+        
+        // Mejoras compradas (ahora con niveles)
+        let upgrades = {
+            double: {level: 0, maxLevel: 5},
+            speed: {level: 0, maxLevel: 5},
+            size: {level: 0, maxLevel: 5},
+            powerups: {level: 0, maxLevel: 3},
+            combo: {level: 0, maxLevel: 3},
+            magnet: {level: 0, maxLevel: 3},
+            critical: {level: 0, maxLevel: 5},
+            bossEvent: false,
+            ability: false,
+            missions: false,
+            multiBall: {level: 0, maxLevel: 5}
+        };
+        
+        // Logros
+        let achievements = {
+            firstBounce: false,
+            hundredBounces: false,
+            thousandBounces: false,
+            firstCoin: false,
+            hundredCoins: false,
+            thousandCoins: false,
+            firstUpgrade: false,
+            allUpgrades: false,
+            maxCombo: false,
+            premiumUnlocked: false,
+            bossDefeated: false,
+            criticalHit: false,
+            abilityUsed: false,
+            missionCompleted: false,
+            multiBallUsed: false
+        };
+        
+        // Elementos UI
+        const coinsDisplay = document.getElementById('coins');
+        const bouncesDisplay = document.getElementById('bounces');
+        const comboDisplay = document.getElementById('combo');
+        const comboPopup = document.getElementById('comboDisplay');
+        const levelDisplay = document.getElementById('level');
+        const highscoreDisplay = document.getElementById('highscore');
+        const coinMultiplierDisplay = document.getElementById('coinMultiplier');
+        const shopBtn = document.getElementById('shopBtn');
+        const configBtn = document.getElementById('configBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const statsBtn = document.getElementById('statsBtn');
+        const shop = document.getElementById('shop');
+        const configPanel = document.getElementById('config');
+        const ballColorInput = document.getElementById('ballColor');
+        const bgColorInput = document.getElementById('bgColor');
+        const particleColorInput = document.getElementById('particleColor');
+        const hudColorInput = document.getElementById('hudColorPicker');
+        const hudColorDisplay = document.getElementById('hudColor');
+        const difficultySelect = document.getElementById('difficulty');
+        const soundToggle = document.getElementById('soundToggle');
+        const achievementsPopup = document.getElementById('achievements');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const premiumShop = document.getElementById('premiumShop');
+        const statsPanel = document.getElementById('statsPanel');
+        const fpsCounter = document.getElementById('fpsCounter');
+        const particleCounter = document.getElementById('particleCounter');
+        const bossHealthBar = document.getElementById('bossHealthBar');
+        const bossHealthContainer = document.getElementById('bossHealth');
+        const abilityButton = document.getElementById('abilityButton');
+        const multiBallButton = document.getElementById('multiBallButton');
+        const missionsPanel = document.getElementById('missions');
+        const missionList = document.getElementById('missionList');
+        const missionToggle = document.getElementById('missionToggle');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingPercent = document.getElementById('loadingPercent');
+        
+        // Elementos de audio
+        const bounceSound = document.getElementById('bounceSound');
+        const coinSound = document.getElementById('coinSound');
+        const powerupSound = document.getElementById('powerupSound');
+        const bossSound = document.getElementById('bossSound');
+        const criticalSound = document.getElementById('criticalSound');
+        const abilitySound = document.getElementById('abilitySound');
+        
+        // Simular carga de recursos
+        function simulateLoading() {
+            loadingInterval = setInterval(() => {
+                loadingProgress += Math.random() * 10;
+                if (loadingProgress >= 100) {
+                    loadingProgress = 100;
+                    clearInterval(loadingInterval);
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                        loadGame();
+                    }, 500);
                 }
-            ],
-            ingredients: [
-                { name: "Lechuga", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Lettuce_Mini_Heads_2008.png/120px-Lettuce_Mini_Heads_2008.png" },
-                { name: "Tomate", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Tomato_je.jpg/120px-Tomato_je.jpg" },
-                { name: "Pepino", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/ARS_cucumber.jpg/120px-ARS_cucumber.jpg" },
-                { name: "Pan", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Fresh_made_bread_05.jpg/120px-Fresh_made_bread_05.jpg" },
-                { name: "Jamón", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Jamon_iberico_%28pata_negra%29.jpg/120px-Jamon_iberico_%28pata_negra%29.jpg" },
-                { name: "Queso", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Emmentaler.jpg/120px-Emmentaler.jpg" },
-                { name: "Pasta", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Spaghetti.jpg/120px-Spaghetti.jpg" },
-                { name: "Salsa de Tomate", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Tomato_sauce.jpg/120px-Tomato_sauce.jpg" },
-                { name: "Masa", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Pizza_dough.jpg/120px-Pizza_dough.jpg" }
-            ],
-            secretIngredients: [
-                { 
-                    name: "Trufa Negra", 
-                    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Tuber_melanosporum.jpg/120px-Tuber_melanosporum.jpg",
-                    secretId: 1,
-                    description: "¡El ingrediente más exclusivo de la gastronomía!"
+                loadingPercent.textContent = Math.min(100, Math.floor(loadingProgress)) + '%';
+            }, 100);
+        }
+        
+        // Cargar datos guardados
+        function loadGame() {
+            const savedGame = localStorage.getItem('circleBounceGame');
+            if (savedGame) {
+                const gameData = JSON.parse(savedGame);
+                coins = gameData.coins || 0;
+                bounces = gameData.bounces || 0;
+                highscore = gameData.highscore || 0;
+                upgrades = gameData.upgrades || {
+                    double: {level: 0, maxLevel: 5},
+                    speed: {level: 0, maxLevel: 5},
+                    size: {level: 0, maxLevel: 5},
+                    powerups: {level: 0, maxLevel: 3},
+                    combo: {level: 0, maxLevel: 3},
+                    magnet: {level: 0, maxLevel: 3},
+                    critical: {level: 0, maxLevel: 5},
+                    bossEvent: false,
+                    ability: false,
+                    missions: false,
+                    multiBall: {level: 0, maxLevel: 5}
+                };
+                level = gameData.level || 1;
+                bouncesToNextLevel = gameData.bouncesToNextLevel || 50;
+                achievements = gameData.achievements || {
+                    firstBounce: false,
+                    hundredBounces: false,
+                    thousandBounces: false,
+                    firstCoin: false,
+                    hundredCoins: false,
+                    thousandCoins: false,
+                    firstUpgrade: false,
+                    allUpgrades: false,
+                    maxCombo: false,
+                    premiumUnlocked: false,
+                    bossDefeated: false,
+                    criticalHit: false,
+                    abilityUsed: false,
+                    missionCompleted: false,
+                    multiBallUsed: false
+                };
+                balls[0].skin = gameData.skin || 'default';
+                premiumUnlocked = gameData.premiumUnlocked || false;
+                criticalChance = gameData.criticalChance || 0;
+                missionsUnlocked = gameData.missionsUnlocked || false;
+                hudColor = gameData.hudColor || '#4CAF50';
+                
+                applySkin(balls[0].skin);
+                applyHudColor(hudColor);
+                
+                // Aplicar mejoras compradas
+                if (upgrades.double.level > 0) coinsMultiplier = 1 + upgrades.double.level * 0.5;
+                if (upgrades.speed.level > 0) {
+                    balls.forEach(ball => {
+                        const speed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+                        const angle = Math.atan2(ball.dy, ball.dx);
+                        ball.dx = Math.cos(angle) * speed * (1 + upgrades.speed.level * 0.3);
+                        ball.dy = Math.sin(angle) * speed * (1 + upgrades.speed.level * 0.3);
+                    });
                 }
-            ],
-            achievements: {
-                firstRecipe: {
-                    name: "Primera Receta",
-                    description: "Completa tu primera receta",
-                    points: 10
-                },
-                fiveRecipes: {
-                    name: "Chef Novato",
-                    description: "Completa 5 recetas",
-                    points: 30
-                },
-                perfectRecipe: {
-                    name: "Perfeccionista",
-                    description: "Completa una receta sin errores",
-                    points: 25
-                },
-                secretFound: {
-                    name: "Cazador de Secretos",
-                    description: "Encuentra un ingrediente secreto",
-                    points: 50
-                },
-                timeChallenge: {
-                    name: "Supervivencia",
-                    description: "Sobrevive más de 45 segundos",
-                    points: 20
+                if (upgrades.size.level > 0) {
+                    balls.forEach(ball => {
+                        ball.radius = 20 * (1 + upgrades.size.level * 0.3);
+                    });
                 }
+                if (upgrades.combo.level > 0) comboTime = 2000 + upgrades.combo.level * 500;
+                if (upgrades.magnet.level > 0) {
+                    balls.forEach(ball => {
+                        ball.magnetRadius = 100 + upgrades.magnet.level * 50;
+                    });
+                }
+                if (upgrades.critical.level > 0) criticalChance = upgrades.critical.level * 0.05;
+                if (upgrades.ability) {
+                    abilityButton.disabled = false;
+                    abilityButton.style.display = 'block';
+                }
+                if (upgrades.missions) {
+                    missionsUnlocked = true;
+                    generateMissions();
+                }
+                if (upgrades.multiBall.level > 0) {
+                    multiBallButton.disabled = false;
+                    multiBallButton.style.display = 'block';
+                    multiBallButton.textContent = `Bolas: ${upgrades.multiBall.level + 1}`;
+                    
+                    // Crear bolas adicionales
+                    for (let i = 1; i <= upgrades.multiBall.level; i++) {
+                        addNewBall();
+                    }
+                }
+                
+                // Habilitar características premium si están desbloqueadas
+                if (premiumUnlocked) {
+                    enablePremiumFeatures();
+                }
+                
+                updateUI();
+                updateShopButtons();
             }
-        };
-
-        // 2. ESTADO DEL JUEGO
-        let gameState = {
-            timeLeft: 0,
-            score: 0,
-            isPaused: false,
-            isGameOver: false,
-            currentRecipe: null,
-            collectedIngredients: [],
-            activeIngredients: [],
-            difficulty: 1,
-            stats: {
-                recipesCompleted: 0,
-                ingredientsCollected: 0,
-                perfectRecipes: 0,
-                secretsFound: 0,
-                playTime: 0
-            },
-            unlockedAchievements: [],
-            foundSecrets: []
-        };
-
-        // 3. ELEMENTOS DEL DOM
-        const elements = {
-            gameTime: document.getElementById('game-time'),
-            gameScore: document.getElementById('game-score'),
-            currentRecipe: document.getElementById('current-recipe'),
-            recipeProgress: document.getElementById('recipe-progress'),
-            notification: document.getElementById('notification'),
-            achievementUnlocked: document.getElementById('achievement-unlocked'),
-            achievementName: document.getElementById('achievement-name'),
-            achievementDesc: document.getElementById('achievement-desc'),
-            secretFound: document.getElementById('secret-found'),
-            secretName: document.getElementById('secret-name'),
-            secretDesc: document.getElementById('secret-desc'),
-            pauseMenu: document.getElementById('pause-menu'),
-            gameContainer: document.querySelector('.game-container'),
-            // Botones
-            btnPause: document.getElementById('btn-pause'),
-            btnExit: document.getElementById('btn-exit'),
-            btnResume: document.getElementById('btn-resume'),
-            btnRestart: document.getElementById('btn-restart'),
-            btnExitMenu: document.getElementById('btn-exit-menu'),
-            btnCloseAchievement: document.getElementById('btn-close-achievement'),
-            btnCloseSecret: document.getElementById('btn-close-secret')
-        };
-
-        // 4. AUDIO
-        const sounds = {
-            collect: document.getElementById('collect-sound'),
-            complete: document.getElementById('complete-sound'),
-            achievement: document.getElementById('achievement-sound'),
-            secret: document.getElementById('secret-sound')
-        };
-
-        // 5. CONFIGURACIÓN DESDE EL MENÚ
-        const menuConfig = JSON.parse(sessionStorage.getItem('fnc-gameData')) || {
-            colorMenu: '#f39c12',
-            volumenMusica: 50,
-            volumenSonido: 70,
-            achievements: {},
-            secrets: []
-        };
-
-        // 6. FUNCIONES DEL JUEGO
-
-        // Inicializar el juego
-        function initGame() {
-            loadSettings();
-            setupEventListeners();
-            resetGameState();
-            startGame();
-            applyMenuConfig();
         }
-
-        function loadSettings() {
-            // Aplicar configuración de audio
-            Object.values(sounds).forEach(sound => {
-                sound.volume = (menuConfig.volumenSonido || 50) / 100;
+        
+        // Guardar datos del juego
+        function saveGame() {
+            const gameData = {
+                coins: coins,
+                bounces: bounces,
+                highscore: highscore,
+                upgrades: upgrades,
+                level: level,
+                bouncesToNextLevel: bouncesToNextLevel,
+                achievements: achievements,
+                skin: balls[0].skin,
+                premiumUnlocked: premiumUnlocked,
+                criticalChance: criticalChance,
+                missionsUnlocked: missionsUnlocked,
+                hudColor: hudColor
+            };
+            localStorage.setItem('circleBounceGame', JSON.stringify(gameData));
+        }
+        
+        // Habilitar características premium
+        function enablePremiumFeatures() {
+            premiumUnlocked = true;
+            ballColorInput.disabled = false;
+            bgColorInput.disabled = false;
+            particleColorInput.disabled = false;
+            hudColorInput.disabled = false;
+            document.getElementById('glowEffect').disabled = false;
+            document.getElementById('screenShake').disabled = false;
+            document.getElementById('rainEffect').disabled = false;
+            document.getElementById('trailRainbow').disabled = false;
+            
+            // Mostrar skins premium
+            document.querySelectorAll('.premium-feature').forEach(el => {
+                el.style.opacity = '1';
+                el.style.pointerEvents = 'auto';
             });
-
-            // Aplicar tema
-            document.documentElement.style.setProperty('--color-menu', menuConfig.colorMenu);
-            document.documentElement.style.setProperty('--color-menu-hover', 
-                adjustBrightness(menuConfig.colorMenu, 20));
+            
+            checkAchievement('premiumUnlocked');
         }
-
-        function applyMenuConfig() {
-            // Cargar logros y secretos ya desbloqueados
-            if (menuConfig.achievements) {
-                gameState.unlockedAchievements = Object.keys(menuConfig.achievements)
-                    .filter(key => menuConfig.achievements[key]);
+        
+        // Aplicar skin a la bola
+        function applySkin(skin) {
+            if (skin.includes('premium') && !premiumUnlocked) {
+                showPremiumShop();
+                return;
             }
             
-            if (menuConfig.secrets) {
-                gameState.foundSecrets = [...menuConfig.secrets];
+            balls.forEach(ball => {
+                ball.skin = skin;
+            });
+            
+            document.querySelectorAll('.skin-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            const selectedOption = document.querySelector(`.skin-option[onclick="selectSkin('${skin}')"]`);
+            if (selectedOption) selectedOption.classList.add('selected');
+            
+            let color = '#ff0000';
+            switch(skin) {
+                case 'default':
+                    color = '#ff0000';
+                    break;
+                case 'fire':
+                    color = '#ff6600';
+                    break;
+                case 'ice':
+                    color = '#00ccff';
+                    break;
+                case 'earth':
+                    color = '#00aa00';
+                    break;
+                case 'galaxy':
+                    color = '#9900ff';
+                    break;
+                case 'sun':
+                    color = '#ffff00';
+                    break;
+                case 'dragon':
+                    color = '#ff3366';
+                    break;
+                case 'rainbow':
+                    color = '#ff0000';
+                    break;
+                case 'nebula':
+                    color = '#9b59b6';
+                    break;
+                case 'golden':
+                    color = '#ffd700';
+                    break;
+            }
+            
+            balls.forEach(ball => {
+                ball.color = color;
+            });
+        }
+        
+        // Aplicar color al HUD
+        function applyHudColor(color) {
+            hudColor = color;
+            hudColorDisplay.style.backgroundColor = color;
+            document.querySelectorAll('button').forEach(btn => {
+                if (!btn.id.includes('darkModeToggle') && !btn.id.includes('abilityButton') && !btn.id.includes('multiBallButton')) {
+                    btn.style.backgroundColor = color;
+                }
+            });
+            document.querySelectorAll('.upgrade').forEach(upgrade => {
+                upgrade.style.borderLeftColor = color;
+            });
+            document.querySelectorAll('.upgrade h3').forEach(title => {
+                title.style.color = color;
+            });
+        }
+        
+        // Seleccionar skin
+        function selectSkin(skin) {
+            applySkin(skin);
+            saveGame();
+        }
+        
+        // Mostrar tienda premium
+        function showPremiumShop() {
+            premiumShop.style.display = 'block';
+        }
+        
+        function hidePremiumShop() {
+            premiumShop.style.display = 'none';
+        }
+        
+        // Comprar premium
+        function buyPremium() {
+            if (premiumUnlocked) return;
+            
+            if (coins >= 5000) {
+                coins -= 5000;
+                enablePremiumFeatures();
+                updateUI();
+                updateShopButtons();
+                saveGame();
+                hidePremiumShop();
+                playSound(powerupSound);
+                showComboMessage('¡Premium desbloqueado!', 'gold');
+            } else {
+                showComboMessage('No tienes suficientes coins', '#ff3333');
             }
         }
-
-        function setupEventListeners() {
-            // Botones
-            elements.btnPause.addEventListener('click', pauseGame);
-            elements.btnExit.addEventListener('click', showExitConfirm);
-            elements.btnResume.addEventListener('click', resumeGame);
-            elements.btnRestart.addEventListener('click', restartGame);
-            elements.btnExitMenu.addEventListener('click', exitToMenu);
-            elements.btnCloseAchievement.addEventListener('click', () => {
-                elements.achievementUnlocked.classList.remove('show');
+        
+        // Añadir una nueva bola al juego
+        function addNewBall() {
+            const lastBall = balls[balls.length - 1];
+            const newBall = {
+                x: lastBall.x + (Math.random() * 40 - 20),
+                y: lastBall.y + (Math.random() * 40 - 20),
+                radius: lastBall.radius,
+                dx: lastBall.dx * (Math.random() > 0.5 ? 1 : -1),
+                dy: lastBall.dy * (Math.random() > 0.5 ? 1 : -1),
+                color: lastBall.color,
+                skin: lastBall.skin,
+                trail: [],
+                isInvincible: false,
+                magnetRadius: lastBall.magnetRadius,
+                abilityActive: false,
+                abilityCooldown: 0
+            };
+            balls.push(newBall);
+            multiBallButton.textContent = `Bolas: ${balls.length}`;
+            checkAchievement('multiBallUsed');
+        }
+        
+        // Event listeners
+        shopBtn.addEventListener('click', toggleShop);
+        configBtn.addEventListener('click', toggleConfig);
+        pauseBtn.addEventListener('click', togglePause);
+        statsBtn.addEventListener('click', toggleStats);
+        window.addEventListener('resize', resizeCanvas);
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+        abilityButton.addEventListener('click', activateAbility);
+        multiBallButton.addEventListener('click', () => {
+            if (balls.length < upgrades.multiBall.maxLevel + 1) {
+                addNewBall();
+            }
+        });
+        missionToggle.addEventListener('click', toggleMissions);
+        hudColorDisplay.addEventListener('click', () => {
+            if (premiumUnlocked) {
+                hudColorInput.style.display = hudColorInput.style.display === 'block' ? 'none' : 'block';
+            }
+        });
+        hudColorInput.addEventListener('input', (e) => {
+            applyHudColor(e.target.value);
+            saveGame();
+        });
+        
+        // Configurar listeners para los tipos de partículas
+        document.querySelectorAll('input[name="particle"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                particleType = this.value;
+                saveGame();
             });
-            elements.btnCloseSecret.addEventListener('click', () => {
-                elements.secretFound.classList.remove('show');
+        });
+        
+        // Iniciar carga de recursos
+        simulateLoading();
+        
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            
+            // Asegurarse que las bolas no queden fuera
+            balls.forEach(ball => {
+                if (ball.x > width) ball.x = width - ball.radius;
+                if (ball.y > height) ball.y = height - ball.radius;
             });
-
-            // Eventos de teclado
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    if (gameState.isPaused) resumeGame();
-                    else pauseGame();
+        }
+        
+        function toggleShop() {
+            if (shop.style.display === 'block') {
+                shop.style.display = 'none';
+            } else {
+                shop.style.display = 'block';
+                configPanel.style.display = 'none';
+                statsPanel.style.display = 'none';
+                missionsPanel.style.display = 'none';
+                updateShopButtons();
+            }
+        }
+        
+        function toggleConfig() {
+            if (configPanel.style.display === 'block') {
+                configPanel.style.display = 'none';
+                hudColorInput.style.display = 'none';
+            } else {
+                configPanel.style.display = 'block';
+                shop.style.display = 'none';
+                statsPanel.style.display = 'none';
+                missionsPanel.style.display = 'none';
+                hudColorInput.style.display = 'none';
+            }
+        }
+        
+        function toggleStats() {
+            if (statsPanel.style.display === 'block') {
+                statsPanel.style.display = 'none';
+            } else {
+                statsPanel.style.display = 'block';
+                shop.style.display = 'none';
+                configPanel.style.display = 'none';
+                missionsPanel.style.display = 'none';
+            }
+        }
+        
+        function toggleMissions() {
+            if (!missionsUnlocked) {
+                showComboMessage('Desbloquea misiones en la tienda Premium', '#ff9900');
+                return;
+            }
+            
+            if (missionsPanel.style.display === 'block') {
+                missionsPanel.style.display = 'none';
+            } else {
+                missionsPanel.style.display = 'block';
+                shop.style.display = 'none';
+                configPanel.style.display = 'none';
+                statsPanel.style.display = 'none';
+                updateMissionsUI();
+            }
+        }
+        
+        function togglePause() {
+            gamePaused = !gamePaused;
+            pauseBtn.textContent = gamePaused ? 'Continuar' : 'Pausa';
+            
+            if (!gamePaused) {
+                lastBounceTime = Date.now(); // Reset combo timer al continuar
+                lastFrameTime = performance.now();
+                gameLoop();
+            }
+        }
+        
+        function toggleDarkMode() {
+            darkMode = !darkMode;
+            darkModeToggle.textContent = darkMode ? 'Modo Claro' : 'Modo Oscuro';
+            document.body.style.backgroundColor = darkMode ? '#111' : '#f0f0f0';
+            canvas.style.backgroundColor = darkMode ? '#000' : '#222';
+        }
+        
+        function openTab(evt, tabName) {
+            const tabcontent = document.getElementsByClassName('tabcontent');
+            for (let i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = 'none';
+            }
+            
+            const tablinks = document.getElementsByClassName('tablinks');
+            for (let i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(' active', '');
+            }
+            
+            document.getElementById(tabName).style.display = 'block';
+            evt.currentTarget.className += ' active';
+        }
+        
+        function updateShopButtons() {
+            document.getElementById('buyDouble').disabled = upgrades.double.level >= upgrades.double.maxLevel || coins < 200;
+            document.getElementById('buySpeed').disabled = upgrades.speed.level >= upgrades.speed.maxLevel || coins < 300;
+            document.getElementById('buySize').disabled = upgrades.size.level >= upgrades.size.maxLevel || coins < 250;
+            document.getElementById('buyPowerups').disabled = upgrades.powerups.level >= upgrades.powerups.maxLevel || coins < 400;
+            document.getElementById('buyCombo').disabled = upgrades.combo.level >= upgrades.combo.maxLevel || coins < 350;
+            document.getElementById('buyMagnet').disabled = upgrades.magnet.level >= upgrades.magnet.maxLevel || coins < 500;
+            document.getElementById('buyCritical').disabled = upgrades.critical.level >= upgrades.critical.maxLevel || coins < 600;
+            document.getElementById('buyPremium').disabled = premiumUnlocked || coins < 5000;
+            document.getElementById('buyBossEvent').disabled = upgrades.bossEvent || coins < 1000;
+            document.getElementById('buyAbility').disabled = !premiumUnlocked || upgrades.ability || coins < 1200;
+            document.getElementById('buyMissions').disabled = !premiumUnlocked || upgrades.missions || coins < 800;
+            document.getElementById('buyMultiBall').disabled = !premiumUnlocked || upgrades.multiBall.level >= upgrades.multiBall.maxLevel || coins < 1000;
+            
+            // Actualizar textos de nivel
+            document.getElementById('doubleLevel').textContent = `(Nivel ${upgrades.double.level})`;
+            document.getElementById('speedLevel').textContent = `(Nivel ${upgrades.speed.level})`;
+            document.getElementById('sizeLevel').textContent = `(Nivel ${upgrades.size.level})`;
+            document.getElementById('powerupsLevel').textContent = `(Nivel ${upgrades.powerups.level})`;
+            document.getElementById('comboLevel').textContent = `(Nivel ${upgrades.combo.level})`;
+            document.getElementById('magnetLevel').textContent = `(Nivel ${upgrades.magnet.level})`;
+            document.getElementById('criticalLevel').textContent = `(Nivel ${upgrades.critical.level})`;
+            
+            // Actualizar textos de costo
+            document.querySelectorAll('.cost').forEach(el => {
+                const cost = parseInt(el.textContent);
+                el.style.color = coins >= cost ? '#4CAF50' : '#ff3333';
+            });
+        }
+        
+        function buyUpgrade(type) {
+            let cost = 0;
+            let bought = false;
+            
+            switch(type) {
+                case 'double':
+                    cost = 200;
+                    if (coins >= cost && upgrades.double.level < upgrades.double.maxLevel) {
+                        coins -= cost;
+                        upgrades.double.level++;
+                        coinsMultiplier = 1 + upgrades.double.level * 0.5;
+                        bought = true;
+                        checkAchievement('firstUpgrade');
+                    }
+                    break;
+                case 'speed':
+                    cost = 300;
+                    if (coins >= cost && upgrades.speed.level < upgrades.speed.maxLevel) {
+                        coins -= cost;
+                        upgrades.speed.level++;
+                        balls.forEach(ball => {
+                            const speed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+                            const angle = Math.atan2(ball.dy, ball.dx);
+                            ball.dx = Math.cos(angle) * speed * (1 + upgrades.speed.level * 0.3);
+                            ball.dy = Math.sin(angle) * speed * (1 + upgrades.speed.level * 0.3);
+                        });
+                        bought = true;
+                        checkAchievement('firstUpgrade');
+                    }
+                    break;
+                case 'size':
+                    cost = 250;
+                    if (coins >= cost && upgrades.size.level < upgrades.size.maxLevel) {
+                        coins -= cost;
+                        upgrades.size.level++;
+                        balls.forEach(ball => {
+                            ball.radius = 20 * (1 + upgrades.size.level * 0.3);
+                        });
+                        bought = true;
+                        checkAchievement('firstUpgrade');
+                    }
+                    break;
+                case 'powerups':
+                    cost = 400;
+                    if (coins >= cost && upgrades.powerups.level < upgrades.powerups.maxLevel) {
+                        coins -= cost;
+                        upgrades.powerups.level++;
+                        bought = true;
+                        checkAchievement('firstUpgrade');
+                    }
+                    break;
+                case 'combo':
+                    cost = 350;
+                    if (coins >= cost && upgrades.combo.level < upgrades.combo.maxLevel) {
+                        coins -= cost;
+                        upgrades.combo.level++;
+                        comboTime = 2000 + upgrades.combo.level * 500;
+                        bought = true;
+                        checkAchievement('firstUpgrade');
+                    }
+                    break;
+                case 'magnet':
+                    cost = 500;
+                    if (coins >= cost && upgrades.magnet.level < upgrades.magnet.maxLevel) {
+                        coins -= cost;
+                        upgrades.magnet.level++;
+                        balls.forEach(ball => {
+                            ball.magnetRadius = 100 + upgrades.magnet.level * 50;
+                        });
+                        bought = true;
+                        checkAchievement('firstUpgrade');
+                    }
+                    break;
+                case 'critical':
+                    cost = 600;
+                    if (coins >= cost && upgrades.critical.level < upgrades.critical.maxLevel) {
+                        coins -= cost;
+                        upgrades.critical.level++;
+                        criticalChance = upgrades.critical.level * 0.05;
+                        bought = true;
+                        checkAchievement('firstUpgrade');
+                    }
+                    break;
+                case 'bossEvent':
+                    cost = 1000;
+                    if (coins >= cost && !upgrades.bossEvent) {
+                        coins -= cost;
+                        upgrades.bossEvent = true;
+                        bought = true;
+                        checkAchievement('firstUpgrade');
+                    }
+                    break;
+                case 'ability':
+                    cost = 1200;
+                    if (coins >= cost && !upgrades.ability && premiumUnlocked) {
+                        coins -= cost;
+                        upgrades.ability = true;
+                        abilityButton.disabled = false;
+                        abilityButton.style.display = 'block';
+                        bought = true;
+                        checkAchievement('firstUpgrade');
+                    }
+                    break;
+                case 'missions':
+                    cost = 800;
+                    if (coins >= cost && !upgrades.missions && premiumUnlocked) {
+                        coins -= cost;
+                        upgrades.missions = true;
+                        missionsUnlocked = true;
+                        generateMissions();
+                        bought = true;
+                        checkAchievement('firstUpgrade');
+                    }
+                    break;
+                case 'multiBall':
+                    cost = 1000;
+                    if (coins >= cost && upgrades.multiBall.level < upgrades.multiBall.maxLevel && premiumUnlocked) {
+                        coins -= cost;
+                        upgrades.multiBall.level++;
+                        addNewBall();
+                        bought = true;
+                        checkAchievement('firstUpgrade');
+                    }
+                    break;
+            }
+            
+            // Verificar si todas las mejoras están compradas
+            if (Object.values(upgrades).every(val => {
+                if (typeof val === 'object') return val.level >= val.maxLevel;
+                return val === true;
+            })) {
+                checkAchievement('allUpgrades');
+            }
+            
+            if (bought) {
+                updateUI();
+                updateShopButtons();
+                saveGame();
+                playSound(coinSound);
+            }
+        }
+        
+        function applyConfig() {
+            if (premiumUnlocked) {
+                balls.forEach(ball => {
+                    ball.color = ballColorInput.value;
+                });
+                bgColor = bgColorInput.value;
+                particleColor = particleColorInput.value;
+                applyHudColor(hudColorInput.value);
+            }
+            
+            difficulty = difficultySelect.value;
+            soundEnabled = soundToggle.checked;
+            
+            // Aplicar dificultad - Mantener la dirección pero ajustar magnitud
+            balls.forEach(ball => {
+                const currentSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+                const angle = Math.atan2(ball.dy, ball.dx);
+                let newSpeed = currentSpeed;
+                
+                switch(difficulty) {
+                    case 'easy':
+                        newSpeed = 3;
+                        break;
+                    case 'normal':
+                        newSpeed = 5;
+                        break;
+                    case 'hard':
+                        newSpeed = 7;
+                        break;
+                    case 'extreme':
+                        newSpeed = 10;
+                        break;
+                }
+                
+                // Si la mejora de velocidad está comprada, aumentar la velocidad
+                if (upgrades.speed.level > 0) {
+                    newSpeed *= (1 + upgrades.speed.level * 0.3);
+                }
+                
+                ball.dx = Math.cos(angle) * newSpeed;
+                ball.dy = Math.sin(angle) * newSpeed;
+            });
+            
+            // Configurar efectos de partículas premium
+            if (premiumUnlocked) {
+                if (document.getElementById('rainEffect').checked) {
+                    startRainEffect();
+                } else {
+                    stopRainEffect();
+                }
+            }
+            
+            saveGame();
+        }
+        
+        function startRainEffect() {
+            if (rainInterval) return;
+            
+            rainInterval = setInterval(() => {
+                if (gamePaused) return;
+                
+                // Crear partículas de lluvia en la parte superior
+                for (let i = 0; i < 3; i++) {
+                    rainParticles.push({
+                        x: Math.random() * width,
+                        y: -10,
+                        size: Math.random() * 4 + 2,
+                        speed: Math.random() * 5 + 5,
+                        life: 100,
+                        alpha: Math.random() * 0.5 + 0.3
+                    });
+                }
+            }, 100);
+        }
+        
+        function stopRainEffect() {
+            if (rainInterval) {
+                clearInterval(rainInterval);
+                rainInterval = null;
+            }
+        }
+        
+        function updateRainParticles() {
+            for (let i = rainParticles.length - 1; i >= 0; i--) {
+                const p = rainParticles[i];
+                p.y += p.speed;
+                p.life--;
+                
+                if (p.y > height || p.life <= 0) {
+                    rainParticles.splice(i, 1);
+                }
+            }
+        }
+        
+        function drawRainParticles() {
+            rainParticles.forEach(p => {
+                ctx.fillStyle = `rgba(200, 200, 255, ${p.alpha})`;
+                ctx.fillRect(p.x, p.y, p.size/2, p.size*2);
+            });
+        }
+        
+        function resetGame() {
+            if (confirm("¿Estás seguro de que quieres reiniciar el juego? Perderás todo tu progreso.")) {
+                localStorage.removeItem('circleBounceGame');
+                location.reload();
+            }
+        }
+        
+        function updateUI() {
+            coinsDisplay.textContent = coins;
+            bouncesDisplay.textContent = bounces;
+            comboDisplay.textContent = combo + 'x';
+            levelDisplay.textContent = level;
+            highscoreDisplay.textContent = highscore;
+            coinMultiplierDisplay.textContent = upgrades.double.level > 0 ? ` (x${coinsMultiplier.toFixed(1)})` : '';
+            
+            // Actualizar récord si es necesario
+            if (bounces > highscore) {
+                highscore = bounces;
+            }
+            
+            // Verificar logros relacionados con cantidades
+            if (bounces >= 1 && !achievements.firstBounce) {
+                checkAchievement('firstBounce');
+            }
+            if (bounces >= 100 && !achievements.hundredBounces) {
+                checkAchievement('hundredBounces');
+            }
+            if (bounces >= 1000 && !achievements.thousandBounces) {
+                checkAchievement('thousandBounces');
+            }
+            if (coins >= 1 && !achievements.firstCoin) {
+                checkAchievement('firstCoin');
+            }
+            if (coins >= 100 && !achievements.hundredCoins) {
+                checkAchievement('hundredCoins');
+            }
+            if (coins >= 1000 && !achievements.thousandCoins) {
+                checkAchievement('thousandCoins');
+            }
+            if (combo >= 10 && !achievements.maxCombo) {
+                checkAchievement('maxCombo');
+            }
+            if (balls.length > 1 && !achievements.multiBallUsed) {
+                checkAchievement('multiBallUsed');
+            }
+        }
+        
+        function checkAchievement(achievement) {
+            if (!achievements[achievement]) {
+                achievements[achievement] = true;
+                showAchievement(achievement);
+                saveGame();
+            }
+        }
+        
+        function showAchievement(achievement) {
+            let title = '';
+            let description = '';
+            let reward = 10;
+            
+            switch(achievement) {
+                case 'firstBounce':
+                    title = 'Primer Rebote!';
+                    description = 'Has rebotado por primera vez';
+                    break;
+                case 'hundredBounces':
+                    title = '100 Rebotes!';
+                    description = 'Has alcanzado 100 rebotes';
+                    reward = 20;
+                    break;
+                case 'thousandBounces':
+                    title = '1000 Rebotes!';
+                    description = 'Wow, 1000 rebotes!';
+                    reward = 50;
+                    break;
+                case 'firstCoin':
+                    title = 'Primera Moneda!';
+                    description = 'Has ganado tu primera moneda';
+                    break;
+                case 'hundredCoins':
+                    title = '100 Monedas!';
+                    description = 'Has acumulado 100 monedas';
+                    reward = 20;
+                    break;
+                case 'thousandCoins':
+                    title = '1000 Monedas!';
+                    description = 'Eres rico! 1000 monedas';
+                    reward = 50;
+                    break;
+                case 'firstUpgrade':
+                    title = 'Primera Mejora!';
+                    description = 'Has comprado tu primera mejora';
+                    break;
+                case 'allUpgrades':
+                    title = 'Mejoras Completas!';
+                    description = 'Has comprado todas las mejoras';
+                    reward = 100;
+                    break;
+                case 'maxCombo':
+                    title = 'Combo Máximo!';
+                    description = 'Alcanzaste un combo de 10x';
+                    reward = 30;
+                    break;
+                case 'premiumUnlocked':
+                    title = 'Premium Desbloqueado!';
+                    description = 'Ahora tienes acceso a características exclusivas';
+                    reward = 50;
+                    break;
+                case 'bossDefeated':
+                    title = 'Jefe Derrotado!';
+                    description = 'Has vencido a un jefe final';
+                    reward = 100;
+                    break;
+                case 'criticalHit':
+                    title = 'Golpe Crítico!';
+                    description = 'Has conseguido un rebote crítico';
+                    reward = 15;
+                    break;
+                case 'abilityUsed':
+                    title = 'Habilidad Usada!';
+                    description = 'Has utilizado tu primera habilidad especial';
+                    reward = 20;
+                    break;
+                case 'missionCompleted':
+                    title = 'Misión Completada!';
+                    description = 'Has completado tu primera misión';
+                    reward = 25;
+                    break;
+                case 'multiBallUsed':
+                    title = 'Bolas Múltiples!';
+                    description = 'Has usado bolas múltiples por primera vez';
+                    reward = 30;
+                    break;
+            }
+            
+            achievementsPopup.innerHTML = `
+                <h2>${title}</h2>
+                <p>${description}</p>
+                <p>+${reward} Coins de recompensa!</p>
+            `;
+            achievementsPopup.style.display = 'block';
+            coins += reward;
+            updateUI();
+            playSound(powerupSound);
+            
+            setTimeout(() => {
+                achievementsPopup.style.display = 'none';
+            }, 3000);
+        }
+        
+        function createParticles(x, y, count = 10, burst = true) {
+            if (!document.getElementById('burstEffect').checked && burst) return;
+            
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 3 + 1;
+                const size = Math.random() * 5 + 2;
+                
+                particles.push({
+                    x: x,
+                    y: y,
+                    size: size,
+                    life: 30,
+                    maxLife: 30,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    type: particleType === 'mixed' ? 
+                          ['circles', 'squares', 'stars', 'hearts'][Math.floor(Math.random() * 4)] : 
+                          particleType,
+                    color: particleColor
+                });
+            }
+        }
+        
+        function createTrailParticles() {
+            if (!document.getElementById('trailEffect').checked) return;
+            
+            // Crear partículas de estela para cada bola
+            balls.forEach(ball => {
+                ball.trail.push({x: ball.x, y: ball.y});
+                if (ball.trail.length > 5) ball.trail.shift();
+                
+                if (Math.random() < 0.3) {
+                    createParticles(ball.x, ball.y, 2, false);
                 }
             });
         }
+        
+        function updateParticles() {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life--;
+                
+                // Aplicar gravedad
+                p.vy += 0.1;
+                
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+        }
+        
+        function drawParticles() {
+            particles.forEach(p => {
+                const alpha = p.life / p.maxLife;
+                ctx.globalAlpha = alpha;
+                
+                // Efecto de estela arcoíris
+                if (premiumUnlocked && document.getElementById('trailRainbow').checked) {
+                    const hue = (p.life / p.maxLife) * 360;
+                    ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+                } else {
+                    ctx.fillStyle = p.color || particleColor;
+                }
+                
+                switch(p.type) {
+                    case 'circles':
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        ctx.fill();
+                        break;
+                    case 'squares':
+                        ctx.fillRect(p.x - p.size/2, p.y - p.size/2, p.size, p.size);
+                        break;
+                    case 'stars':
+                        drawStar(p.x, p.y, 5, p.size, p.size/2);
+                        ctx.fill();
+                        break;
+                    case 'hearts':
+                        drawHeart(p.x, p.y, p.size);
+                        ctx.fill();
+                        break;
+                }
+            });
+            ctx.globalAlpha = 1;
+        }
+        
+        function drawStar(cx, cy, spikes, outerRadius, innerRadius) {
+            let rot = Math.PI / 2 * 3;
+            let x = cx;
+            let y = cy;
+            let step = Math.PI / spikes;
 
-        function resetGameState() {
-            gameState = {
-                ...gameState,
-                timeLeft: gameConfig.timeLimit,
-                score: 0,
-                isPaused: false,
-                isGameOver: false,
-                currentRecipe: null,
-                collectedIngredients: [],
-                activeIngredients: [],
-                difficulty: 1
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - outerRadius);
+            
+            for (let i = 0; i < spikes; i++) {
+                x = cx + Math.cos(rot) * outerRadius;
+                y = cy + Math.sin(rot) * outerRadius;
+                ctx.lineTo(x, y);
+                rot += step;
+
+                x = cx + Math.cos(rot) * innerRadius;
+                y = cy + Math.sin(rot) * innerRadius;
+                ctx.lineTo(x, y);
+                rot += step;
+            }
+            
+            ctx.lineTo(cx, cy - outerRadius);
+            ctx.closePath();
+        }
+        
+        function drawHeart(x, y, size) {
+            ctx.beginPath();
+            const topCurveHeight = size * 0.3;
+            ctx.moveTo(x, y + topCurveHeight);
+            // top left curve
+            ctx.bezierCurveTo(
+                x, y, 
+                x - size / 2, y, 
+                x - size / 2, y + topCurveHeight
+            );
+            // bottom left curve
+            ctx.bezierCurveTo(
+                x - size / 2, y + (size + topCurveHeight) / 2, 
+                x, y + (size + topCurveHeight) / 2, 
+                x, y + size
+            );
+            // bottom right curve
+            ctx.bezierCurveTo(
+                x, y + (size + topCurveHeight) / 2, 
+                x + size / 2, y + (size + topCurveHeight) / 2, 
+                x + size / 2, y + topCurveHeight
+            );
+            // top right curve
+            ctx.bezierCurveTo(
+                x + size / 2, y, 
+                x, y, 
+                x, y + topCurveHeight
+            );
+            ctx.closePath();
+        }
+        
+        function spawnPowerup() {
+            if (Math.random() < 0.02 * (1 + upgrades.powerups.level * 0.5)) {
+                const types = ['coin', 'multiplier', 'slow', 'invincible', 'time', 'explosion'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                
+                const powerup = {
+                    x: Math.random() * (width - 40) + 20,
+                    y: Math.random() * (height - 40) + 20,
+                    radius: 15,
+                    type: type,
+                    life: 500, // 10 segundos a 50fps
+                    color: getPowerupColor(type)
+                };
+                
+                powerups.push(powerup);
+            }
+        }
+        
+        function getPowerupColor(type) {
+            switch(type) {
+                case 'coin': return 'gold';
+                case 'multiplier': return '#00ff00';
+                case 'slow': return '#0000ff';
+                case 'invincible': return '#ff00ff';
+                case 'time': return '#ffff00';
+                case 'explosion': return '#ff6600';
+                default: return 'white';
+            }
+        }
+        
+        function updatePowerups() {
+            for (let i = powerups.length - 1; i >= 0; i--) {
+                // Aplicar magnetismo si está activo
+                if (upgrades.magnet.level > 0) {
+                    let closestBall = null;
+                    let minDistance = Infinity;
+                    
+                    // Encontrar la bola más cercana
+                    balls.forEach(ball => {
+                        const dx = ball.x - powerups[i].x;
+                        const dy = ball.y - powerups[i].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            closestBall = ball;
+                        }
+                    });
+                    
+                    if (minDistance < closestBall.magnetRadius) {
+                        const angle = Math.atan2(closestBall.y - powerups[i].y, closestBall.x - powerups[i].x);
+                        const pullStrength = 1 - (minDistance / closestBall.magnetRadius);
+                        powerups[i].x += Math.cos(angle) * 5 * pullStrength;
+                        powerups[i].y += Math.sin(angle) * 5 * pullStrength;
+                    }
+                }
+                
+                powerups[i].life--;
+                
+                if (powerups[i].life <= 0) {
+                    powerups.splice(i, 1);
+                }
+            }
+        }
+        
+        function drawPowerups() {
+            powerups.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+                ctx.closePath();
+                
+                // Dibujar icono según tipo
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 16px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                switch(p.type) {
+                    case 'coin':
+                        ctx.fillText('$', p.x, p.y);
+                        break;
+                    case 'multiplier':
+                        ctx.fillText('x2', p.x, p.y);
+                        break;
+                    case 'slow':
+                        ctx.fillText('⌛', p.x, p.y);
+                        break;
+                    case 'invincible':
+                        ctx.fillText('✨', p.x, p.y);
+                        break;
+                    case 'time':
+                        ctx.fillText('⏱️', p.x, p.y);
+                        break;
+                    case 'explosion':
+                        ctx.fillText('💥', p.x, p.y);
+                        break;
+                }
+            });
+            
+            // Dibujar radio de magnetismo si está activo
+            if (upgrades.magnet.level > 0) {
+                balls.forEach(ball => {
+                    if (ball.magnetRadius > 0) {
+                        ctx.beginPath();
+                        ctx.arc(ball.x, ball.y, ball.magnetRadius, 0, Math.PI * 2);
+                        ctx.strokeStyle = 'rgba(0, 255, 255, 0.2)';
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+                        ctx.closePath();
+                    }
+                });
+            }
+        }
+        
+        function checkPowerupCollision() {
+            for (let i = powerups.length - 1; i >= 0; i--) {
+                const p = powerups[i];
+                
+                // Verificar colisión con todas las bolas
+                for (let j = 0; j < balls.length; j++) {
+                    const ball = balls[j];
+                    const dx = ball.x - p.x;
+                    const dy = ball.y - p.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < ball.radius + p.radius) {
+                        applyPowerup(p.type);
+                        powerups.splice(i, 1);
+                        playSound(powerupSound);
+                        break; // Salir del bucle de bolas si hay colisión
+                    }
+                }
+            }
+        }
+        
+        function applyPowerup(type) {
+            let message = '';
+            let color = '#ffffff';
+            
+            switch(type) {
+                case 'coin':
+                    coins += 10 * coinsMultiplier;
+                    message = '+10 Coins!';
+                    color = 'gold';
+                    break;
+                case 'multiplier':
+                    coinsMultiplier *= 2;
+                    setTimeout(() => {
+                        coinsMultiplier /= 2;
+                        updateUI();
+                    }, 10000);
+                    message = 'Multiplicador x2!';
+                    color = '#00ff00';
+                    break;
+                case 'slow':
+                    balls.forEach(ball => {
+                        const originalDx = ball.dx;
+                        const originalDy = ball.dy;
+                        ball.dx *= 0.5;
+                        ball.dy *= 0.5;
+                        setTimeout(() => {
+                            ball.dx = originalDx;
+                            ball.dy = originalDy;
+                        }, 5000);
+                    });
+                    message = 'Lentitud!';
+                    color = '#0000ff';
+                    break;
+                case 'invincible':
+                    balls.forEach(ball => {
+                        ball.isInvincible = true;
+                        const originalColor = ball.color;
+                        ball.color = '#ffffff';
+                        setTimeout(() => {
+                            ball.isInvincible = false;
+                            ball.color = originalColor;
+                        }, 3000);
+                    });
+                    message = 'Invencible!';
+                    color = '#ff00ff';
+                    break;
+                case 'time':
+                    comboTime += 1000;
+                    setTimeout(() => {
+                        comboTime -= 1000;
+                    }, 5000);
+                    message = '+1s Combo!';
+                    color = '#ffff00';
+                    break;
+                case 'explosion':
+                    balls.forEach(ball => {
+                        createParticles(ball.x, ball.y, 50);
+                    });
+                    message = '¡Explosión!';
+                    color = '#ff6600';
+                    break;
+            }
+            
+            showComboMessage(message, color);
+        }
+        
+        function spawnObstacles() {
+            if (level >= 3 && obstacles.length < Math.floor(level / 2)) {
+                const obstacle = {
+                    x: Math.random() * (width - 100) + 50,
+                    y: Math.random() * (height - 100) + 50,
+                    width: Math.random() * 50 + 30,
+                    height: Math.random() * 50 + 30,
+                    color: `rgba(255, 255, 255, ${Math.random() * 0.3 + 0.2})`
+                };
+                
+                // Asegurarse de que no aparezca demasiado cerca de ninguna bola
+                let tooClose = false;
+                balls.forEach(ball => {
+                    const dx = ball.x - obstacle.x;
+                    const dy = ball.y - obstacle.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 150) {
+                        tooClose = true;
+                    }
+                });
+                
+                if (!tooClose) {
+                    obstacles.push(obstacle);
+                }
+            }
+        }
+        
+        function drawObstacles() {
+            obstacles.forEach(obs => {
+                ctx.fillStyle = obs.color;
+                ctx.fillRect(obs.x - obs.width/2, obs.y - obs.height/2, obs.width, obs.height);
+                
+                // Dibujar borde si es premium
+                if (premiumUnlocked) {
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(obs.x - obs.width/2, obs.y - obs.height/2, obs.width, obs.height);
+                }
+            });
+        }
+        
+        function checkObstacleCollision() {
+            for (let i = 0; i < obstacles.length; i++) {
+                const obs = obstacles[i];
+                
+                // Verificar colisión con todas las bolas
+                balls.forEach(ball => {
+                    if (ball.isInvincible) return;
+                    
+                    // Calcular el punto más cercano en el obstáculo al centro de la bola
+                    const closestX = Math.max(obs.x - obs.width/2, Math.min(ball.x, obs.x + obs.width/2));
+                    const closestY = Math.max(obs.y - obs.height/2, Math.min(ball.y, obs.y + obs.height/2));
+                    
+                    // Calcular la distancia entre el centro de la bola y este punto más cercano
+                    const distanceX = ball.x - closestX;
+                    const distanceY = ball.y - closestY;
+                    const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+                    
+                    // Si la distancia es menor que el radio, hay colisión
+                    if (distance < ball.radius) {
+                        // Determinar de qué lado ocurrió la colisión
+                        if (closestY === obs.y - obs.height/2 || closestY === obs.y + obs.height/2) {
+                            ball.dy = -ball.dy;
+                        } else {
+                            ball.dx = -ball.dx;
+                        }
+                        
+                        handleBounce(ball);
+                        createParticles(closestX, closestY, 15);
+                    }
+                });
+            }
+        }
+        
+        function spawnBoss() {
+            if (!upgrades.bossEvent || bossActive || level % 10 !== 0) return;
+            
+            bossActive = true;
+            bossMaxHealth = level * 5;
+            bossHealth = bossMaxHealth;
+            boss = {
+                x: width / 2,
+                y: height / 4,
+                width: 150,
+                height: 80,
+                color: `rgba(255, 50, 50, 0.7)`,
+                speed: 3 + level / 10
             };
+            
+            bossHealthContainer.style.display = 'block';
+            updateBossHealthBar();
+            playSound(bossSound);
+            showComboMessage('¡Jefe Final Aparecido!', '#ff0000');
+        }
+        
+        function updateBoss() {
+            if (!bossActive) return;
+            
+            // Mover al jefe
+            boss.x += boss.speed;
+            
+            // Rebotar en los bordes
+            if (boss.x + boss.width/2 > width || boss.x - boss.width/2 < 0) {
+                boss.speed = -boss.speed;
+            }
+            
+            // Verificar colisión con todas las bolas
+            balls.forEach(ball => {
+                if (ball.isInvincible) return;
+                
+                const closestX = Math.max(boss.x - boss.width/2, Math.min(ball.x, boss.x + boss.width/2));
+                const closestY = Math.max(boss.y - boss.height/2, Math.min(ball.y, boss.y + boss.height/2));
+                const distanceX = ball.x - closestX;
+                const distanceY = ball.y - closestY;
+                const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+                
+                if (distance < ball.radius) {
+                    // Golpear al jefe
+                    bossHealth--;
+                    updateBossHealthBar();
+                    
+                    // Rebotar la bola
+                    if (closestY === boss.y - boss.height/2 || closestY === boss.y + boss.height/2) {
+                        ball.dy = -ball.dy * 1.2; // Aumentar velocidad al rebotar
+                    } else {
+                        ball.dx = -ball.dx * 1.2;
+                    }
+                    
+                    // Efecto especial
+                    createParticles(closestX, closestY, 30);
+                    
+                    // Verificar si el jefe fue derrotado
+                    if (bossHealth <= 0) {
+                        defeatBoss();
+                    } else {
+                        handleBounce(ball);
+                    }
+                }
+            });
+        }
+        
+        function updateBossHealthBar() {
+            const percentage = (bossHealth / bossMaxHealth) * 100;
+            bossHealthBar.style.width = `${percentage}%`;
+        }
+        
+        function defeatBoss() {
+            bossActive = false;
+            bossHealthContainer.style.display = 'none';
+            const reward = level * 10;
+            coins += reward;
+            showComboMessage(`¡Jefe Derrotado! +${reward} Coins`, '#4CAF50');
+            playSound(powerupSound);
+            checkAchievement('bossDefeated');
             updateUI();
         }
-
-        function startGame() {
-            selectRandomRecipe();
-            startGameLoop();
-            startIngredientSpawner();
+        
+        function drawBoss() {
+            if (!bossActive) return;
+            
+            ctx.fillStyle = boss.color;
+            ctx.fillRect(boss.x - boss.width/2, boss.y - boss.height/2, boss.width, boss.height);
+            
+            // Dibujar detalles del jefe
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            ctx.beginPath();
+            ctx.arc(boss.x - boss.width/4, boss.y, 15, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(boss.x + boss.width/4, boss.y, 15, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Boca
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.beginPath();
+            ctx.ellipse(boss.x, boss.y + 20, 30, 15, 0, 0, Math.PI);
+            ctx.fill();
         }
-
-        function startGameLoop() {
-            const gameLoop = setInterval(() => {
-                if (gameState.isPaused || gameState.isGameOver) return;
-
-                gameState.timeLeft--;
-                gameState.stats.playTime++;
-                elements.gameTime.textContent = gameState.timeLeft;
-
-                // Verificar logro de tiempo
-                if (gameState.timeLeft <= gameConfig.timeLimit - 45 && 
-                    !gameState.unlockedAchievements.includes('timeChallenge')) {
-                    unlockAchievement('timeChallenge');
+        
+        function updateCombo() {
+            const now = Date.now();
+            if (now - lastBounceTime > comboTime) {
+                if (combo > 1) {
+                    showComboMessage(`Combo x${combo} terminado!`, 'gold');
                 }
-
-                if (gameState.timeLeft <= 0) {
-                    clearInterval(gameLoop);
-                    endGame();
-                }
+                combo = 1;
+                comboDisplay.style.color = 'white';
+            }
+        }
+        
+        function showComboMessage(message, color) {
+            comboPopup.textContent = message;
+            comboPopup.style.color = color;
+            comboPopup.style.opacity = '1';
+            
+            setTimeout(() => {
+                comboPopup.style.opacity = '0';
             }, 1000);
         }
-
-        function startIngredientSpawner() {
-            const spawner = setInterval(() => {
-                if (gameState.isPaused || gameState.isGameOver) {
-                    clearInterval(spawner);
-                    return;
-                }
-
-                if (gameState.activeIngredients.length < gameConfig.maxIngredients) {
-                    spawnIngredient();
-                }
-            }, gameConfig.ingredientSpawnRate / gameState.difficulty);
-        }
-
-        function spawnIngredient() {
-            // 5% de chance de ingrediente secreto (si no se ha encontrado)
-            const secretChance = gameState.foundSecrets.includes(1) ? 0 : 0.05;
-            const isSecret = Math.random() < secretChance;
-            const pool = isSecret ? gameConfig.secretIngredients : gameConfig.ingredients;
-            const ingredient = pool[Math.floor(Math.random() * pool.length)];
-
-            const element = document.createElement('div');
-            element.className = 'ingredient ingredient-float';
-            element.style.backgroundImage = `url('${ingredient.image}')`;
-            element.dataset.name = ingredient.name;
-            
-            if (ingredient.secretId) {
-                element.dataset.secretId = ingredient.secretId;
-                element.style.filter = 'hue-rotate(45deg) saturate(2)';
-            }
-
-            // Posición aleatoria con márgenes
-            const maxX = elements.gameContainer.clientWidth - 80;
-            const maxY = elements.gameContainer.clientHeight - 200;
-            const posX = Math.max(40, Math.min(maxX, Math.random() * maxX));
-            const posY = Math.max(40, Math.min(maxY, Math.random() * maxY));
-
-            element.style.left = `${posX}px`;
-            element.style.top = `${posY}px`;
-
-            element.addEventListener('click', collectIngredient);
-            elements.gameContainer.appendChild(element);
-
-            gameState.activeIngredients.push({
-                element,
-                name: ingredient.name,
-                secretId: ingredient.secretId,
-                x: posX,
-                y: posY
-            });
-
-            // Animación de aparición
-            element.style.opacity = '0';
-            element.style.transform = 'scale(0.5)';
-            setTimeout(() => {
-                element.style.opacity = '1';
-                element.style.transform = 'scale(1)';
-            }, 10);
-        }
-
-        function collectIngredient(e) {
-            if (gameState.isPaused || gameState.isGameOver) return;
-
-            const ingredient = e.target;
-            const name = ingredient.dataset.name;
-            const secretId = ingredient.dataset.secretId;
-
-            // Animación de recolección
-            ingredient.style.transform = 'scale(1.2) rotate(15deg)';
-            ingredient.style.opacity = '0';
-            setTimeout(() => ingredient.remove(), 200);
-
-            // Actualizar estado
-            gameState.activeIngredients = gameState.activeIngredients.filter(
-                item => item.element !== ingredient
-            );
-            gameState.collectedIngredients.push(name);
-            gameState.stats.ingredientsCollected++;
-
-            // Sonido
-            playSound(sounds.collect);
-
-            // Verificar si es secreto
-            if (secretId && !gameState.foundSecrets.includes(parseInt(secretId))) {
-                gameState.foundSecrets.push(parseInt(secretId));
-                gameState.stats.secretsFound++;
-                showSecretFound(parseInt(secretId));
-                
-                if (!gameState.unlockedAchievements.includes('secretFound')) {
-                    unlockAchievement('secretFound');
-                }
-            }
-
-            checkRecipe();
-            updateUI();
-        }
-
-        function selectRandomRecipe() {
-            const recipe = gameConfig.recipes[Math.floor(Math.random() * gameConfig.recipes.length)];
-            gameState.currentRecipe = {
-                name: recipe.name,
-                ingredients: [...recipe.ingredients],
-                originalIngredients: [...recipe.ingredients],
-                difficulty: recipe.difficulty,
-                image: recipe.image
-            };
-            renderRecipe();
-        }
-
-        function renderRecipe() {
-            elements.currentRecipe.innerHTML = `
-                <div style="display: flex; flex-direction: column; width: 100%;">
-                    ${gameState.currentRecipe.originalIngredients.map(ing => {
-                        const ingredient = [...gameConfig.ingredients, ...gameConfig.secretIngredients]
-                            .find(i => i.name === ing) || { image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/120px-No_image_available.svg.png' };
-                        
-                        const isCollected = !gameState.currentRecipe.ingredients.includes(ing);
-                        
-                        return `
-                        <div class="recipe-item" style="${isCollected ? 'opacity: 0.6;' : ''}">
-                            <img src="${ingredient.image}" alt="${ing}" 
-                                onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/120px-No_image_available.svg.png'">
-                            <span style="flex: 1; text-decoration: ${isCollected ? 'line-through' : 'none'}">
-                                ${ing}
-                            </span>
-                            ${isCollected ? '<i class="fas fa-check" style="color: #2ecc71;"></i>' : ''}
-                        </div>
-                        `;
-                    }).join('')}
-                </div>
-            `;
-            updateRecipeProgress();
-        }
-
-        function checkRecipe() {
-            const currentIngredients = [...gameState.currentRecipe.ingredients];
-            const collected = [...gameState.collectedIngredients];
-            let perfectRecipe = true;
-
-            // Verificar cada ingrediente recolectado
-            collected.forEach(item => {
-                const index = currentIngredients.indexOf(item);
-                if (index !== -1) {
-                    currentIngredients.splice(index, 1);
-                } else {
-                    perfectRecipe = false;
-                }
-            });
-
-            gameState.currentRecipe.ingredients = currentIngredients;
-            gameState.collectedIngredients = [];
-
-            if (currentIngredients.length === 0) {
-                completeRecipe(perfectRecipe);
-            }
-
-            updateRecipeProgress();
-        }
-
-        function completeRecipe(isPerfect) {
-            // Calcular puntos
-            let points = gameConfig.basePoints * gameState.currentRecipe.difficulty;
-            if (isPerfect) {
-                points = Math.floor(points * 1.5);
-                gameState.stats.perfectRecipes++;
-                
-                if (!gameState.unlockedAchievements.includes('perfectRecipe')) {
-                    unlockAchievement('perfectRecipe');
-                }
-            }
-
-            gameState.score += points;
-            gameState.stats.recipesCompleted++;
-            gameState.difficulty += gameConfig.difficultyIncrease;
-
-            // Mostrar notificación
-            showNotification(`¡${gameState.currentRecipe.name} completada! +${points} puntos`, 
-                isPerfect ? 'success' : 'normal');
-
-            // Sonido
-            playSound(sounds.complete);
-
-            // Verificar logros
-            if (gameState.stats.recipesCompleted === 1 && 
-                !gameState.unlockedAchievements.includes('firstRecipe')) {
-                unlockAchievement('firstRecipe');
-            } else if (gameState.stats.recipesCompleted === 5 && 
-                !gameState.unlockedAchievements.includes('fiveRecipes')) {
-                unlockAchievement('fiveRecipes');
-            }
-
-            // Seleccionar nueva receta
-            selectRandomRecipe();
-            saveGameProgress();
-        }
-
-        function updateRecipeProgress() {
-            const total = gameState.currentRecipe.originalIngredients.length;
-            const remaining = gameState.currentRecipe.ingredients.length;
-            const progress = ((total - remaining) / total) * 100;
-            elements.recipeProgress.style.width = `${progress}%`;
-        }
-
-        function updateUI() {
-            elements.gameScore.textContent = gameState.score;
-        }
-
-        function showNotification(text, type = 'normal') {
-            elements.notification.textContent = text;
-            elements.notification.style.backgroundColor = 
-                type === 'error' ? '#e74c3c' : 
-                type === 'success' ? '#27ae60' : 
-                menuConfig.colorMenu || '#f39c12';
-            elements.notification.classList.add('show');
-            
-            setTimeout(() => {
-                elements.notification.classList.remove('show');
-            }, 2000);
-        }
-
-        function unlockAchievement(key) {
-            const achievement = gameConfig.achievements[key];
-            if (!achievement || gameState.unlockedAchievements.includes(key)) return;
-
-            gameState.unlockedAchievements.push(key);
-            
-            // Mostrar UI
-            elements.achievementName.textContent = achievement.name;
-            elements.achievementDesc.textContent = achievement.description;
-            elements.achievementUnlocked.classList.add('show');
-            
-            // Sonido
-            playSound(sounds.achievement);
-            
-            // Guardar
-            saveAchievement(key);
-        }
-
-        function showSecretFound(secretId) {
-            const secret = gameConfig.secretIngredients.find(s => s.secretId === secretId);
-            if (!secret) return;
-
-            elements.secretName.textContent = secret.name;
-            elements.secretDesc.textContent = secret.description || "¡Has encontrado un ingrediente secreto!";
-            elements.secretFound.classList.add('show');
-            
-            // Sonido
-            playSound(sounds.secret);
-            
-            // Guardar
-            saveSecret(secretId);
-        }
-
-        function pauseGame() {
-            gameState.isPaused = true;
-            elements.pauseMenu.classList.add('show');
-        }
-
-        function resumeGame() {
-            gameState.isPaused = false;
-            elements.pauseMenu.classList.remove('show');
-        }
-
-        function showExitConfirm() {
-            if (confirm("¿Estás seguro de que quieres salir? Se perderá el progreso de esta partida.")) {
-                exitToMenu();
-            }
-        }
-
-        function restartGame() {
-            if (confirm("¿Reiniciar la partida? Se perderá el progreso actual.")) {
-                clearGameElements();
-                resetGameState();
-                startGame();
-                elements.pauseMenu.classList.remove('show');
-            }
-        }
-
-        function exitToMenu() {
-            saveGameProgress();
-            document.body.style.opacity = '0';
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 500);
-        }
-
-        function endGame() {
-            gameState.isGameOver = true;
-            showNotification(`¡Juego terminado! Puntuación final: ${gameState.score}`, 'normal');
-            setTimeout(() => {
-                if (confirm(`¡Juego terminado!\nPuntuación: ${gameState.score}\n¿Quieres jugar de nuevo?`)) {
-                    restartGame();
-                } else {
-                    exitToMenu();
-                }
-            }, 1500);
-        }
-
-        function clearGameElements() {
-            // Eliminar todos los ingredientes
-            gameState.activeIngredients.forEach(ing => {
-                if (ing.element && ing.element.parentNode) {
-                    ing.element.remove();
-                }
-            });
-            gameState.activeIngredients = [];
-        }
-
+        
         function playSound(sound) {
-            try {
+            if (soundEnabled) {
                 sound.currentTime = 0;
                 sound.play().catch(e => console.log("Error al reproducir sonido:", e));
-            } catch (e) {
-                console.log("Error de audio:", e);
             }
         }
-
-        function adjustBrightness(hex, percent) {
-            // ... (función existente de main.js)
-            let r = parseInt(hex.substring(1, 3), 16);
-            let g = parseInt(hex.substring(3, 5), 16);
-            let b = parseInt(hex.substring(5, 7), 16);
-
-            r = Math.min(255, r + r * percent / 100);
-            g = Math.min(255, g + g * percent / 100);
-            b = Math.min(255, b + b * percent / 100);
-
-            return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+        
+        function updateLevel() {
+            if (bounces >= bouncesToNextLevel) {
+                level++;
+                bouncesToNextLevel += level * 50;
+                showComboMessage(`Nivel ${level} alcanzado!`, '#4CAF50');
+                playSound(powerupSound);
+                
+                // Aumentar dificultad
+                balls.forEach(ball => {
+                    const speed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+                    const angle = Math.atan2(ball.dy, ball.dx);
+                    ball.dx = Math.cos(angle) * speed * 1.05;
+                    ball.dy = Math.sin(angle) * speed * 1.05;
+                });
+                
+                updateUI();
+                spawnObstacles();
+                spawnBoss();
+                
+                // Actualizar misiones
+                checkMissions('level', level);
+            }
         }
-
-        // 7. SISTEMA DE GUARDADO
-
-        function saveGameProgress() {
-            // Guardar solo datos persistentes
-            const saveData = {
-                stats: gameState.stats,
-                unlockedAchievements: gameState.unlockedAchievements,
-                foundSecrets: gameState.foundSecrets
-            };
+        
+        function updateFPS() {
+            const now = performance.now();
+            frameCount++;
             
-            localStorage.setItem('fnc-game-state', JSON.stringify(saveData));
+            if (now - lastFpsUpdate >= 1000) {
+                fps = Math.round((frameCount * 1000) / (now - lastFpsUpdate));
+                fpsCounter.textContent = fps;
+                particleCounter.textContent = particles.length;
+                frameCount = 0;
+                lastFpsUpdate = now;
+            }
+        }
+        
+        function activateAbility() {
+            if (balls[0].abilityCooldown > 0 || !upgrades.ability) return;
             
-            // Actualizar sessionStorage para el menú principal
-            const achievements = {};
-            gameState.unlockedAchievements.forEach(key => {
-                achievements[key] = true;
+            // Activar habilidad para todas las bolas
+            balls.forEach(ball => {
+                ball.abilityActive = true;
+                ball.abilityCooldown = 300; // 5 segundos a 60fps
+                
+                // Efecto de habilidad
+                const originalRadius = ball.radius;
+                ball.radius *= 1.5;
+                ball.isInvincible = true;
+                const originalColor = ball.color;
+                ball.color = '#ffffff';
+                
+                // Terminar efecto después de 3 segundos
+                setTimeout(() => {
+                    ball.abilityActive = false;
+                    ball.radius = originalRadius;
+                    ball.isInvincible = false;
+                    ball.color = originalColor;
+                }, 3000);
             });
             
-            sessionStorage.setItem('fnc-gameData', JSON.stringify({
-                ...menuConfig,
-                achievements,
-                secrets: gameState.foundSecrets
-            }));
+            abilityButton.disabled = true;
+            
+            playSound(abilitySound);
+            checkAchievement('abilityUsed');
+            
+            // Crear efecto visual para todas las bolas
+            balls.forEach(ball => {
+                for (let i = 0; i < 360; i += 10) {
+                    const angle = (i * Math.PI) / 180;
+                    particles.push({
+                        x: ball.x,
+                        y: ball.y,
+                        size: 5,
+                        life: 60,
+                        maxLife: 60,
+                        vx: Math.cos(angle) * 10,
+                        vy: Math.sin(angle) * 10,
+                        type: 'stars',
+                        color: '#ffffff'
+                    });
+                }
+            });
         }
-
-        function saveAchievement(key) {
-            const achievements = JSON.parse(localStorage.getItem('fnc-achievements')) || {};
-            achievements[key] = true;
-            localStorage.setItem('fnc-achievements', JSON.stringify(achievements));
-        }
-
-        function saveSecret(secretId) {
-            const secrets = JSON.parse(localStorage.getItem('fnc-secrets')) || [];
-            if (!secrets.includes(secretId)) {
-                secrets.push(secretId);
-                localStorage.setItem('fnc-secrets', JSON.stringify(secrets));
+        
+        function updateAbilityCooldown() {
+            if (balls[0].abilityCooldown > 0) {
+                balls[0].abilityCooldown--;
+                
+                if (balls[0].abilityCooldown <= 0) {
+                    abilityButton.disabled = false;
+                    abilityButton.textContent = 'Habilidad Especial';
+                } else {
+                    const seconds = Math.ceil(balls[0].abilityCooldown / 60);
+                    abilityButton.textContent = `Espera ${seconds}s`;
+                }
             }
         }
-
-        // 8. INICIALIZACIÓN
-        window.addEventListener('load', initGame);
+        
+        function generateMissions() {
+            if (!missionsUnlocked) return;
+            
+            const missionTypes = [
+                { type: 'bounces', target: 50, reward: 50, description: 'Realiza 50 rebotes' },
+                { type: 'coins', target: 100, reward: 75, description: 'Consigue 100 coins' },
+                { type: 'level', target: 5, reward: 100, description: 'Alcanza el nivel 5' },
+                { type: 'combo', target: 5, reward: 60, description: 'Consigue un combo de 5x' }
+            ];
+            
+            missions = [];
+            for (let i = 0; i < 3; i++) {
+                const randomType = Math.floor(Math.random() * missionTypes.length);
+                missions.push({
+                    ...missionTypes[randomType],
+                    progress: 0,
+                    completed: false
+                });
+            }
+            
+            updateMissionsUI();
+        }
+        
+        function checkMissions(type, amount) {
+            if (!missionsUnlocked) return;
+            
+            let anyCompleted = false;
+            
+            missions.forEach(mission => {
+                if (!mission.completed && mission.type === type) {
+                    mission.progress = Math.max(mission.progress, amount);
+                    
+                    if (mission.progress >= mission.target) {
+                        mission.completed = true;
+                        coins += mission.reward;
+                        anyCompleted = true;
+                        checkAchievement('missionCompleted');
+                        showComboMessage(`Misión completada! +${mission.reward}`, '#4CAF50');
+                    }
+                }
+            });
+            
+            if (anyCompleted) {
+                updateUI();
+                updateMissionsUI();
+                playSound(coinSound);
+                
+                // Verificar si todas las misiones están completadas
+                if (missions.every(m => m.completed)) {
+                    setTimeout(() => {
+                        generateMissions();
+                        showComboMessage('Nuevas misiones disponibles!', '#4CAF50');
+                    }, 2000);
+                }
+            }
+        }
+        
+        function updateMissionsUI() {
+            if (!missionsUnlocked) return;
+            
+            missionList.innerHTML = '';
+            
+            missions.forEach((mission, index) => {
+                const missionElement = document.createElement('div');
+                missionElement.className = `mission ${mission.completed ? 'completed' : ''}`;
+                
+                const progress = mission.completed ? mission.target : mission.progress;
+                const percent = Math.min(100, (progress / mission.target) * 100);
+                
+                missionElement.innerHTML = `
+                    <h4>${mission.description}</h4>
+                    <div>Progreso: ${progress}/${mission.target}</div>
+                    <div class="progress-bar" style="width: 100%; height: 5px; background: #333;">
+                        <div style="width: ${percent}%; height: 100%; background: #4CAF50;"></div>
+                    </div>
+                    <div>Recompensa: ${mission.reward} coins</div>
+                    ${mission.completed ? '<div class="completed-text">¡Completada!</div>' : ''}
+                `;
+                
+                missionList.appendChild(missionElement);
+            });
+        }
+        
+        function update() {
+            if (gamePaused) return;
+            
+            // Mover todas las bolas
+            balls.forEach(ball => {
+                ball.x += ball.dx;
+                ball.y += ball.dy;
+            });
+            
+            // Crear estela de partículas
+            createTrailParticles();
+            
+            // Detectar colisiones con los bordes para todas las bolas
+            balls.forEach(ball => {
+                if (ball.x + ball.radius > width || ball.x - ball.radius < 0) {
+                    ball.dx = -ball.dx;
+                    if (ball.x + ball.radius > width) ball.x = width - ball.radius;
+                    if (ball.x - ball.radius < 0) ball.x = ball.radius;
+                    handleBounce(ball);
+                }
+                
+                if (ball.y + ball.radius > height || ball.y - ball.radius < 0) {
+                    ball.dy = -ball.dy;
+                    if (ball.y + ball.radius > height) ball.y = height - ball.radius;
+                    if (ball.y - ball.radius < 0) ball.y = ball.radius;
+                    handleBounce(ball);
+                }
+            });
+            
+            // Verificar colisión con obstáculos
+            checkObstacleCollision();
+            
+            // Actualizar combo
+            updateCombo();
+            
+            // Generar power-ups aleatorios
+            spawnPowerup();
+            
+            // Verificar colisión con power-ups
+            checkPowerupCollision();
+            
+            // Actualizar jefe si existe
+            if (bossActive) {
+                updateBoss();
+            }
+            
+            // Actualizar nivel
+            updateLevel();
+            
+            // Actualizar FPS y contadores
+            updateFPS();
+            
+            // Actualizar cooldown de habilidad
+            updateAbilityCooldown();
+            
+            // Actualizar partículas de lluvia
+            if (premiumUnlocked && document.getElementById('rainEffect').checked) {
+                updateRainParticles();
+            }
+            
+            // Verificar misiones
+            checkMissions('bounces', bounces);
+            checkMissions('coins', coins);
+            checkMissions('combo', combo);
+        }
+        
+        function handleBounce(ball) {
+            const now = Date.now();
+            
+            // Comprobar si es un rebote rápido (combo)
+            if (now - lastBounceTime < comboTime) {
+                combo++;
+                comboDisplay.style.color = combo >= 5 ? 'gold' : '#4CAF50';
+                
+                if (combo >= 10) {
+                    checkAchievement('maxCombo');
+                }
+            }
+            
+            lastBounceTime = now;
+            bounces++;
+            
+            // Verificar si es un rebote crítico
+            let isCritical = false;
+            if (upgrades.critical.level > 0 && Math.random() < criticalChance) {
+                isCritical = true;
+                playSound(criticalSound);
+                checkAchievement('criticalHit');
+            }
+            
+            const coinsEarned = 1 * coinsMultiplier * combo * (isCritical ? 5 : 1);
+            coins += coinsEarned;
+            
+            if (isCritical) {
+                showComboMessage(`CRÍTICO! +${coinsEarned}`, '#ff0000');
+            }
+            
+            updateUI();
+            createParticles(ball.x, ball.y);
+            playSound(bounceSound);
+            
+            // Efecto de vibración de pantalla si está activado
+            if (premiumUnlocked && document.getElementById('screenShake').checked) {
+                canvas.style.transform = 'translate(5px, 5px)';
+                setTimeout(() => {
+                    canvas.style.transform = 'translate(0, 0)';
+                }, 100);
+            }
+        }
+        
+        function draw() {
+            // Limpiar el canvas
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Dibujar partículas de lluvia si está activo
+            if (premiumUnlocked && document.getElementById('rainEffect').checked) {
+                drawRainParticles();
+            }
+            
+            // Dibujar obstáculos
+            drawObstacles();
+            
+            // Dibujar jefe si existe
+            drawBoss();
+            
+            // Dibujar power-ups
+            drawPowerups();
+            
+            // Dibujar partículas
+            drawParticles();
+            
+            // Dibujar todas las bolas
+            balls.forEach(ball => {
+                drawBall(ball);
+            });
+        }
+        
+        function drawBall(ball) {
+            // Dibujar la bola con estilo según skin
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            
+            // Efectos especiales según skin
+            switch(ball.skin) {
+                case 'fire':
+                    const fireGradient = ctx.createRadialGradient(
+                        ball.x - ball.radius/3, ball.y - ball.radius/3, 0,
+                        ball.x, ball.y, ball.radius
+                    );
+                    fireGradient.addColorStop(0, '#ffff00');
+                    fireGradient.addColorStop(0.5, '#ff6600');
+                    fireGradient.addColorStop(1, '#aa0000');
+                    ctx.fillStyle = fireGradient;
+                    break;
+                case 'ice':
+                    const iceGradient = ctx.createRadialGradient(
+                        ball.x - ball.radius/3, ball.y - ball.radius/3, 0,
+                        ball.x, ball.y, ball.radius
+                    );
+                    iceGradient.addColorStop(0, '#ffffff');
+                    iceGradient.addColorStop(0.7, '#00ccff');
+                    iceGradient.addColorStop(1, '#0066ff');
+                    ctx.fillStyle = iceGradient;
+                    break;
+                case 'galaxy':
+                    const galaxyGradient = ctx.createRadialGradient(
+                        ball.x - ball.radius/3, ball.y - ball.radius/3, 0,
+                        ball.x, ball.y, ball.radius
+                    );
+                    galaxyGradient.addColorStop(0, '#ffffff');
+                    galaxyGradient.addColorStop(0.3, '#cc99ff');
+                    galaxyGradient.addColorStop(1, '#330066');
+                    ctx.fillStyle = galaxyGradient;
+                    
+                    // Estrellas en la bola galaxia
+                    ctx.fill();
+                    ctx.fillStyle = 'white';
+                    for (let i = 0; i < 10; i++) {
+                        const angle = Math.random() * Math.PI * 2;
+                        const dist = Math.random() * ball.radius * 0.8;
+                        const starX = ball.x + Math.cos(angle) * dist;
+                        const starY = ball.y + Math.sin(angle) * dist;
+                        const size = Math.random() * 2 + 1;
+                        ctx.fillRect(starX - size/2, starY - size/2, size, size);
+                    }
+                    break;
+                case 'rainbow':
+                    // Bola arcoíris (solo premium)
+                    if (premiumUnlocked) {
+                        const rainbowGradient = ctx.createConicGradient(0, ball.x, ball.y);
+                        rainbowGradient.addColorStop(0, 'red');
+                        rainbowGradient.addColorStop(0.16, 'orange');
+                        rainbowGradient.addColorStop(0.33, 'yellow');
+                        rainbowGradient.addColorStop(0.5, 'green');
+                        rainbowGradient.addColorStop(0.66, 'blue');
+                        rainbowGradient.addColorStop(0.83, 'indigo');
+                        rainbowGradient.addColorStop(1, 'violet');
+                        ctx.fillStyle = rainbowGradient;
+                    } else {
+                        ctx.fillStyle = ball.color;
+                    }
+                    break;
+                case 'dragon':
+                    // Bola dragón (solo premium)
+                    if (premiumUnlocked) {
+                        const dragonGradient = ctx.createRadialGradient(
+                            ball.x - ball.radius/3, ball.y - ball.radius/3, 0,
+                            ball.x, ball.y, ball.radius
+                        );
+                        dragonGradient.addColorStop(0, '#ff9999');
+                        dragonGradient.addColorStop(0.5, '#ff3366');
+                        dragonGradient.addColorStop(1, '#990033');
+                        ctx.fillStyle = dragonGradient;
+                        
+                        // Escamas de dragón
+                        ctx.fill();
+                        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                        ctx.lineWidth = 1;
+                        for (let i = 0; i < 20; i++) {
+                            const angle = Math.random() * Math.PI * 2;
+                            const dist = Math.random() * ball.radius * 0.8;
+                            const scaleX = ball.x + Math.cos(angle) * dist;
+                            const scaleY = ball.y + Math.sin(angle) * dist;
+                            const size = Math.random() * 5 + 3;
+                            ctx.beginPath();
+                            ctx.ellipse(scaleX, scaleY, size, size/2, angle, 0, Math.PI * 2);
+                            ctx.stroke();
+                        }
+                    } else {
+                        ctx.fillStyle = ball.color;
+                    }
+                    break;
+                case 'nebula':
+                    if (premiumUnlocked) {
+                        const nebulaGradient = ctx.createRadialGradient(
+                            ball.x - ball.radius/3, ball.y - ball.radius/3, 0,
+                            ball.x, ball.y, ball.radius
+                        );
+                        nebulaGradient.addColorStop(0, '#9b59b6');
+                        nebulaGradient.addColorStop(0.5, '#3498db');
+                        nebulaGradient.addColorStop(1, '#2ecc71');
+                        ctx.fillStyle = nebulaGradient;
+                        
+                        // Efecto nebulosa
+                        ctx.fill();
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                        for (let i = 0; i < 15; i++) {
+                            const angle = Math.random() * Math.PI * 2;
+                            const dist = Math.random() * ball.radius * 0.7;
+                            const cloudX = ball.x + Math.cos(angle) * dist;
+                            const cloudY = ball.y + Math.sin(angle) * dist;
+                            const size = Math.random() * 8 + 4;
+                            ctx.beginPath();
+                            ctx.arc(cloudX, cloudY, size, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    } else {
+                        ctx.fillStyle = ball.color;
+                    }
+                    break;
+                case 'golden':
+                    if (premiumUnlocked) {
+                        const goldenGradient = ctx.createRadialGradient(
+                            ball.x - ball.radius/3, ball.y - ball.radius/3, 0,
+                            ball.x, ball.y, ball.radius
+                        );
+                        goldenGradient.addColorStop(0, '#ffd700');
+                        goldenGradient.addColorStop(0.7, '#c5a000');
+                        goldenGradient.addColorStop(1, '#8b7500');
+                        ctx.fillStyle = goldenGradient;
+                        
+                        // Efecto de joya
+                        ctx.fill();
+                        ctx.strokeStyle = 'rgba(255, 215, 0, 0.7)';
+                        ctx.lineWidth = 2;
+                        for (let i = 0; i < 8; i++) {
+                            const angle = (i * Math.PI * 2) / 8;
+                            const dist = ball.radius * 0.8;
+                            const jewelX = ball.x + Math.cos(angle) * dist;
+                            const jewelY = ball.y + Math.sin(angle) * dist;
+                            ctx.beginPath();
+                            ctx.moveTo(ball.x, ball.y);
+                            ctx.lineTo(jewelX, jewelY);
+                            ctx.stroke();
+                        }
+                    } else {
+                        ctx.fillStyle = ball.color;
+                    }
+                    break;
+                default:
+                    ctx.fillStyle = ball.color;
+            }
+            
+            ctx.fill();
+            ctx.closePath();
+            
+            // Efecto de resplandor si está activado
+            if (premiumUnlocked && document.getElementById('glowEffect').checked) {
+                ctx.shadowColor = ball.color;
+                ctx.shadowBlur = 20;
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.closePath();
+                ctx.shadowBlur = 0;
+            }
+            
+            // Dibujar trail
+            if (document.getElementById('trailEffect').checked) {
+                ctx.strokeStyle = ball.color;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(ball.trail[0]?.x || ball.x, ball.trail[0]?.y || ball.y);
+                for (let i = 1; i < ball.trail.length; i++) {
+                    ctx.lineTo(ball.trail[i].x, ball.trail[i].y);
+                }
+                ctx.stroke();
+            }
+        }
+        
+        function gameLoop(timestamp) {
+            if (!gamePaused) {
+                update();
+                updateParticles();
+                updatePowerups();
+                draw();
+                
+                // Optimización: Limitar partículas si hay demasiadas
+                if (particles.length > 500) {
+                    particles = particles.slice(particles.length - 500);
+                }
+                
+                requestAnimationFrame(gameLoop);
+            }
+        }
+        
+        // Iniciar el juego
+        lastFrameTime = performance.now();
+        lastFpsUpdate = lastFrameTime;
+        gameLoop();
+        
+        // Configurar eventos para pantalla táctil
+        canvas.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            // Mover la bola principal a la posición táctil
+            const rect = canvas.getBoundingClientRect();
+            balls[0].x = e.touches[0].clientX - rect.left;
+            balls[0].y = e.touches[0].clientY - rect.top;
+        }, false);
     </script>
 </body>
 </html>
