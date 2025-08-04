@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Friday Night Cooking 0.2.0</title>
+    <title>Friday Night Cooking 0.2.1</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* Base Styles */
         :root {
             --color-menu: #e67e22;
             --color-menu-hover: #d35400;
@@ -24,6 +22,10 @@
             --color-fondo-panel: rgba(40, 40, 40, 0.95);
             --sombra-panel: 0 0 20px rgba(230, 126, 34, 0.3);
             --transicion-rapida: all 0.25s ease;
+            --transicion-lenta: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --scrollbar-thumb: var(--color-menu);
+            --scrollbar-track: rgba(0, 0, 0, 0.2);
+            --close-btn-color: var(--color-texto);
         }
 
         body {
@@ -35,9 +37,66 @@
             font-family: 'Roboto', sans-serif;
             overflow-x: hidden;
             background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgwLDAsMCwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
-            opacity: 1;
         }
 
+        /* Selector de color flotante mejorado */
+        #color-picker-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1100;
+            background: var(--color-fondo-panel);
+            padding: 10px;
+            border-radius: 50px;
+            box-shadow: var(--sombra-panel);
+            transition: var(--transicion-rapida);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--color-menu);
+        }
+
+        #color-picker-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(230, 126, 34, 0.5);
+        }
+
+        #color-picker {
+            width: 30px;
+            height: 30px;
+            border: none;
+            cursor: pointer;
+            border-radius: 50%;
+            background: transparent;
+        }
+
+        #color-picker::-webkit-color-swatch {
+            border-radius: 50%;
+            border: 2px solid var(--color-texto);
+        }
+
+        #color-picker::-moz-color-swatch {
+            border-radius: 50%;
+            border: 2px solid var(--color-texto);
+        }
+
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--scrollbar-thumb);
+            border-radius: 5px;
+        }
+
+        /* Estilos para el HUD y paneles */
         .hud-panel {
             background-color: var(--color-fondo-panel);
             border-radius: 15px;
@@ -50,6 +109,15 @@
             box-shadow: var(--sombra-panel);
             position: relative;
             background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJ3b29kIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDEzNSkiPjxyZWN0IHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgZmlsbD0icmdiYSgxMDQsIDY5LCAzMSwgMC4xKSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCN3b29kKSIvPjwvc3ZnPg==');
+            transform: translateY(20px);
+            opacity: 0;
+            transition: var(--transicion-lenta);
+            will-change: transform, opacity;
+        }
+
+        .hud-panel.active {
+            transform: translateY(0);
+            opacity: 1;
         }
 
         .hud-panel::before {
@@ -63,6 +131,7 @@
             z-index: 1;
         }
 
+        /* Estilos para botones */
         .btn-cocina {
             background-color: var(--color-menu);
             border: none;
@@ -97,484 +166,279 @@
             background-color: #7f8c8d;
         }
 
-        .btn-cocina:hover::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
-            animation: sizzle 1.5s linear infinite;
-        }
-
-        @keyframes sizzle {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        #update-banner {
-            background: linear-gradient(90deg, #17a2b8, #138496);
+        /* Estilos para botones de música personalizados */
+        .music-btn {
+            background-color: var(--color-menu);
             color: white;
-            padding: 12px;
-            text-align: center;
-            font-weight: bold;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
             transition: var(--transicion-rapida);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            will-change: transform;
+            margin: 0 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        #update-banner:hover {
-            background: linear-gradient(90deg, #138496, #117a8b);
+        .music-btn:hover {
+            background-color: var(--color-menu-hover);
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
-        #update-banner::after {
-            content: '';
-            position: absolute;
+        .music-btn:active {
+            transform: scale(0.95);
+        }
+
+        .music-buttons {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+            gap: 10px;
+        }
+
+        /* Estilos para paneles emergentes */
+        .popup-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            z-index: 1001;
+            width: 95%;
+            max-width: 600px;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transicion-lenta);
+            will-change: transform, opacity;
+        }
+
+        .popup-panel.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #fondo-oscuro {
+            display: none;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            transition: opacity 0.3s ease;
+            opacity: 0;
         }
 
-        #update-banner:hover::after {
-            transform: translateX(100%);
+        #fondo-oscuro.active {
+            display: block;
+            opacity: 1;
         }
 
-        #color-picker-container {
+        /* Estilos para títulos */
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            color: var(--color-texto);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--color-menu), #f1c40f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            font-family: 'Pacifico', cursive;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--color-menu);
+            margin: 10px auto;
+            border-radius: 2px;
+        }
+
+        /* Estilos para logros */
+        .achievements-container {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+        }
+
+        .achievement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: var(--transicion-rapida);
+            cursor: help;
+            position: relative;
+        }
+
+        .achievement:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .achievement-icon {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+            border-radius: 8px;
+            background-color: var(--color-menu);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--color-texto);
+        }
+
+        .achievement-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            color: var(--color-texto);
+        }
+
+        .achievement-progress {
+            height: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .achievement-progress-bar {
+            height: 100%;
+            background-color: var(--color-menu);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Estilos para el tema claro */
+        body.tema-claro {
+            --color-texto: #333333;
+            --color-texto-rgb: 51, 51, 51;
+            --color-fondo: #f5f5f5;
+            --color-fondo-panel: rgba(255, 255, 255, 0.9);
+            --scrollbar-track: rgba(0, 0, 0, 0.1);
+            --close-btn-color: #333333;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgwLDAsMCwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+        }
+
+        /* Estilos para créditos */
+        .creditos-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--color-menu);
+            margin-bottom: 15px;
+            transition: var(--transicion-rapida);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .creditos-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .creditos-container {
+            max-height: 65vh;
+            padding-bottom: 20px;
+            color: var(--color-texto);
+            overflow-y: auto;
+        }
+
+        .creditos-seccion {
+            margin-bottom: 25px;
+            background-color: rgba(var(--color-texto-rgb), 0.03);
             padding: 15px;
-            text-align: center;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--color-texto);
+        }
+
+        /* Estilos para notificaciones al estilo Psych Engine */
+        .notification-container {
+            position: fixed;
+            left: 20px;
+            bottom: 20px;
+            z-index: 2100;
+            max-width: 350px;
+            width: 100%;
             display: flex;
             flex-direction: column;
-            align-items: center;
-        }
-
-        .update-item {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-left: 4px solid var(--color-menu);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 0 8px 8px 0;
-            transition: var(--transicion-rapida);
-            color: var(--color-texto);
-        }
-
-        .update-item:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-            transform: translateX(5px);
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: var(--color-texto);
-            font-size: 1.5rem;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            cursor: pointer;
-            transition: var(--transicion-rapida);
-            z-index: 2;
-        }
-
-        .close-btn:hover {
-            color: var(--color-menu);
-            transform: rotate(90deg);
-        }
-
-        .popup-panel {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.95);
-            z-index: 1001;
-            width: 95%;
-            max-width: 600px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease-out;
-            will-change: transform, opacity;
-        }
-
-        .popup-panel.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        #fondo-oscuro {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            transition: opacity 0.3s ease;
-        }
-
-        #fondo-oscuro.active {
-            display: block;
-            opacity: 1;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4 {
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            color: var(--color-texto);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(to right, var(--color-menu), #f1c40f);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            position: relative;
-            font-family: 'Pacifico', cursive;
-        }
-
-        h1::after {
-            content: '';
-            display: block;
-            width: 100px;
-            height: 4px;
-            background: var(--color-menu);
-            margin: 10px auto;
-            border-radius: 2px;
-        }
-
-        .creditos-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--color-menu);
-            margin-bottom: 15px;
-            transition: var(--transicion-rapida);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .creditos-avatar:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .music-controls-container {
-            background-color: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 1px solid var(--color-menu);
-        }
-
-        .music-info {
-            text-align: center;
-            margin-bottom: 15px;
-            font-style: italic;
-            color: var(--color-menu);
-        }
-
-        .music-buttons {
-            display: flex;
-            justify-content: center;
             gap: 10px;
-            margin-top: 10px;
         }
 
-        .music-btn {
-            background: var(--color-menu);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+        .achievement-notification {
+            width: 300px;
+            background-color: var(--color-fondo-panel);
+            border-left: 5px solid var(--color-menu);
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            transform: translateX(-110%);
+            transition: var(--transicion-lenta);
             display: flex;
             align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transicion-rapida);
-            color: white;
+            gap: 15px;
         }
 
-        .music-btn:hover {
-            background: var(--color-menu-hover);
-            transform: scale(1.1);
+        .achievement-notification.show {
+            transform: translateX(0);
         }
 
-        #panel-actualizacion {
-            max-height: 80vh;
-            overflow-y: auto;
+        .achievement-notification.hide {
+            transform: translateX(-110%);
         }
 
-        .achievements-container {
-            max-height: 60vh;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .achievement {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            padding: 10px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            transition: var(--transicion-rapida);
-            cursor: help;
-            position: relative;
-        }
-
-        .achievement:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .achievement:hover::after {
-            content: attr(data-progress);
-            position: absolute;
-            right: 10px;
-            bottom: 5px;
-            font-size: 0.8rem;
+        .achievement-notification-icon {
+            font-size: 2rem;
             color: var(--color-menu);
         }
 
-        .achievement-icon {
-            width: 50px;
-            height: 50px;
-            margin-right: 15px;
-            border-radius: 8px;
-            background-color: var(--color-menu);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: white;
+        .achievement-notification-text h4 {
+            color: var(--color-menu);
+            margin: 0 0 5px 0;
+            font-size: 1.1rem;
         }
 
-        .achievement-info {
-            flex: 1;
-        }
-
-        .achievement-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: var(--color-texto);
-        }
-
-        .achievement-desc {
+        .achievement-notification-text p {
+            margin: 0;
             font-size: 0.9rem;
             opacity: 0.8;
             color: var(--color-texto);
         }
 
-        .achievement-progress {
-            height: 5px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            margin-top: 5px;
-            overflow: hidden;
-        }
-
-        .achievement-progress-bar {
-            height: 100%;
-            background-color: var(--color-menu);
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
-        @keyframes shake {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            10%,
-            30%,
-            50%,
-            70%,
-            90% {
-                transform: translateX(-5px);
-            }
-
-            20%,
-            40%,
-            60%,
-            80% {
-                transform: translateX(5px);
-            }
-        }
-
-        .music-selector {
-            margin: 15px 0;
-            width: 100%;
-        }
-
-        .music-selector select {
-            background-color: rgba(0, 0, 0, 0.2);
-            color: var(--color-texto);
-            border: 1px solid var(--color-menu);
-            border-radius: 5px;
-            padding: 8px;
-            width: 100%;
-        }
-
-        .secrets-container {
-            max-height: 40vh;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .secret-item {
-            background-color: rgba(243, 156, 18, 0.1);
-            border-left: 4px solid var(--color-menu);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 0 8px 8px 0;
-            transition: var(--transicion-rapida);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .secret-item::before {
-            content: '🔒 SECRETO';
-            position: absolute;
-            top: 0;
-            right: 0;
-            background-color: var(--color-menu);
-            color: white;
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 0 0 0 5px;
-        }
-
-        .secret-item.unlocked::before {
-            content: '🔓 SECRETO';
-            background-color: #2ecc71;
-        }
-
-        .secret-item:hover {
-            background-color: rgba(243, 156, 18, 0.15);
-        }
-
-        .achievements-container::-webkit-scrollbar,
-        .secrets-container::-webkit-scrollbar,
-        #panel-actualizacion::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .achievements-container::-webkit-scrollbar-track,
-        .secrets-container::-webkit-scrollbar-track,
-        #panel-actualizacion::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
-
-        .achievements-container::-webkit-scrollbar-thumb,
-        .secrets-container::-webkit-scrollbar-thumb,
-        #panel-actualizacion::-webkit-scrollbar-thumb {
-            background-color: var(--color-menu);
-            border-radius: 10px;
-        }
-
-        body.tema-claro {
-            --color-texto: #333333;
-            --color-texto-rgb: 51, 51, 51;
-            --color-fondo: #f5f5f5;
-            --color-fondo-panel: rgba(255, 255, 255, 0.9);
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgwLDAsMCwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
-        }
-
-        body.tema-claro .update-item,
-        body.tema-claro footer,
-        body.tema-claro .creditos-container p,
-        body.tema-claro .creditos-container h4,
-        body.tema-claro .creditos-container h5,
-        body.tema-claro .text-muted {
-            color: #333333 !important;
-        }
-
-        body.tema-claro .close-btn {
-            color: #333333;
-        }
-
-        body.tema-claro .close-btn:hover {
-            color: var(--color-menu);
-        }
-
-        body.tema-claro .music-info {
-            color: var(--color-menu-hover);
-        }
-
-        .advanced-settings {
-            background-color: rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            border: 1px dashed var(--color-menu);
-        }
-
-        .advanced-settings h5 {
-            color: var(--color-menu);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-        }
-
-        .advanced-settings h5 i {
-            transition: transform 0.3s ease;
-        }
-
-        .advanced-settings h5.collapsed i {
-            transform: rotate(-90deg);
-        }
-
-        .advanced-settings-content {
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .advanced-settings-content.collapsed {
-            max-height: 0 !important;
-        }
-
-        .secret-panel {
-            background-color: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            border: 2px solid #8e44ad;
-        }
-
-        .secret-panel h3 {
-            color: #8e44ad;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
+        /* Botón de cerrar */
         .close-btn {
             background: none;
             border: none;
-            color: var(--color-texto);
+            color: var(--close-btn-color);
             font-size: 1.5rem;
             position: absolute;
             top: 15px;
@@ -589,1209 +453,13 @@
             transform: rotate(90deg);
         }
 
-        .popup-panel {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.95);
-            z-index: 1001;
-            width: 95%;
-            max-width: 600px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease-out;
-            will-change: transform, opacity;
-        }
-
-        .popup-panel.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        #fondo-oscuro {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            transition: opacity 0.3s ease;
-        }
-
-        #fondo-oscuro.active {
-            display: block;
-            opacity: 1;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4 {
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            color: var(--color-texto);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(to right, var(--color-menu), #f1c40f);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            position: relative;
-            font-family: 'Pacifico', cursive;
-        }
-
-        h1::after {
-            content: '';
-            display: block;
-            width: 100px;
-            height: 4px;
-            background: var(--color-menu);
-            margin: 10px auto;
-            border-radius: 2px;
-        }
-
-        .creditos-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--color-menu);
-            margin-bottom: 15px;
-            transition: var(--transicion-rapida);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .creditos-avatar:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .music-controls-container {
-            background-color: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 1px solid var(--color-menu);
-        }
-
-        .music-info {
-            text-align: center;
-            margin-bottom: 15px;
-            font-style: italic;
-            color: var(--color-menu);
-        }
-
-        .music-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .music-btn {
-            background: var(--color-menu);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transicion-rapida);
-            color: white;
-        }
-
-        .music-btn:hover {
-            background: var(--color-menu-hover);
-            transform: scale(1.1);
-        }
-
-        #panel-actualizacion {
+        /* Estilos para el panel de opciones */
+        #panel-opciones {
             max-height: 80vh;
             overflow-y: auto;
         }
 
-        .achievements-container {
-            max-height: 60vh;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .achievement {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            padding: 10px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            transition: var(--transicion-rapida);
-            cursor: help;
-            position: relative;
-        }
-
-        .achievement:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .achievement:hover::after {
-            content: attr(data-progress);
-            position: absolute;
-            right: 10px;
-            bottom: 5px;
-            font-size: 0.8rem;
-            color: var(--color-menu);
-        }
-
-        .achievement-icon {
-            width: 50px;
-            height: 50px;
-            margin-right: 15px;
-            border-radius: 8px;
-            background-color: var(--color-menu);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: white;
-        }
-
-        .achievement-info {
-            flex: 1;
-        }
-
-        .achievement-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: var(--color-texto);
-        }
-
-        .achievement-desc {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            color: var(--color-texto);
-        }
-
-        .achievement-progress {
-            height: 5px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            margin-top: 5px;
-            overflow: hidden;
-        }
-
-        .achievement-progress-bar {
-            height: 100%;
-            background-color: var(--color-menu);
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
-        @keyframes shake {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            10%,
-            30%,
-            50%,
-            70%,
-            90% {
-                transform: translateX(-5px);
-            }
-
-            20%,
-            40%,
-            60%,
-            80% {
-                transform: translateX(5px);
-            }
-        }
-
-        .music-selector {
-            margin: 15px 0;
-            width: 100%;
-        }
-
-        .music-selector select {
-            background-color: rgba(0, 0, 0, 0.2);
-            color: var(--color-texto);
-            border: 1px solid var(--color-menu);
-            border-radius: 5px;
-            padding: 8px;
-            width: 100%;
-        }
-
-        .secrets-container {
-            max-height: 40vh;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .secret-item {
-            background-color: rgba(243, 156, 18, 0.1);
-            border-left: 4px solid var(--color-menu);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 0 8px 8px 0;
-            transition: var(--transicion-rapida);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .secret-item::before {
-            content: '🔒 SECRETO';
-            position: absolute;
-            top: 0;
-            right: 0;
-            background-color: var(--color-menu);
-            color: white;
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 0 0 0 5px;
-        }
-
-        .secret-item.unlocked::before {
-            content: '🔓 SECRETO';
-            background-color: #2ecc71;
-        }
-
-        .secret-item:hover {
-            background-color: rgba(243, 156, 18, 0.15);
-        }
-
-        .achievements-container::-webkit-scrollbar,
-        .secrets-container::-webkit-scrollbar,
-        #panel-actualizacion::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .achievements-container::-webkit-scrollbar-track,
-        .secrets-container::-webkit-scrollbar-track,
-        #panel-actualizacion::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
-
-        .achievements-container::-webkit-scrollbar-thumb,
-        .secrets-container::-webkit-scrollbar-thumb,
-        #panel-actualizacion::-webkit-scrollbar-thumb {
-            background-color: var(--color-menu);
-            border-radius: 10px;
-        }
-
-        body.tema-claro {
-            --color-texto: #333333;
-            --color-texto-rgb: 51, 51, 51;
-            --color-fondo: #f5f5f5;
-            --color-fondo-panel: rgba(255, 255, 255, 0.9);
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgwLDAsMCwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
-        }
-
-        body.tema-claro .update-item,
-        body.tema-claro footer,
-        body.tema-claro .creditos-container p,
-        body.tema-claro .creditos-container h4,
-        body.tema-claro .creditos-container h5,
-        body.tema-claro .text-muted {
-            color: #333333 !important;
-        }
-
-        body.tema-claro .close-btn {
-            color: #333333;
-        }
-
-        body.tema-claro .close-btn:hover {
-            color: var(--color-menu);
-        }
-
-        body.tema-claro .music-info {
-            color: var(--color-menu-hover);
-        }
-
-        .advanced-settings {
-            background-color: rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            border: 1px dashed var(--color-menu);
-        }
-
-        .advanced-settings h5 {
-            color: var(--color-menu);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-        }
-
-        .advanced-settings h5 i {
-            transition: transform 0.3s ease;
-        }
-
-        .advanced-settings h5.collapsed i {
-            transform: rotate(-90deg);
-        }
-
-        .advanced-settings-content {
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .advanced-settings-content.collapsed {
-            max-height: 0 !important;
-        }
-
-        .secret-panel {
-            background-color: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            border: 2px solid #8e44ad;
-        }
-
-        .secret-panel h3 {
-            color: #8e44ad;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: var(--color-texto);
-            font-size: 1.5rem;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            cursor: pointer;
-            transition: var(--transicion-rapida);
-            z-index: 2;
-        }
-
-        .close-btn:hover {
-            color: var(--color-menu);
-            transform: rotate(90deg);
-        }
-
-        .popup-panel {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.95);
-            z-index: 1001;
-            width: 95%;
-            max-width: 600px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease-out;
-            will-change: transform, opacity;
-        }
-
-        .popup-panel.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        #fondo-oscuro {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            transition: opacity 0.3s ease;
-        }
-
-        #fondo-oscuro.active {
-            display: block;
-            opacity: 1;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4 {
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            color: var(--color-texto);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(to right, var(--color-menu), #f1c40f);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            position: relative;
-            font-family: 'Pacifico', cursive;
-        }
-
-        h1::after {
-            content: '';
-            display: block;
-            width: 100px;
-            height: 4px;
-            background: var(--color-menu);
-            margin: 10px auto;
-            border-radius: 2px;
-        }
-
-        .creditos-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--color-menu);
-            margin-bottom: 15px;
-            transition: var(--transicion-rapida);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .creditos-avatar:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .music-controls-container {
-            background-color: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 1px solid var(--color-menu);
-        }
-
-        .music-info {
-            text-align: center;
-            margin-bottom: 15px;
-            font-style: italic;
-            color: var(--color-menu);
-        }
-
-        .music-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .music-btn {
-            background: var(--color-menu);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transicion-rapida);
-            color: white;
-        }
-
-        .music-btn:hover {
-            background: var(--color-menu-hover);
-            transform: scale(1.1);
-        }
-
-        #panel-actualizacion {
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .achievements-container {
-            max-height: 60vh;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .achievement {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            padding: 10px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            transition: var(--transicion-rapida);
-            cursor: help;
-            position: relative;
-        }
-
-        .achievement:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .achievement:hover::after {
-            content: attr(data-progress);
-            position: absolute;
-            right: 10px;
-            bottom: 5px;
-            font-size: 0.8rem;
-            color: var(--color-menu);
-        }
-
-        .achievement-icon {
-            width: 50px;
-            height: 50px;
-            margin-right: 15px;
-            border-radius: 8px;
-            background-color: var(--color-menu);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: white;
-        }
-
-        .achievement-info {
-            flex: 1;
-        }
-
-        .achievement-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: var(--color-texto);
-        }
-
-        .achievement-desc {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            color: var(--color-texto);
-        }
-
-        .achievement-progress {
-            height: 5px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            margin-top: 5px;
-            overflow: hidden;
-        }
-
-        .achievement-progress-bar {
-            height: 100%;
-            background-color: var(--color-menu);
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
-        @keyframes shake {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            10%,
-            30%,
-            50%,
-            70%,
-            90% {
-                transform: translateX(-5px);
-            }
-
-            20%,
-            40%,
-            60%,
-            80% {
-                transform: translateX(5px);
-            }
-        }
-
-        .music-selector {
-            margin: 15px 0;
-            width: 100%;
-        }
-
-        .music-selector select {
-            background-color: rgba(0, 0, 0, 0.2);
-            color: var(--color-texto);
-            border: 1px solid var(--color-menu);
-            border-radius: 5px;
-            padding: 8px;
-            width: 100%;
-        }
-
-        .secrets-container {
-            max-height: 40vh;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .secret-item {
-            background-color: rgba(243, 156, 18, 0.1);
-            border-left: 4px solid var(--color-menu);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 0 8px 8px 0;
-            transition: var(--transicion-rapida);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .secret-item::before {
-            content: '🔒 SECRETO';
-            position: absolute;
-            top: 0;
-            right: 0;
-            background-color: var(--color-menu);
-            color: white;
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 0 0 0 5px;
-        }
-
-        .secret-item.unlocked::before {
-            content: '🔓 SECRETO';
-            background-color: #2ecc71;
-        }
-
-        .secret-item:hover {
-            background-color: rgba(243, 156, 18, 0.15);
-        }
-
-        .achievements-container::-webkit-scrollbar,
-        .secrets-container::-webkit-scrollbar,
-        #panel-actualizacion::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .achievements-container::-webkit-scrollbar-track,
-        .secrets-container::-webkit-scrollbar-track,
-        #panel-actualizacion::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
-
-        .achievements-container::-webkit-scrollbar-thumb,
-        .secrets-container::-webkit-scrollbar-thumb,
-        #panel-actualizacion::-webkit-scrollbar-thumb {
-            background-color: var(--color-menu);
-            border-radius: 10px;
-        }
-
-        body.tema-claro {
-            --color-texto: #333333;
-            --color-texto-rgb: 51, 51, 51;
-            --color-fondo: #f5f5f5;
-            --color-fondo-panel: rgba(255, 255, 255, 0.9);
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgwLDAsMCwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
-        }
-
-        body.tema-claro .update-item,
-        body.tema-claro footer,
-        body.tema-claro .creditos-container p,
-        body.tema-claro .creditos-container h4,
-        body.tema-claro .creditos-container h5,
-        body.tema-claro .text-muted {
-            color: #333333 !important;
-        }
-
-        body.tema-claro .close-btn {
-            color: #333333;
-        }
-
-        body.tema-claro .close-btn:hover {
-            color: var(--color-menu);
-        }
-
-        body.tema-claro .music-info {
-            color: var(--color-menu-hover);
-        }
-
-        .advanced-settings {
-            background-color: rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            border: 1px dashed var(--color-menu);
-        }
-
-        .advanced-settings h5 {
-            color: var(--color-menu);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-        }
-
-        .advanced-settings h5 i {
-            transition: transform 0.3s ease;
-        }
-
-        .advanced-settings h5.collapsed i {
-            transform: rotate(-90deg);
-        }
-
-        .advanced-settings-content {
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .advanced-settings-content.collapsed {
-            max-height: 0 !important;
-        }
-
-        .secret-panel {
-            background-color: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            border: 2px solid #8e44ad;
-        }
-
-        .secret-panel h3 {
-            color: #8e44ad;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: var(--color-texto);
-            font-size: 1.5rem;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            cursor: pointer;
-            transition: var(--transicion-rapida);
-            z-index: 2;
-        }
-
-        .close-btn:hover {
-            color: var(--color-menu);
-            transform: rotate(90deg);
-        }
-
-        .popup-panel {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.95);
-            z-index: 1001;
-            width: 95%;
-            max-width: 600px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease-out;
-            will-change: transform, opacity;
-        }
-
-        .popup-panel.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        #fondo-oscuro {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            transition: opacity 0.3s ease;
-        }
-
-        #fondo-oscuro.active {
-            display: block;
-            opacity: 1;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4 {
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            color: var(--color-texto);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(to right, var(--color-menu), #f1c40f);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            position: relative;
-            font-family: 'Pacifico', cursive;
-        }
-
-        h1::after {
-            content: '';
-            display: block;
-            width: 100px;
-            height: 4px;
-            background: var(--color-menu);
-            margin: 10px auto;
-            border-radius: 2px;
-        }
-
-        .creditos-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--color-menu);
-            margin-bottom: 15px;
-            transition: var(--transicion-rapida);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .creditos-avatar:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .music-controls-container {
-            background-color: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 1px solid var(--color-menu);
-        }
-
-        .music-info {
-            text-align: center;
-            margin-bottom: 15px;
-            font-style: italic;
-            color: var(--color-menu);
-        }
-
-        .music-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .music-btn {
-            background: var(--color-menu);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transicion-rapida);
-            color: white;
-        }
-
-        .music-btn:hover {
-            background: var(--color-menu-hover);
-            transform: scale(1.1);
-        }
-
-        #panel-actualizacion {
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .achievements-container {
-            max-height: 60vh;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .achievement {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            padding: 10px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            transition: var(--transicion-rapida);
-            cursor: help;
-            position: relative;
-        }
-
-        .achievement:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .achievement:hover::after {
-            content: attr(data-progress);
-            position: absolute;
-            right: 10px;
-            bottom: 5px;
-            font-size: 0.8rem;
-            color: var(--color-menu);
-        }
-
-        .achievement-icon {
-            width: 50px;
-            height: 50px;
-            margin-right: 15px;
-            border-radius: 8px;
-            background-color: var(--color-menu);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: white;
-        }
-
-        .achievement-info {
-            flex: 1;
-        }
-
-        .achievement-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: var(--color-texto);
-        }
-
-        .achievement-desc {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            color: var(--color-texto);
-        }
-
-        .achievement-progress {
-            height: 5px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            margin-top: 5px;
-            overflow: hidden;
-        }
-
-        .achievement-progress-bar {
-            height: 100%;
-            background-color: var(--color-menu);
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
-        @keyframes shake {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            10%,
-            30%,
-            50%,
-            70%,
-            90% {
-                transform: translateX(-5px);
-            }
-
-            20%,
-            40%,
-            60%,
-            80% {
-                transform: translateX(5px);
-            }
-        }
-
-        .music-selector {
-            margin: 15px 0;
-            width: 100%;
-        }
-
-        .music-selector select {
-            background-color: rgba(0, 0, 0, 0.2);
-            color: var(--color-texto);
-            border: 1px solid var(--color-menu);
-            border-radius: 5px;
-            padding: 8px;
-            width: 100%;
-        }
-
-        .secrets-container {
-            max-height: 40vh;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .secret-item {
-            background-color: rgba(243, 156, 18, 0.1);
-            border-left: 4px solid var(--color-menu);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 0 8px 8px 0;
-            transition: var(--transicion-rapida);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .secret-item::before {
-            content: '🔒 SECRETO';
-            position: absolute;
-            top: 0;
-            right: 0;
-            background-color: var(--color-menu);
-            color: white;
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 0 0 0 5px;
-        }
-
-        .secret-item.unlocked::before {
-            content: '🔓 SECRETO';
-            background-color: #2ecc71;
-        }
-
-        .secret-item:hover {
-            background-color: rgba(243, 156, 18, 0.15);
-        }
-
-        .achievements-container::-webkit-scrollbar,
-        .secrets-container::-webkit-scrollbar,
-        #panel-actualizacion::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .achievements-container::-webkit-scrollbar-track,
-        .secrets-container::-webkit-scrollbar-track,
-        #panel-actualizacion::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
-
-        .achievements-container::-webkit-scrollbar-thumb,
-        .secrets-container::-webkit-scrollbar-thumb,
-        #panel-actualizacion::-webkit-scrollbar-thumb {
-            background-color: var(--color-menu);
-            border-radius: 10px;
-        }
-
-        body.tema-claro {
-            --color-texto: #333333;
-            --color-texto-rgb: 51, 51, 51;
-            --color-fondo: #f5f5f5;
-            --color-fondo-panel: rgba(255, 255, 255, 0.9);
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgwLDAsMCwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
-        }
-
-        body.tema-claro .update-item,
-        body.tema-claro footer,
-        body.tema-claro .creditos-container p,
-        body.tema-claro .creditos-container h4,
-        body.tema-claro .creditos-container h5,
-        body.tema-claro .text-muted {
-            color: #333333 !important;
-        }
-
-        body.tema-claro .close-btn {
-            color: #333333;
-        }
-
-        body.tema-claro .close-btn:hover {
-            color: var(--color-menu);
-        }
-
-        body.tema-claro .music-info {
-            color: var(--color-menu-hover);
-        }
-
-        .advanced-settings {
-            background-color: rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            border: 1px dashed var(--color-menu);
-        }
-
-        .advanced-settings h5 {
-            color: var(--color-menu);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-        }
-
-        .advanced-settings h5 i {
-            transition: transform 0.3s ease;
-        }
-
-        .advanced-settings h5.collapsed i {
-            transform: rotate(-90deg);
-        }
-
-        .advanced-settings-content {
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .advanced-settings-content.collapsed {
-            max-height: 0 !important;
-        }
-
-        .secret-panel {
-            background-color: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            border: 2px solid #8e44ad;
-        }
-
-        .secret-panel h3 {
-            color: #8e44ad;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: var(--color-texto);
-            font-size: 1.5rem;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            cursor: pointer;
-            transition: var(--transicion-rapida);
-            z-index: 2;
-        }
-
-        .close-btn:hover {
-            color: var(--color-menu);
-            transform: rotate(90deg);
-        }
-
-        .secret-input {
-            background-color: rgba(0, 0, 0, 0.5);
-            border: 1px solid #8e44ad;
-            color: white;
-            padding: 10px;
-            width: 100%;
-            margin-bottom: 15px;
-            border-radius: 5px;
-        }
-
-        #secret-password {
-            background-color: rgba(0, 0, 0, 0.5);
-            border: 1px solid #8e44ad;
-            color: white;
-            padding: 10px;
-            width: 100%;
-            margin-bottom: 15px;
-            border-radius: 5px;
-        }
-
-        /* Game Panel Styles */
+        /* Estilos para el panel de juego */
         #panel-juego {
             max-height: 80vh;
             overflow-y: auto;
@@ -1804,12 +472,6 @@
             margin-bottom: 15px;
             border-left: 4px solid var(--color-menu);
             transition: var(--transicion-rapida);
-            cursor: pointer;
-        }
-
-        .modo-juego:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .modo-juego h3 {
@@ -1817,111 +479,110 @@
             margin-bottom: 10px;
         }
 
-        .modo-juego p {
-            margin-bottom: 0;
+        /* Estilos para el panel secreto */
+        #panel-secreto {
+            background-color: rgba(75, 0, 130, 0.95);
+            border-color: #9b59b6;
+            animation: none;
         }
 
-        /* Game Screen Styles */
-        #game-screen {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--color-fondo);
-            z-index: 2000;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+        #panel-secreto::before {
+            background: linear-gradient(90deg, #9b59b6, transparent);
         }
 
-        #game-header {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 800px;
-            margin-bottom: 20px;
+        #panel-secreto.active {
+            animation: pulsePurple 2s infinite alternate;
         }
 
-        #game-timer,
-        #game-score {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--color-menu);
+        @keyframes pulsePurple {
+            0% {
+                box-shadow: 0 0 20px rgba(155, 89, 182, 0.3);
+            }
+            100% {
+                box-shadow: 0 0 40px rgba(155, 89, 182, 0.7);
+            }
         }
 
-        #game-content {
-            width: 100%;
-            max-width: 800px;
-            background-color: var(--color-fondo-panel);
-            border-radius: 15px;
-            padding: 20px;
-            border: 2px solid var(--color-menu);
-            box-shadow: var(--sombra-panel);
-            text-align: center;
-        }
-
-        #game-recipe {
-            margin-bottom: 20px;
-        }
-
-        #game-ingredients {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .ingredient {
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 10px 15px;
-            border-radius: 20px;
-            transition: var(--transicion-rapida);
-            cursor: pointer;
-        }
-
-        .ingredient:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .ingredient.selected {
-            background-color: var(--color-menu);
-            color: white;
-        }
-
-        #game-controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        #game-result {
-            margin-top: 20px;
-            font-size: 1.2rem;
-            min-height: 30px;
-        }
-
-        #game-progress {
-            width: 100%;
+        .particula {
+            position: absolute;
+            width: 10px;
             height: 10px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            margin-top: 20px;
-            overflow: hidden;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particula-fly 1.5s ease-out forwards;
         }
 
-        #game-progress-bar {
-            height: 100%;
-            width: 0%;
-            background-color: var(--color-menu);
-            transition: width 0.3s ease;
+        .particula-verde {
+            background-color: #2ecc71;
         }
 
-        /* Mobile optimizations */
+        .particula-roja {
+            background-color: #e74c3c;
+        }
+
+        @keyframes particula-fly {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty));
+                opacity: 0;
+            }
+        }
+
+        @keyframes transitionToMainColor {
+            0% {
+                background-color: rgba(75, 0, 130, 0.95);
+                border-color: #9b59b6;
+            }
+            100% {
+                background-color: var(--color-fondo-panel);
+                border-color: var(--color-menu);
+            }
+        }
+
+        /* Botón secreto en el menú */
+        #btn-secreto {
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transicion-lenta);
+            background-color: #9b59b6;
+        }
+
+        #btn-secreto.unlocked {
+            opacity: 1;
+            pointer-events: auto;
+            animation: pulsePurple 2s infinite;
+        }
+
+        /* Campo de entrada de código secreto */
+        .secret-code-input {
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 2px solid #9b59b6;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.1rem;
+            transition: var(--transicion-rapida);
+        }
+
+        .secret-code-input:focus {
+            outline: none;
+            border-color: #2ecc71;
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+        }
+
+        /* Logros secretos */
+        .secret-achievement {
+            background-color: rgba(155, 89, 182, 0.1);
+            border-left: 4px solid #9b59b6;
+        }
+
+        /* Estilos responsivos */
         @media (max-width: 768px) {
             .hud-panel {
                 padding: 1.5rem;
@@ -1937,23 +598,20 @@
                 font-size: 0.9rem;
             }
 
-            .music-btn {
-                width: 35px;
-                height: 35px;
+            .notification-container {
+                max-width: 280px;
             }
 
-            #game-ingredients {
-                gap: 8px;
+            /* Ajustes para móvil del panel secreto */
+            #panel-secreto .hud-panel {
+                padding: 1rem;
+                max-height: 80vh;
+                overflow-y: auto;
             }
 
-            .ingredient {
-                padding: 8px 12px;
+            .secret-code-input {
                 font-size: 0.9rem;
-            }
-
-            #game-controls {
-                flex-direction: column;
-                gap: 8px;
+                padding: 10px;
             }
         }
 
@@ -1971,295 +629,32 @@
                 height: 80px;
             }
 
-            #game-header {
-                flex-direction: column;
-                gap: 10px;
-                align-items: center;
-            }
-        }
-
-        /* NUEVOS ESTILOS PARA 0.2.0 */
-        #panel-opciones {
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .notification-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 2100;
-            max-width: 350px;
-            width: 100%;
-        }
-
-        .konami-code {
-            position: fixed;
-            bottom: 10px;
-            left: 10px;
-            font-size: 0.8rem;
-            opacity: 0.3;
-            z-index: 100;
-        }
-
-        #panel-creditos {
-            top: 45%;
-            transform: translate(-50%, -50%) scale(0.95);
-        }
-
-        .creditos-container {
-            max-height: 65vh;
-            padding-bottom: 20px;
-            color: var(--color-texto);
-        }
-
-        .creditos-seccion {
-            margin-bottom: 25px;
-            background-color: rgba(var(--color-texto-rgb), 0.03);
-            padding: 15px;
-            border-radius: 10px;
-            color: var(--color-texto);
-        }
-
-        .creditos-container p,
-        .creditos-container h4,
-        .creditos-container h5 {
-            color: var(--color-texto);
-        }
-
-        .text-muted {
-            color: rgba(var(--color-texto-rgb), 0.7) !important;
-        }
-
-        /* Estilos para el panel secreto */
-        .secret-panel {
-            background-color: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            border: 2px solid #8e44ad;
-            color: white;
-        }
-
-        .secret-panel h3 {
-            color: #8e44ad;
-            text-align: center;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(142, 68, 173, 0.5);
-        }
-
-        .secret-achievements-container {
-            max-height: 60vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .secrets-scrollable {
-            overflow-y: auto;
-            padding-right: 10px;
-            flex-grow: 1;
-            margin-bottom: 15px;
-        }
-
-        .secret-item {
-            background-color: rgba(142, 68, 173, 0.1);
-            border-left: 3px solid #8e44ad;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 0 8px 8px 0;
-            position: relative;
-            color: var(--color-texto);
-        }
-
-        .secret-item.unlocked {
-            background-color: rgba(46, 204, 113, 0.1);
-            border-left-color: #2ecc71;
-        }
-
-        .secret-item h5 {
-            color: #8e44ad;
-            margin-bottom: 5px;
-        }
-
-        .secret-item.unlocked h5 {
-            color: #2ecc71;
-        }
-
-        .secret-status {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 0.8rem;
-            padding: 3px 8px;
-            border-radius: 10px;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .secret-status.locked {
-            color: #e74c3c;
-        }
-
-        .secret-status.unlocked {
-            color: #2ecc71;
-            background-color: rgba(46, 204, 113, 0.2);
-        }
-
-        /* Scrollbar personalizada */
-        .secrets-scrollable::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .secrets-scrollable::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 3px;
-        }
-
-        .secrets-scrollable::-webkit-scrollbar-thumb {
-            background-color: #8e44ad;
-            border-radius: 3px;
-        }
-
-        .achievement-notification {
-            position: fixed;
-            top: 20px;
-            right: -400px;
-            width: 350px;
-            background-color: var(--color-fondo-panel);
-            border-left: 5px solid var(--color-menu);
-            border-radius: 5px;
-            padding: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            z-index: 2000;
-            transition: right 0.5s ease;
-        }
-
-        .achievement-notification.show {
-            right: 20px;
-        }
-
-        .achievement-notification-content {
-            display: flex;
-            align-items: center;
-        }
-
-        .achievement-notification-icon {
-            font-size: 2rem;
-            color: var(--color-menu);
-            margin-right: 15px;
-        }
-
-        .achievement-notification-text h4 {
-            color: var(--color-menu);
-            margin: 0 0 5px 0;
-        }
-
-        .achievement-notification-text h5 {
-            margin: 0 0 5px 0;
-            font-size: 1.1rem;
-        }
-
-        .achievement-notification-text p {
-            margin: 0;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        /* Efecto de sartén para los botones */
-        .btn-cocina::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .btn-cocina:hover::before {
-            opacity: 1;
-        }
-
-        /* Animación para notificaciones */
-        @keyframes slideIn {
-            from {
-                right: -400px;
+            .achievement-notification {
+                width: 250px;
+                padding: 10px;
             }
 
-            to {
-                right: 20px;
+            /* Más ajustes para móvil */
+            #panel-secreto .hud-panel {
+                width: 90%;
+                padding: 0.8rem;
             }
-        }
-
-        @keyframes slideOut {
-            from {
-                right: 20px;
-            }
-
-            to {
-                right: -400px;
-            }
-        }
-
-        .idioma-selector {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 100;
-        }
-
-        .btn-idioma {
-            background-color: var(--color-menu);
-            color: var(--color-texto);
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: var(--transicion-rapida);
-        }
-
-        .btn-idioma:hover {
-            transform: scale(1.1);
-        }
-
-        #panel-opciones {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-height: 90vh;
-            overflow-y: auto;
-            width: 95%;
-            z-index: 1001;
         }
     </style>
 </head>
 
 <body>
+    <!-- Selector de color flotante (NUEVO) -->
+    <div id="color-picker-container">
+        <input type="color" id="color-picker" value="#e67e22" title="Cambiar color del menú">
+    </div>
+    
     <div id="fondo-oscuro"></div>
     <div class="notification-container"></div>
     <div class="konami-code">↑↑↓↓←→←→BA</div>
 
-    <div id="update-banner">
-        ⚡ Actualización 0.2.0 - Haz clic para ver los cambios (o desaparecerá en 10 segundos)
-    </div>
-
-    <div id="color-picker-container">
-        <label for="color-picker">Color del menú:</label>
-        <input type="color" id="color-picker" class="form-control form-control-color" value="#e67e22"
-            title="Elige el color del menú">
-    </div>
-
     <main class="container py-4">
-        <section id="menu-principal" class="hud-panel w-100">
+        <section id="menu-principal" class="hud-panel active">
             <h1 class="text-center mb-4">Friday Night Cooking</h1>
             <div class="d-grid gap-2">
                 <button id="btn-jugar" class="btn-cocina">Jugar</button>
@@ -2268,8 +663,7 @@
                 <button id="btn-logros" class="btn-cocina">Logros</button>
                 <button id="btn-opciones" class="btn-cocina">Opciones</button>
                 <button id="btn-creditos" class="btn-cocina">Créditos</button>
-                <button id="btn-secretos" class="btn-cocina"
-                    style="display: none; background-color: #8e44ad;">Secretos</button>
+                <button id="btn-secreto" class="btn-cocina">Modo Secreto</button>
                 <button id="btn-salir" class="btn-cocina">Salir</button>
             </div>
         </section>
@@ -2279,47 +673,26 @@
             <h2 class="text-center mb-4">Últimas Actualizaciones</h2>
             <div class="update-container">
                 <div class="update-item">
-                    <h4>Versión 0.2.0 <span class="badge bg-success ms-2">Nuevo</span></h4>
-                    <ul>
-                        <li><strong>Mejoras generales:</strong>
-                            <ul>
-                                <li>Corrección del problema de scroll en opciones</li>
-                                <li>Solución a notificaciones duplicadas</li>
-                                <li>Mejoras en el sistema de temas</li>
-                                <li>Código Konami ahora funciona correctamente</li>
-                                <li>Optimizaciones de rendimiento</li>
-                            </ul>
-                        </li>
-                        <li><strong>Nuevas características:</strong>
-                            <ul>
-                                <li>Sistema de notificaciones centralizado</li>
-                                <li>Debounce para guardado de configuración</li>
-                                <li>Mejor manejo de paneles visitados</li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <small class="text-muted">Publicado: 26/06/2025</small>
-                </div>
-                <div class="update-item">
-                    <h4>Versión 0.1.9</h4>
+                    <h4>Versión 0.2.1 <span class="badge bg-success ms-2">Nuevo</span></h4>
                     <ul>
                         <li><strong>Mejoras visuales:</strong>
                             <ul>
-                                <li>Nuevo estilo de cocina con texturas y efectos</li>
-                                <li>Mejor manejo de colores negro/blanco</li>
-                                <li>Nuevo logro "Nice Try" al usar colores extremos</li>
-                                <li>Mejoras en el sistema de secretos</li>
+                                <li>Selector de color flotante mejorado</li>
+                                <li>Scrollbars personalizadas que coinciden con el tema</li>
+                                <li>Notificaciones de logros al estilo Psych Engine</li>
+                                <li>Mejor legibilidad en modo claro</li>
                             </ul>
                         </li>
                         <li><strong>Correcciones:</strong>
                             <ul>
-                                <li>Problema de visibilidad de texto en modo oscuro</li>
-                                <li>Mejoras en la legibilidad de los créditos</li>
-                                <li>Optimización del sistema de temas</li>
+                                <li>Eliminada la barra de color superior redundante</li>
+                                <li>Problemas de color en créditos</li>
+                                <li>Botones de cierre inconsistentes</li>
+                                <li>Mejoras en la coherencia visual</li>
                             </ul>
                         </li>
                     </ul>
-                    <small class="text-muted">Publicado: 20/06/2025</small>
+                    <small class="text-muted">Publicado: 28/06/2025</small>
                 </div>
             </div>
         </section>
@@ -2328,86 +701,6 @@
             <button id="btn-volver-menu-logros" class="close-btn">✕</button>
             <h2 class="text-center mb-4">Logros</h2>
             <div class="achievements-container">
-                <!-- Logro Nice Try -->
-                <div class="achievement" id="achievement-niceTry">
-                    <div class="achievement-icon">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <div class="achievement-info">
-                        <div class="achievement-title">Nice Try</div>
-                        <div class="achievement-desc">Intentaste usar negro/blanco como color</div>
-                        <div class="achievement-progress">
-                            <div class="achievement-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Logros del juego -->
-                <div class="achievement" id="achievement-firstRecipe" data-progress="0/1">
-                    <div class="achievement-icon">
-                        <i class="fas fa-utensils"></i>
-                    </div>
-                    <div class="achievement-info">
-                        <div class="achievement-title">Primera Receta</div>
-                        <div class="achievement-desc">Completa tu primera receta</div>
-                        <div class="achievement-progress">
-                            <div class="achievement-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="achievement" id="achievement-fiveRecipes" data-progress="0/5">
-                    <div class="achievement-icon">
-                        <i class="fas fa-medal"></i>
-                    </div>
-                    <div class="achievement-info">
-                        <div class="achievement-title">Chef Novato</div>
-                        <div class="achievement-desc">Completa 5 recetas</div>
-                        <div class="achievement-progress">
-                            <div class="achievement-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="achievement" id="achievement-tenRecipes" data-progress="0/10">
-                    <div class="achievement-icon">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <div class="achievement-info">
-                        <div class="achievement-title">Chef Experimentado</div>
-                        <div class="achievement-desc">Completa 10 recetas</div>
-                        <div class="achievement-progress">
-                            <div class="achievement-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="achievement" id="achievement-perfectRecipe" data-progress="0/1">
-                    <div class="achievement-icon">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <div class="achievement-info">
-                        <div class="achievement-title">Perfeccionista</div>
-                        <div class="achievement-desc">Completa una receta sin errores</div>
-                        <div class="achievement-progress">
-                            <div class="achievement-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="achievement" id="achievement-timeChallenge" data-progress="0/1">
-                    <div class="achievement-icon">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="achievement-info">
-                        <div class="achievement-title">Supervivencia</div>
-                        <div class="achievement-desc">Sobrevive 30 segundos</div>
-                        <div class="achievement-progress">
-                            <div class="achievement-progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Logros del menú principal -->
                 <div class="achievement" id="achievement-firstLaunch">
                     <div class="achievement-icon">
@@ -2466,7 +759,7 @@
                         <i class="fas fa-palette"></i>
                     </div>
                     <div class="achievement-info">
-                        <div class="achievement-title">Cambiador de colores</div>
+                        <div class="achievement-title">Artista del color</div>
                         <div class="achievement-desc">Cambia el color del menú</div>
                         <div class="achievement-progress">
                             <div class="achievement-progress-bar" style="width: 0%"></div>
@@ -2474,13 +767,119 @@
                     </div>
                 </div>
 
-                <div class="achievement" id="achievement-secretFinder">
+                <div class="achievement" id="achievement-nightOwl">
                     <div class="achievement-icon">
-                        <i class="fas fa-key"></i>
+                        <i class="fas fa-moon"></i>
                     </div>
                     <div class="achievement-info">
-                        <div class="achievement-title">Buscador de secretos</div>
-                        <div class="achievement-desc">Encuentra tu primer secreto</div>
+                        <div class="achievement-title">Noctámbulo</div>
+                        <div class="achievement-desc">Accede al juego entre las 12 AM y 5 AM</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement" id="achievement-menuExplorer">
+                    <div class="achievement-icon">
+                        <i class="fas fa-map"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Explorador del menú</div>
+                        <div class="achievement-desc">Visita todas las secciones del menú</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nuevos logros relacionados con el menú -->
+                <div class="achievement" id="achievement-fastClicker">
+                    <div class="achievement-icon">
+                        <i class="fas fa-hand-pointer"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Clic Rápido</div>
+                        <div class="achievement-desc">Navega por 5 menús en menos de 3 segundos</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement" id="achievement-menuMaster">
+                    <div class="achievement-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Maestro del Menú</div>
+                        <div class="achievement-desc">Completa todos los logros relacionados con el menú</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement" id="achievement-secretHunter">
+                    <div class="achievement-icon">
+                        <i class="fas fa-user-secret"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Cazador de Secretos</div>
+                        <div class="achievement-desc">Intenta activar el modo secreto 3 veces</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement secret-achievement" id="achievement-secretUnlocked">
+                    <div class="achievement-icon">
+                        <i class="fas fa-lock-open"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Desbloqueador de Secretos</div>
+                        <div class="achievement-desc">Activa correctamente el modo secreto</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement secret-achievement" id="achievement-menuSpeedrun">
+                    <div class="achievement-icon">
+                        <i class="fas fa-stopwatch"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Menú Speedrun</div>
+                        <div class="achievement-desc">Completa todas las acciones del menú en menos de 30 segundos</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logros secretos adicionales -->
+                <div class="achievement secret-achievement" id="achievement-secretChef">
+                    <div class="achievement-icon">
+                        <i class="fas fa-hat-chef"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Chef Secreto</div>
+                        <div class="achievement-desc">Descubre todos los secretos del juego</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement secret-achievement" id="achievement-codeMaster">
+                    <div class="achievement-icon">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Maestro del Código</div>
+                        <div class="achievement-desc">Ingresa el código secreto correctamente</div>
                         <div class="achievement-progress">
                             <div class="achievement-progress-bar" style="width: 0%"></div>
                         </div>
@@ -2502,7 +901,7 @@
             </div>
 
             <div class="mb-4">
-                <label for="selector-dificultad" class="form-label">Dificultad:</label>
+                <label for="selector-dificultad" class="form-label">Dificultad predeterminada:</label>
                 <select id="selector-dificultad" class="form-select">
                     <option value="facil">Fácil</option>
                     <option value="normal" selected>Normal</option>
@@ -2584,70 +983,8 @@
 
                 <div class="update-item mt-4">
                     <h5>Gracias por jugar</h5>
-                    <p class="mb-0">FNC Engine 0.2.0</p>
+                    <p class="mb-0">FNC Engine 0.2.1</p>
                     <small class="text-muted">© 2025 Todos los derechos reservados</small>
-                </div>
-            </div>
-        </section>
-
-        <section id="panel-secretos" class="hud-panel popup-panel w-100" style="display: none;">
-            <button id="btn-cerrar-secretos" class="close-btn">✕</button>
-            <div class="secret-panel">
-                <h3>🔒 Área Secreta</h3>
-
-                <div class="secret-achievements-container">
-                    <h4 class="text-center mb-3">Logros Secretos</h4>
-
-                    <div class="secrets-scrollable">
-                        <!-- Logro 1 -->
-                        <div class="secret-item" id="secret-1">
-                            <h5>Paciencia Recompensada</h5>
-                            <p>Esperaste 5 minutos en el menú principal</p>
-                            <div class="secret-status locked">🔒 Bloqueado</div>
-                        </div>
-
-                        <!-- Logro 2 -->
-                        <div class="secret-item" id="secret-2">
-                            <h5>Hora del Misterio</h5>
-                            <p>Jugaste a las 3:33 AM</p>
-                            <div class="secret-status locked">🔒 Bloqueado</div>
-                        </div>
-
-                        <!-- Logro 3 -->
-                        <div class="secret-item" id="secret-3">
-                            <h5>Cambiador de Colores</h5>
-                            <p>Cambiaste el color del menú 5 veces</p>
-                            <div class="secret-status locked">🔒 Bloqueado</div>
-                        </div>
-
-                        <!-- Logro 4 -->
-                        <div class="secret-item" id="secret-4">
-                            <h5>Maestro Konami</h5>
-                            <p>Descubriste el código Konami</p>
-                            <div class="secret-status locked">🔒 Bloqueado</div>
-                        </div>
-
-                        <!-- Logro 5 -->
-                        <div class="secret-item" id="secret-5">
-                            <h5>Explorador Completo</h5>
-                            <p>Visitaste todos los paneles del menú</p>
-                            <div class="secret-status locked">🔒 Bloqueado</div>
-                        </div>
-
-                        <!-- Logro 6 -->
-                        <div class="secret-item" id="secret-6">
-                            <h5>Persistencia</h5>
-                            <p>Mantuviste presionado el botón Jugar por 10 segundos</p>
-                            <div class="secret-status locked">🔒 Bloqueado</div>
-                        </div>
-                    </div>
-
-                    <div class="secret-controls mt-4">
-                        <input type="password" id="secret-password" class="form-control mb-3"
-                            placeholder="Ingresa la contraseña secreta">
-                        <button id="submit-password" class="btn-cocina"
-                            style="background-color: #8e44ad;">Verificar</button>
-                    </div>
                 </div>
             </div>
         </section>
@@ -2678,10 +1015,26 @@
                 </div>
             </div>
         </section>
+
+        <!-- Panel Secreto -->
+        <section id="panel-secreto" class="hud-panel popup-panel w-100" style="display: none;">
+            <button id="btn-cerrar-secreto" class="close-btn">✕</button>
+            <h2 class="text-center mb-4">Modo Secreto</h2>
+            
+            <div class="text-center mb-4">
+                <p>Ingresa el código secreto para desbloquear contenido especial:</p>
+                <input type="text" id="secret-code-input" class="secret-code-input" placeholder="Introduce el código aquí">
+                <div class="d-flex justify-content-center gap-3">
+                    <button id="btn-verificar-codigo" class="btn-cocina" style="background-color: #9b59b6;">Verificar</button>
+                </div>
+            </div>
+            
+            <div id="particulas-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;"></div>
+        </section>
     </main>
 
     <footer class="text-center py-3">
-        © FNC Engine 0.2.0 - Todos los derechos reservados
+        © FNC Engine 0.2.1 - Todos los derechos reservados
     </footer>
 
     <!-- Audio Elements -->
@@ -2701,8 +1054,8 @@
         <source src="assets/sounds/knife-slice-41231.mp3" type="audio/mpeg">
     </audio>
 
-    <audio id="secret-sound">
-        <source src="assets/sounds/magic-chime-14865.mp3" type="audio/mpeg">
+    <audio id="achievement-sound">
+        <source src="assets/sounds/achievement-unlock.mp3" type="audio/mpeg">
     </audio>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -2715,58 +1068,86 @@
             { element: document.getElementById('bg-music-2'), name: 'Midnight Snack' }
         ];
         let isMusicPlaying = false;
-        let secretUnlocked = false;
         let konamiIndex = 0;
         const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-        let notificationTimeout;
         let settingsSaveTimeout;
         let visitedPanels = new Set();
+        let updateBannerTimer;
+        let secretModeUnlocked = false;
+        let secretModeAttempts = 0;
+        let lastMenuClickTime = 0;
+        let menuClickCount = 0;
+        let menuActionsCompleted = 0;
+        let menuSpeedrunStartTime = 0;
+        const SECRET_CODE = "AbelitoJAJASALUDOS";
 
         // Inicialización al cargar la página
         document.addEventListener('DOMContentLoaded', function () {
-            // Cargar configuración guardada primero
             loadSettings();
-
-            // Configurar eventos
             setupEventListeners();
-
-            // Desbloquear logro de primer lanzamiento
             unlockAchievement('achievement-firstLaunch');
-
-            // Configurar temporizador para el banner de actualización
-            setupUpdateBannerTimer();
-
-            // Configurar el sistema de temas
             setupThemeSystem();
-
-            // Verificar si hay secretos desbloqueados para mostrar el botón
-            checkSecretsUnlocked();
+            checkTimeForAchievements();
+            
+            // Mostrar notificación de actualización al inicio
+            setTimeout(() => {
+                showUpdateNotification();
+            }, 1000);
         });
+
+        // Función para mostrar notificación de actualización
+        function showUpdateNotification() {
+            showNotification(
+                'Versión 0.2.1 - Mejoras visuales y correcciones', 
+                'info', 
+                'Haz clic para ver los detalles',
+                () => {
+                    showPanel('panel-actualizacion');
+                    unlockAchievement('achievement-updateChecker');
+                }
+            );
+        }
 
         // Configurar todos los event listeners
         function setupEventListeners() {
             // Navegación entre paneles
-            document.getElementById('btn-jugar').addEventListener('click', () => showPanel('panel-juego'));
+            document.getElementById('btn-jugar').addEventListener('click', () => {
+                showPanel('panel-juego');
+                trackMenuAction();
+            });
             document.getElementById('btn-actualizacion').addEventListener('click', () => {
                 showPanel('panel-actualizacion');
                 unlockAchievement('achievement-updateChecker');
+                trackMenuAction();
             });
-            document.getElementById('btn-logros').addEventListener('click', () => showPanel('panel-logros'));
+            document.getElementById('btn-logros').addEventListener('click', () => {
+                showPanel('panel-logros');
+                trackMenuAction();
+            });
             document.getElementById('btn-opciones').addEventListener('click', () => {
                 showPanel('panel-opciones');
                 unlockAchievement('achievement-optionsExplorer');
+                trackMenuAction();
             });
-            document.getElementById('btn-creditos').addEventListener('click', () => showPanel('panel-creditos'));
-            document.getElementById('btn-secretos').addEventListener('click', () => showPanel('panel-secretos'));
+            document.getElementById('btn-creditos').addEventListener('click', () => {
+                showPanel('panel-creditos');
+                trackMenuAction();
+            });
             document.getElementById('btn-salir').addEventListener('click', exitGame);
+
+            // Botón secreto (solo visible cuando está desbloqueado)
+            document.getElementById('btn-secreto').addEventListener('click', () => {
+                showPanel('panel-secreto');
+                trackMenuAction();
+            });
 
             // Botones de volver
             document.getElementById('btn-volver-menu-act').addEventListener('click', () => hidePanel('panel-actualizacion'));
             document.getElementById('btn-volver-menu-logros').addEventListener('click', () => hidePanel('panel-logros'));
             document.getElementById('btn-volver-menu').addEventListener('click', () => hidePanel('panel-opciones'));
             document.getElementById('btn-cerrar-creditos').addEventListener('click', () => hidePanel('panel-creditos'));
-            document.getElementById('btn-cerrar-secretos').addEventListener('click', () => hidePanel('panel-secretos'));
             document.getElementById('btn-volver-menu-juego').addEventListener('click', () => hidePanel('panel-juego'));
+            document.getElementById('btn-cerrar-secreto').addEventListener('click', () => hidePanel('panel-secreto'));
 
             // Control de música
             document.getElementById('btn-play-music').addEventListener('click', playMusic);
@@ -2791,19 +1172,6 @@
             document.getElementById('btn-guardar-opciones').addEventListener('click', debouncedSaveSettings);
             document.getElementById('btn-reset-opciones').addEventListener('click', resetSettings);
 
-            // Banner de actualización
-            document.getElementById('update-banner').addEventListener('click', () => {
-                showPanel('panel-actualizacion');
-                clearTimeout(updateBannerTimer);
-                document.getElementById('update-banner').style.display = 'none';
-            });
-
-            // Verificación de contraseña secreta
-            document.getElementById('submit-password').addEventListener('click', checkSecretPassword);
-
-            // Botón de jugar (para el secreto de persistencia)
-            setupPressAndHold();
-
             // Botones de juego
             document.getElementById('btn-jugar-clasico').addEventListener('click', () => startGame('classic'));
             document.getElementById('btn-jugar-supervivencia').addEventListener('click', () => startGame('survival'));
@@ -2811,6 +1179,14 @@
 
             // Eventos de teclado
             document.addEventListener('keydown', handleKeyDown);
+            
+            // Verificación de código secreto
+            document.getElementById('btn-verificar-codigo').addEventListener('click', verifySecretCode);
+            document.getElementById('secret-code-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    verifySecretCode();
+                }
+            });
         }
 
         // Configurar el sistema de temas
@@ -2823,8 +1199,18 @@
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
                 if (document.getElementById('selector-tema').value === 'automatico') {
                     document.body.classList.toggle('tema-claro', !e.matches);
+                    updateScrollbarColors();
                 }
             });
+        }
+
+        // Actualizar colores de scrollbar
+        function updateScrollbarColors() {
+            document.documentElement.style.setProperty('--scrollbar-thumb', getComputedStyle(document.documentElement).getPropertyValue('--color-menu'));
+            document.documentElement.style.setProperty('--scrollbar-track', 
+                document.body.classList.contains('tema-claro') ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.2)');
+            document.documentElement.style.setProperty('--close-btn-color', 
+                document.body.classList.contains('tema-claro') ? '#333333' : '#ffffff');
         }
 
         // Función debounce para guardar configuración
@@ -2837,17 +1223,11 @@
 
         // Manejo de teclas para el código Konami
         function handleKeyDown(event) {
-            // Combinación de teclas para panel secreto
-            if (event.ctrlKey && event.altKey && event.key.toLowerCase() === 'c') {
-                showSecretPanel();
-                return;
-            }
-
             // Código Konami
             if (event.key === konamiCode[konamiIndex]) {
                 konamiIndex++;
                 if (konamiIndex === konamiCode.length) {
-                    unlockSecret('secret-4');
+                    showNotification('¡Código Konami activado!', 'success');
                     konamiIndex = 0;
                 }
             } else {
@@ -2855,28 +1235,48 @@
             }
         }
 
-        // Mostrar un panel específico
+        // Mostrar un panel específico con animación
         function showPanel(panelId) {
-            document.getElementById('fondo-oscuro').classList.add('active');
-            document.getElementById(panelId).style.display = 'block';
-            document.getElementById(panelId).classList.add('active');
+            const panel = document.getElementById(panelId);
+            const darkBg = document.getElementById('fondo-oscuro');
+            
+            // Mostrar fondo oscuro con animación
+            darkBg.style.display = 'block';
+            setTimeout(() => {
+                darkBg.classList.add('active');
+            }, 10);
+            
+            // Mostrar panel con animación
+            panel.style.display = 'block';
+            setTimeout(() => {
+                panel.classList.add('active');
+            }, 50);
+            
             document.body.style.overflow = 'hidden';
             playSoundEffect();
 
             // Registrar panel visitado
-            if (panelId !== 'panel-juego') {
-                visitedPanels.add(panelId);
-                checkAllPanelsVisited();
-            }
+            visitedPanels.add(panelId);
+            checkAllPanelsVisited();
         }
 
-        // Ocultar un panel
+        // Ocultar un panel con animación
         function hidePanel(panelId) {
-            document.getElementById('fondo-oscuro').classList.remove('active');
-            document.getElementById(panelId).classList.remove('active');
+            const panel = document.getElementById(panelId);
+            const darkBg = document.getElementById('fondo-oscuro');
+            
+            // Ocultar panel con animación
+            panel.classList.remove('active');
+            
+            // Ocultar fondo oscuro con animación
+            darkBg.classList.remove('active');
+            
+            // Esperar a que termine la animación para ocultar completamente
             setTimeout(() => {
-                document.getElementById(panelId).style.display = 'none';
-            }, 300);
+                panel.style.display = 'none';
+                darkBg.style.display = 'none';
+            }, 500);
+            
             document.body.style.overflow = 'auto';
             playSoundEffect();
         }
@@ -2943,46 +1343,21 @@
         // Manejo del cambio de color
         function handleColorChange(e) {
             const color = e.target.value;
-
-            // Si el color es negro o blanco, cambiamos al inverso
-            if (color === '#000000' || color === '#ffffff') {
-                const inverseColor = color === '#000000' ? '#ffffff' : '#000000';
-                document.documentElement.style.setProperty('--color-menu', inverseColor);
-                document.documentElement.style.setProperty('--color-menu-hover', adjustColor(inverseColor, -20));
-
-                // Desbloquear logro "Nice Try"
-                unlockAchievement('achievement-niceTry');
-            } else {
-                document.documentElement.style.setProperty('--color-menu', color);
-                document.documentElement.style.setProperty('--color-menu-hover', adjustColor(color, -20));
-            }
-
-            // Desbloquear logro de cambiador de colores
+            document.documentElement.style.setProperty('--color-menu', color);
+            document.documentElement.style.setProperty('--color-menu-hover', adjustColor(color, -20));
+            document.documentElement.style.setProperty('--scrollbar-thumb', color);
+            
             unlockAchievement('achievement-colorChanger');
-
-            // Contar cambios de color para el secreto
-            countColorChanges();
+            debouncedSaveSettings();
         }
 
         function adjustColor(color, amount) {
-            return '#' + color.replace(/^#/, '').replace(/../g, color =>
+            return '#' + color.replace(/^#/, '').replace(/../g, color => 
                 ('0' + Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
-        }
-
-        // Contador de cambios de color para el secreto
-        let colorChangeCount = 0;
-        function countColorChanges() {
-            colorChangeCount++;
-            if (colorChangeCount >= 5) {
-                unlockSecret('secret-3');
-            }
         }
 
         // Guardar configuración
         function saveSettings() {
-            const menuColor = document.getElementById('color-picker').value;
-            const menuHover = adjustColor(menuColor, -20);
-
             const settings = {
                 theme: document.getElementById('selector-tema').value,
                 difficulty: document.getElementById('selector-dificultad').value,
@@ -2990,16 +1365,17 @@
                 soundVolume: document.getElementById('volumen-sonido').value,
                 currentMusic: currentMusic,
                 autoPlay: document.getElementById('auto-play-music').checked,
-                menuColor: menuColor,
-                menuColorHover: menuHover,
+                menuColor: document.getElementById('color-picker').value,
+                menuColorHover: adjustColor(document.getElementById('color-picker').value, -20),
                 achievements: getUnlockedAchievements(),
-                secrets: getUnlockedSecrets(),
-                visitedPanels: Array.from(visitedPanels)
+                visitedPanels: Array.from(visitedPanels),
+                secretModeUnlocked: secretModeUnlocked,
+                secretModeAttempts: secretModeAttempts,
+                menuActionsCompleted: menuActionsCompleted
             };
 
             localStorage.setItem('fncSettings', JSON.stringify(settings));
             
-            // Mostrar feedback solo cuando es explícito (no en autoguardados)
             if (!settingsSaveTimeout) {
                 showNotification('Configuración guardada correctamente');
             }
@@ -3029,29 +1405,29 @@
                 // Aplicar color del menú
                 document.documentElement.style.setProperty('--color-menu', settings.menuColor || '#e67e22');
                 document.documentElement.style.setProperty('--color-menu-hover', settings.menuColorHover || adjustColor(settings.menuColor || '#e67e22', -20));
+                document.documentElement.style.setProperty('--scrollbar-thumb', settings.menuColor || '#e67e22');
 
                 // Restaurar logros desbloqueados
                 if (settings.achievements) {
                     restoreAchievements(settings.achievements);
                 }
 
-                // Restaurar secretos desbloqueados
-                if (settings.secrets && settings.secrets.length > 0) {
-                    settings.secrets.forEach(secretId => {
-                        const secretItem = document.getElementById(secretId);
-                        if (secretItem && !secretItem.classList.contains('unlocked')) {
-                            secretItem.classList.add('unlocked');
-                            secretItem.querySelector('.secret-status').textContent = '🔓 Desbloqueado';
-                            secretItem.querySelector('.secret-status').classList.remove('locked');
-                            secretItem.querySelector('.secret-status').classList.add('unlocked');
-                        }
-                    });
-                }
-
                 // Restaurar paneles visitados
                 if (settings.visitedPanels) {
                     visitedPanels = new Set(settings.visitedPanels);
                     checkAllPanelsVisited();
+                }
+
+                // Restaurar modo secreto
+                if (settings.secretModeUnlocked) {
+                    secretModeUnlocked = settings.secretModeUnlocked;
+                    unlockSecretMode();
+                }
+                if (settings.secretModeAttempts) {
+                    secretModeAttempts = settings.secretModeAttempts;
+                }
+                if (settings.menuActionsCompleted) {
+                    menuActionsCompleted = settings.menuActionsCompleted;
                 }
 
                 // Aplicar volumen
@@ -3087,23 +1463,6 @@
             }
         }
 
-        // Obtener secretos desbloqueados
-        function getUnlockedSecrets() {
-            const unlocked = [];
-            document.querySelectorAll('.secret-item.unlocked').forEach(secret => {
-                unlocked.push(secret.id);
-            });
-            return unlocked;
-        }
-
-        // Verificar si hay secretos desbloqueados para mostrar el botón
-        function checkSecretsUnlocked() {
-            const secrets = document.querySelectorAll('.secret-item.unlocked');
-            if (secrets.length > 0) {
-                document.getElementById('btn-secretos').style.display = 'block';
-            }
-        }
-
         // Restablecer configuración
         function resetSettings() {
             if (confirm('¿Estás seguro de que quieres restablecer toda la configuración a los valores predeterminados?')) {
@@ -3117,17 +1476,13 @@
 
         // Manejo de temas
         function applyTheme(theme, skipSaving = false) {
-            // Primero eliminar cualquier tema existente
             document.body.classList.remove('tema-claro');
             
-            // Guardar el tema en localStorage si no estamos en modo skipSaving
             if (!skipSaving) {
                 localStorage.setItem('fnc-theme', theme);
             }
 
-            // Aplicar el tema seleccionado
             if (theme === 'automatico') {
-                // Usar la preferencia del sistema
                 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                 if (!prefersDark) {
                     document.body.classList.add('tema-claro');
@@ -3135,18 +1490,8 @@
             } else if (theme === 'light') {
                 document.body.classList.add('tema-claro');
             }
-            // 'dark' es el tema por defecto, no necesita clase adicional
-        }
-
-        // Banner de actualización
-        let updateBannerTimer;
-        function setupUpdateBannerTimer() {
-            updateBannerTimer = setTimeout(() => {
-                document.getElementById('update-banner').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('update-banner').style.display = 'none';
-                }, 500);
-            }, 10000);
+            
+            updateScrollbarColors();
         }
 
         // Función para desbloquear logros
@@ -3155,9 +1500,8 @@
             if (achievement && achievement.querySelector('.achievement-progress-bar').style.width !== '100%') {
                 achievement.querySelector('.achievement-progress-bar').style.width = '100%';
 
-                // Mostrar notificación
+                // Mostrar notificación al estilo Psych Engine
                 showAchievementNotification(
-                    'Logro desbloqueado',
                     achievement.querySelector('.achievement-title').textContent,
                     achievement.querySelector('.achievement-desc').textContent
                 );
@@ -3165,200 +1509,28 @@
                 // Reproducir sonido de logro
                 playSoundEffect('achievement');
 
-                // Guardar en localStorage
-                debouncedSaveSettings();
-            }
-        }
-
-        // Función para desbloquear secretos
-        function unlockSecret(secretId) {
-            const secretItem = document.getElementById(secretId);
-            if (secretItem && !secretItem.classList.contains('unlocked')) {
-                secretItem.classList.add('unlocked');
-                secretItem.querySelector('.secret-status').textContent = '🔓 Desbloqueado';
-                secretItem.querySelector('.secret-status').classList.remove('locked');
-                secretItem.querySelector('.secret-status').classList.add('unlocked');
-
-                // Reproducir sonido de desbloqueo
-                playSoundEffect('secret');
-
-                // Mostrar notificación
-                showAchievementNotification(
-                    'Secreto desbloqueado',
-                    secretItem.querySelector('h5').textContent,
-                    secretItem.querySelector('p').textContent);
-
-                // Mostrar botón de secretos si está oculto
-                document.getElementById('btn-secretos').style.display = 'block';
-
-                // Desbloquear logro de buscador de secretos
-                unlockAchievement('achievement-secretFinder');
-
-                // Verificar si todos los secretos están desbloqueados
-                checkAllSecretsUnlocked();
+                // Verificar si se completaron todos los logros del menú
+                checkMenuMasterAchievement();
 
                 // Guardar en localStorage
                 debouncedSaveSettings();
             }
         }
 
-        function checkAllSecretsUnlocked() {
-            const allSecrets = document.querySelectorAll('.secret-item');
-            const unlockedSecrets = document.querySelectorAll('.secret-item.unlocked');
-
-            if (allSecrets.length === unlockedSecrets.length) {
-                unlockAchievement('achievement-secretMaster');
-            }
-        }
-
-        // Verificación de contraseña secreta
-        function checkSecretPassword() {
-            const password = document.getElementById('secret-password').value;
-            if (password.toLowerCase() === 'salsa') {
-                // Desbloquear un secreto aleatorio
-                const secrets = document.querySelectorAll('.secret-item:not(.unlocked)');
-                if (secrets.length > 0) {
-                    const randomIndex = Math.floor(Math.random() * secrets.length);
-                    const secretId = secrets[randomIndex].id;
-                    unlockSecret(secretId);
-                }
-
-                document.getElementById('secret-password').value = '';
-                showNotification('¡Contraseña correcta! Secreto desbloqueado');
-            } else {
-                showNotification('Contraseña incorrecta', 'error');
-            }
-        }
-
-        // Configurar el evento de mantener presionado para el botón de jugar
-        function setupPressAndHold() {
-            const btn = document.getElementById('btn-jugar');
-            let pressTimer;
-
-            btn.addEventListener('mousedown', function () {
-                pressTimer = setTimeout(function () {
-                    unlockSecret('secret-6');
-                }, 10000); // 10 segundos
-            });
-
-            btn.addEventListener('mouseup', function () {
-                clearTimeout(pressTimer);
-            });
-
-            btn.addEventListener('mouseleave', function () {
-                clearTimeout(pressTimer);
-            });
-        }
-
-        // Mostrar notificación de logro
-        function showAchievementNotification(title, achievement, description) {
-            const container = document.querySelector('.notification-container');
-            
-            // Limpiar notificaciones anteriores
-            clearTimeout(notificationTimeout);
-            container.innerHTML = '';
-
-            const notification = document.createElement('div');
-            notification.className = 'achievement-notification';
-            notification.innerHTML = `
-                <div class="achievement-notification-content">
-                    <div class="achievement-notification-icon">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <div class="achievement-notification-text">
-                        <h4>${title}</h4>
-                        <h5>${achievement}</h5>
-                        <p>${description}</p>
-                    </div>
-                </div>
-            `;
-
-            container.appendChild(notification);
-
-            notificationTimeout = setTimeout(() => {
-                notification.remove();
-            }, 5000);
-        }
-
-        // Mostrar notificación genérica
-        function showNotification(message, type = 'success') {
-            const container = document.querySelector('.notification-container');
-            
-            // Limpiar notificaciones anteriores
-            clearTimeout(notificationTimeout);
-            container.innerHTML = '';
-
-            const notification = document.createElement('div');
-            notification.className = `achievement-notification ${type}`;
-            notification.innerHTML = `
-                <div class="achievement-notification-content">
-                    <div class="achievement-notification-icon">
-                        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
-                    </div>
-                    <div class="achievement-notification-text">
-                        <p>${message}</p>
-                    </div>
-                </div>
-            `;
-
-            container.appendChild(notification);
-
-            notificationTimeout = setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-
-        // Reproducir efectos de sonido
-        function playSoundEffect(type = 'normal') {
-            const sound = document.getElementById(type === 'secret' ? 'secret-sound' : 'sound-effect');
-            if (sound) {
-                sound.volume = document.getElementById('volumen-sonido').value / 100;
-                sound.currentTime = 0;
-                sound.play().catch(e => console.log("Error al reproducir sonido:", e));
-            }
-        }
-
-        // Método para mostrar el panel secreto
-        function showSecretPanel() {
-            const panelSecreto = document.getElementById('panel-secretos');
-            const fondoOscuro = document.getElementById('fondo-oscuro');
-
-            if (panelSecreto && fondoOscuro) {
-                panelSecreto.style.display = 'block';
-                panelSecreto.classList.add('active');
-                fondoOscuro.classList.add('active');
-                document.body.style.overflow = 'hidden';
-
-                // Reproducir sonido de feedback
-                playSoundEffect('secret');
-
-                // Vibración (opcional, solo para móviles)
-                if (navigator.vibrate) {
-                    navigator.vibrate([100, 50, 100]);
-                }
-            }
-        }
-
-        // Verificar la hora para el secreto de las 3:33 AM
-        function checkTimeForSecret() {
+        // Verificar la hora para logros
+        function checkTimeForAchievements() {
             const now = new Date();
-            if (now.getHours() === 3 && now.getMinutes() === 33) {
-                unlockSecret('secret-2');
+            const hours = now.getHours();
+            
+            // Noctámbulo (entre 12 AM y 5 AM)
+            if (hours >= 0 && hours < 5) {
+                unlockAchievement('achievement-nightOwl');
             }
         }
 
-        // Verificar cada minuto
-        setInterval(checkTimeForSecret, 60000);
-        checkTimeForSecret(); // Comprobar al cargar
-
-        // Temporizador para el secreto de paciencia (5 minutos en el menú)
-        setTimeout(() => {
-            unlockSecret('secret-1');
-        }, 300000); // 5 minutos
-
-        // Verificar si se han visitado todos los paneles para el secreto
+        // Verificar si se han visitado todos los paneles para el logro
         function checkAllPanelsVisited() {
-            const allPanels = ['panel-actualizacion', 'panel-logros', 'panel-opciones', 'panel-creditos', 'panel-secretos'];
+            const allPanels = ['panel-actualizacion', 'panel-logros', 'panel-opciones', 'panel-creditos', 'panel-juego'];
             let allVisited = true;
 
             for (const panel of allPanels) {
@@ -3369,13 +1541,195 @@
             }
 
             if (allVisited) {
-                unlockSecret('secret-5');
+                unlockAchievement('achievement-menuExplorer');
+            }
+        }
+
+        // Verificar código secreto
+        function verifySecretCode() {
+            const input = document.getElementById('secret-code-input');
+            const code = input.value.trim();
+            
+            if (code === SECRET_CODE) {
+                // Código correcto
+                createParticles(30, true);
+                unlockAchievement('achievement-secretUnlocked');
+                unlockAchievement('achievement-codeMaster');
+                secretModeUnlocked = true;
+                
+                // Mostrar notificación especial
+                showNotification('¡Código Secreto Correcto!', 'success', 'Modo Secreto desbloqueado', () => {
+                    hidePanel('panel-secreto');
+                    unlockSecretMode();
+                });
+                
+                // Ocultar después de 2 segundos
+                setTimeout(() => {
+                    hidePanel('panel-secreto');
+                    unlockSecretMode();
+                }, 2000);
+            } else {
+                // Código incorrecto
+                createParticles(20, false);
+                input.value = '';
+                input.focus();
+                secretModeAttempts++;
+                
+                // Logro por intentar el modo secreto
+                if (secretModeAttempts === 3) {
+                    unlockAchievement('achievement-secretHunter');
+                }
+                
+                // Mostrar notificación de error
+                showNotification('Código incorrecto', 'error', 'Inténtalo de nuevo');
+                
+                // Cerrar panel si es el tercer intento fallido
+                if (secretModeAttempts >= 3) {
+                    setTimeout(() => {
+                        hidePanel('panel-secreto');
+                    }, 1500);
+                }
+            }
+            
+            debouncedSaveSettings();
+        }
+
+        // Desbloquear el modo secreto
+        function unlockSecretMode() {
+            const btnSecreto = document.getElementById('btn-secreto');
+            btnSecreto.classList.add('unlocked');
+            
+            // Mostrar logros secretos
+            document.querySelectorAll('.secret-achievement').forEach(achievement => {
+                achievement.style.display = 'flex';
+            });
+            
+            debouncedSaveSettings();
+        }
+
+        function createParticles(count, isGreen) {
+            const container = document.getElementById('particulas-container');
+            container.innerHTML = '';
+            
+            const panel = document.getElementById('panel-secreto');
+            const panelRect = panel.getBoundingClientRect();
+            
+            for (let i = 0; i < count; i++) {
+                const particula = document.createElement('div');
+                particula.className = `particula ${isGreen ? 'particula-verde' : 'particula-roja'}`;
+                
+                // Posición inicial en el centro del panel
+                const startX = panelRect.width / 2;
+                const startY = panelRect.height / 2;
+                
+                // Dirección aleatoria
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 50 + Math.random() * 100;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                particula.style.left = `${startX}px`;
+                particula.style.top = `${startY}px`;
+                particula.style.setProperty('--tx', `${tx}px`);
+                particula.style.setProperty('--ty', `${ty}px`);
+                
+                container.appendChild(particula);
+            }
+        }
+
+        // Mostrar notificación de logro al estilo Psych Engine
+        function showAchievementNotification(title, description) {
+            const container = document.querySelector('.notification-container');
+            
+            const notification = document.createElement('div');
+            notification.className = 'achievement-notification';
+            notification.innerHTML = `
+                <div class="achievement-notification-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="achievement-notification-text">
+                    <h4>${title}</h4>
+                    <p>${description}</p>
+                </div>
+            `;
+
+            container.appendChild(notification);
+            
+            // Forzar reflow para que la animación funcione
+            void notification.offsetWidth;
+            
+            notification.classList.add('show');
+            
+            // Reproducir sonido
+            document.getElementById('achievement-sound').currentTime = 0;
+            document.getElementById('achievement-sound').play().catch(e => console.log("Error al reproducir sonido:", e));
+
+            // Ocultar después de 5 segundos
+            setTimeout(() => {
+                notification.classList.remove('show');
+                notification.classList.add('hide');
+                
+                // Eliminar después de la animación
+                setTimeout(() => {
+                    notification.remove();
+                }, 500);
+            }, 5000);
+        }
+
+        // Mostrar notificación genérica
+        function showNotification(message, type = 'success', subtitle = '', callback = null) {
+            const container = document.querySelector('.notification-container');
+            
+            const notification = document.createElement('div');
+            notification.className = `achievement-notification ${type}`;
+            notification.innerHTML = `
+                <div class="achievement-notification-icon">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 
+                                      type === 'info' ? 'info-circle' : 
+                                      'exclamation-circle'}"></i>
+                </div>
+                <div class="achievement-notification-text">
+                    <p>${message}</p>
+                    ${subtitle ? `<small>${subtitle}</small>` : ''}
+                </div>
+            `;
+
+            if (callback) {
+                notification.style.cursor = 'pointer';
+                notification.addEventListener('click', callback);
+            }
+
+            container.appendChild(notification);
+            
+            // Forzar reflow para que la animación funcione
+            void notification.offsetWidth;
+            
+            notification.classList.add('show');
+            
+            // Ocultar después de 5 segundos (o 10 para info)
+            setTimeout(() => {
+                notification.classList.remove('show');
+                notification.classList.add('hide');
+                
+                // Eliminar después de la animación
+                setTimeout(() => {
+                    notification.remove();
+                }, 500);
+            }, type === 'info' ? 10000 : 5000);
+        }
+
+        // Reproducir efectos de sonido
+        function playSoundEffect(type = 'normal') {
+            const sound = document.getElementById(type === 'achievement' ? 'achievement-sound' : 'sound-effect');
+            if (sound) {
+                sound.volume = document.getElementById('volumen-sonido').value / 100;
+                sound.currentTime = 0;
+                sound.play().catch(e => console.log("Error al reproducir sonido:", e));
             }
         }
 
         // Función para iniciar el juego
         function startGame(mode) {
-            // Redirigir a los HTMLs específicos para cada modo
             if (mode === 'classic') {
                 window.location.href = 'hola.html';
             } else if (mode === 'survival') {
@@ -3387,10 +1741,71 @@
 
         // Salir del juego
         function exitGame() {
-            // Puedes personalizar esto según lo que necesites
-            window.close(); // Esto solo funciona si la ventana fue abierta con JavaScript
-            // Otra opción es redirigir a una página de salida
-            // window.location.href = 'salida.html';
+            window.close();
+        }
+
+        // Rastrear acciones del menú para logros
+        function trackMenuAction() {
+            const now = Date.now();
+            menuActionsCompleted++;
+            
+            // Logro por completar todas las acciones del menú
+            if (menuActionsCompleted >= 10) {
+                unlockAchievement('achievement-menuMaster');
+            }
+            
+            // Logro de clic rápido (5 menús en menos de 3 segundos)
+            if (now - lastMenuClickTime < 3000) {
+                menuClickCount++;
+                if (menuClickCount >= 5) {
+                    unlockAchievement('achievement-fastClicker');
+                }
+            } else {
+                menuClickCount = 1;
+            }
+            
+            // Iniciar speedrun del menú si es la primera acción
+            if (menuActionsCompleted === 1) {
+                menuSpeedrunStartTime = now;
+                setTimeout(checkMenuSpeedrun, 30000); // Verificar después de 30 segundos
+            }
+            
+            lastMenuClickTime = now;
+            debouncedSaveSettings();
+        }
+
+        // Verificar speedrun del menú
+        function checkMenuSpeedrun() {
+            if (menuActionsCompleted >= 8 && (Date.now() - menuSpeedrunStartTime) < 30000) {
+                unlockAchievement('achievement-menuSpeedrun');
+            }
+        }
+
+        // Verificar si se completaron todos los logros del menú
+        function checkMenuMasterAchievement() {
+            const menuAchievements = [
+                'achievement-firstLaunch',
+                'achievement-updateChecker',
+                'achievement-optionsExplorer',
+                'achievement-musicLover',
+                'achievement-colorChanger',
+                'achievement-nightOwl',
+                'achievement-menuExplorer',
+                'achievement-fastClicker',
+                'achievement-secretHunter',
+                'achievement-secretUnlocked',
+                'achievement-menuSpeedrun',
+                'achievement-codeMaster'
+            ];
+            
+            const allUnlocked = menuAchievements.every(achievementId => {
+                const element = document.getElementById(achievementId);
+                return element && element.querySelector('.achievement-progress-bar').style.width === '100%';
+            });
+            
+            if (allUnlocked) {
+                unlockAchievement('achievement-menuMaster');
+            }
         }
     </script>
 </body>
