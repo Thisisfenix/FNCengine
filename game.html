@@ -2570,28 +2570,7 @@
         }
         
         function checkGitHubPages() {
-            const hostname = window.location.hostname;
-            const officialDomains = ['thisisfenix.github.io', 'localhost', '127.0.0.1'];
-            
-            // Solo aplicar penalizaciones si NO es un dominio oficial
-            if ((hostname.includes('github.io') || hostname.includes('pages.github.com')) && 
-                !officialDomains.some(domain => hostname.includes(domain))) {
-                const warningDiv = document.createElement('div');
-                warningDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:#ff4444;color:white;text-align:center;padding:10px;z-index:9999;';
-                warningDiv.textContent = '⚠️ Versión no oficial - Juega en thisisfenix.github.io/FNCengine/game.html';
-                document.body.appendChild(warningDiv);
-                
-                // Penalizaciones solo para sitios no oficiales
-                setInterval(() => {
-                    if (Math.random() < 0.1) {
-                        coins = Math.floor(coins * 0.95);
-                        diamonds = Math.floor(diamonds * 0.98);
-                        ball.dx *= 0.99; // Reducir velocidad gradualmente
-                        ball.dy *= 0.99;
-                        updateUI();
-                    }
-                }, 30000);
-            }
+            // Sistema antipiracy eliminado
         }
         
         function updateAfkSystem() {
@@ -3645,7 +3624,6 @@
 
         // Inicializar el juego
         window.addEventListener('load', () => {
-            checkGitHubPages();
             init();
             generateMissions();
             generateAdvancedMissions();
