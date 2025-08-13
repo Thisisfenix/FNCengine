@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Circle Bounce Coins Ultimate - Enhanced Edition</title>
+    <title>Circle Bounce Coins Ultimate - Enhanced Edition Beta 2</title>
     <style>
         :root {
             --primary: #667eea;
@@ -353,7 +353,9 @@
         #missions,
         #premiumShop,
         #dailyChallenges,
-        #achievements {
+        #achievements,
+        #codes,
+        #feedback {
             position: fixed;
             top: 50%;
             left: 50%;
@@ -584,7 +586,7 @@
 <body>
     <div id="loadingScreen"
         style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #111; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; color: white;">
-        <h1>Circle Bounce Coins Ultimate - Enhanced</h1>
+        <h1>Circle Bounce Coins Ultimate - Enhanced Beta 2</h1>
         <div style="width: 200px; height: 200px; position: relative; margin: 20px;">
             <div
                 style="width: 100%; height: 100%; border: 10px solid #333; border-top-color: var(--hud-color); border-radius: 50%; animation: spin 1s linear infinite;">
@@ -617,12 +619,18 @@
             <button id="configBtn" title="Configuración del juego">⚙️ Config</button>
             <button id="pauseBtn" title="Pausar/Reanudar juego">⏸️ Pausa</button>
             <button id="importExportBtn" title="Guardar/Cargar datos">📁 Datos</button>
+            <button id="codesBtn" title="Canjear códigos especiales">🎁 Códigos</button>
+            <button id="feedbackBtn" title="Enviar feedback de beta">📝 Feedback</button>
             <button id="prestigeBtn" title="Reiniciar con bonificadores">✨ Prestigio</button>
         </div>
         
         <div id="controlsArrow" style="position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); color: white; font-size: 20px; animation: bounce 2s infinite; pointer-events: none; z-index: 99;">▼</div>
         
         <button id="toggleControls" onclick="toggleControlsVisibility()">▲</button>
+        
+        <div id="betaIndicator" style="position: fixed; top: 5px; left: 5px; background: rgba(255, 165, 0, 0.8); color: black; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; z-index: 1000; pointer-events: none;">
+            BETA 2
+        </div>
         </div>
 
         <div id="currency-display">
@@ -696,6 +704,14 @@
         <div>Total coins: <span id="totalCoins">0</span></div>
         <div>Tiempo jugado: <span id="playTime">0m</span></div>
         <div>Mejor combo: <span id="bestCombo">1x</span></div>
+        <div style="border-top: 1px solid #555; margin: 15px 0; padding-top: 15px;">
+            <h4>Estadísticas Beta 2</h4>
+            <div>Sesión actual: <span id="sessionTime">0m</span></div>
+            <div>Orbes recogidos: <span id="totalOrbs">0</span></div>
+            <div>Códigos canjeados: <span id="codesRedeemed">0</span></div>
+            <div>Eventos activados: <span id="eventsTriggered">0</span></div>
+            <div>Crashes detectados: <span id="crashCount">0</span></div>
+        </div>
         <button onclick="closeStats()">Cerrar</button>
     </div>
 
@@ -1254,6 +1270,56 @@
         </div>
     </div>
 
+    <div id="feedback">
+        <h3>📝 Feedback Beta 2</h3>
+        <p>Ayuda a mejorar el juego reportando bugs o sugerencias:</p>
+        <div style="margin: 10px 0;">
+            <label>Tipo de feedback:</label>
+            <select id="feedbackType" style="width: 100%; padding: 5px; margin: 5px 0; background: #333; color: white; border: 1px solid #555;">
+                <option value="bug">Bug/Error</option>
+                <option value="balance">Balance del juego</option>
+                <option value="feature">Nueva característica</option>
+                <option value="ui">Interfaz/Diseño</option>
+                <option value="mobile">Problema móvil</option>
+                <option value="other">Otro</option>
+            </select>
+        </div>
+        <textarea id="feedbackText" placeholder="Describe tu feedback aquí..." style="width: 100%; height: 100px; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #555; background: #333; color: white; resize: vertical;"></textarea>
+        <div style="margin: 10px 0;">
+            <button onclick="submitFeedback()">🚀 Enviar Feedback</button>
+            <button onclick="closeFeedback()">Cerrar</button>
+        </div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 10px;">
+            <p>🚀 <strong>Cómo funciona:</strong></p>
+            <p>1. Escribe tu feedback y haz clic en "Enviar"</p>
+            <p>2. Elige: GitHub Issue (recomendado) o copiar al portapapeles</p>
+            <p>3. Si eliges portapapeles, envíamelo por Discord/email</p>
+            <p>Versión: Beta 2 | Build: <span id="buildNumber">2024.12</span></p>
+        </div>
+    </div>
+
+    <div id="codes">
+        <h3>🎁 Códigos Especiales</h3>
+        <p>Ingresa códigos para obtener recompensas:</p>
+        <input type="text" id="codeInput" placeholder="Ingresa tu código aquí..." style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #555; background: #333; color: white;">
+        <div style="margin: 10px 0;">
+            <button onclick="redeemCode()">Canjear Código</button>
+            <button onclick="closeCodes()">Cerrar</button>
+        </div>
+        <div style="margin-top: 15px; font-size: 12px; opacity: 0.8;">
+            <h4>Códigos Activos:</h4>
+            <p>• WELCOME2 - Pack de bienvenida beta</p>
+            <p>• BETA2024 - 1K coins + 5 diamantes</p>
+            <p>• FENIX2024 - 500 coins + 3 diamantes</p>
+            <p>• BETATEST2 - 2K coins + 10 diamantes</p>
+            <p>• FEEDBACK - Orbe mítico + 1K coins</p>
+            <p>• GITHUB - 5 diamantes + boost combo</p>
+            <p>• ORBES - 300 coins + orbe raro</p>
+            <p>• SPEED - Velocidad x1.5 por 1 min</p>
+            <p>• COMBO - Combo x2 por 30 seg</p>
+        </div>
+    </div>
+
     <div id="importExport">
         <h3>Importar/Exportar Datos</h3>
         <p>Copia tu código de guardado:</p>
@@ -1262,7 +1328,7 @@
             <button onclick="exportSave()">Exportar</button>
             <button onclick="importSave()">Importar</button>
             <button onclick="downloadSave()">Descargar</button>
-            <button onclick="toggleImportExport()">Cerrar</button>
+            <button onclick="togglePanel('importExport')">Cerrar</button>
         </div>
     </div>
 
@@ -1313,7 +1379,7 @@
         let canvas, ctx, width, height;
         let coins = 0, diamonds = 0, experience = 0, bounces = 0, level = 1;
         let combo = 1, gamePaused = false;
-        let ball = { x: 0, y: 0, radius: 20, dx: 5, dy: 5, color: '#ff0000' };
+        let ball = { x: 0, y: 0, radius: 20, dx: 5, dy: 5, color: '#ff0000', baseSpeed: 5 };
         let particles = [];
         let orbs = [];
         let orbTypes = [
@@ -1339,8 +1405,8 @@
             ball.y = height / 2;
             
             // Asegurar velocidad inicial correcta
-            ball.dx = 5;
-            ball.dy = 5;
+            ball.dx = ball.baseSpeed;
+            ball.dy = ball.baseSpeed;
 
             loadGame();
             setupEventListeners();
@@ -1375,6 +1441,8 @@
                 updateEventsDisplay(); 
             };
             document.getElementById('dailyChallengesBtn').onclick = () => { togglePanel('dailyChallenges'); updateDailyChallengesDisplay(); updateResetTimer(); };
+            document.getElementById('codesBtn').onclick = () => togglePanel('codes');
+            document.getElementById('feedbackBtn').onclick = () => togglePanel('feedback');
             
             // Detectar actividad del usuario para sistema anti-AFK
             document.addEventListener('mousemove', resetAfkTimer);
@@ -1535,6 +1603,16 @@
                     case 'cosmic': coinsGained *= 10; expGained *= 10; break;
                 }
             }
+            
+            // Aplicar eventos por fecha
+            if (dateEvent) {
+                switch(dateEvent.type) {
+                    case 'coins': coinsGained *= dateEvent.multiplier; break;
+                    case 'all': coinsGained *= dateEvent.multiplier; expGained *= dateEvent.multiplier; break;
+                    case 'experience': expGained *= dateEvent.multiplier; break;
+                    case 'combo': combo = Math.min(combo + 0.1, 20); break;
+                }
+            }
 
             // Mejoras legendarias y míticas
             if (gameData.upgrades.dimension.level > 0) coinsGained *= Math.pow(2, gameData.upgrades.dimension.level);
@@ -1554,6 +1632,7 @@
             // Generación de diamantes MEJORADA
             let diamondChance = 0.015 + gameData.upgrades.diamondGen.level * 0.005; // Más chance
             if (currentEvent && currentEvent.effect === 'diamonds') diamondChance *= 2;
+            if (dateEvent && dateEvent.type === 'diamonds') diamondChance *= dateEvent.multiplier;
             
             if (Math.random() < diamondChance) {
                 let diamondsGained = Math.floor(Math.random() * 3) + 1; // Más diamantes
@@ -1648,7 +1727,8 @@
             
             // Actualizar displays del HUD
             if (document.getElementById('eventStatus')) {
-                document.getElementById('eventStatus').textContent = currentEvent ? currentEvent.name : 'Ninguno';
+                const eventText = dateEvent ? dateEvent.name : (currentEvent ? currentEvent.name : 'Ninguno');
+                document.getElementById('eventStatus').textContent = eventText;
             }
 
             if (document.getElementById('afkTimer')) {
@@ -1718,10 +1798,9 @@
         function applyUpgradeEffects(upgradeId) {
             switch (upgradeId) {
                 case 'speed':
-                    // Aplicar velocidad base más incremento por nivel
-                    const baseSpeed = 5;
+                    // Recalcular velocidad base con mejoras
                     const speedIncrease = gameData.upgrades.speed.level * 0.5;
-                    const newSpeed = baseSpeed + speedIncrease;
+                    const newSpeed = ball.baseSpeed + speedIncrease;
                     
                     // Mantener la dirección actual
                     const directionX = ball.dx > 0 ? 1 : -1;
@@ -1779,8 +1858,8 @@
 
                 // Resetear pelota a valores iniciales
                 ball.radius = 20;
-                ball.dx = 5;
-                ball.dy = 5;
+                ball.dx = ball.baseSpeed;
+                ball.dy = ball.baseSpeed;
                 ball.color = '#ff0000';
 
                 generateMissions();
@@ -2111,6 +2190,7 @@
         let completedMissions = 0;
         let gameSpeed = 1;
         let lightMode = false;
+        let redeemedCodes = [];
         let achievements = [
             { id: 'first100', name: 'Primer Centenar', desc: 'Alcanza 100 rebotes', target: 100, type: 'bounces', unlocked: false, reward: 500 },
             { id: 'first1000', name: 'Mil Rebotes', desc: 'Alcanza 1000 rebotes', target: 1000, type: 'bounces', unlocked: false, reward: 2000 },
@@ -2191,6 +2271,8 @@
         let nightMode = false;
         let autoClicker = { active: false, level: 0 };
         let idleBonus = 1;
+        let dateEvent = null;
+        let betaStats = { sessionStart: Date.now(), orbsCollected: 0, codesRedeemed: 0, eventsTriggered: 0, crashes: 0 };
 
         // Funciones UI
         // Sistema unificado de paneles
@@ -2206,7 +2288,7 @@
             console.log('Panel visibility:', isVisible);
             
             // Cerrar todos los paneles
-            ['shop', 'config', 'stats', 'missions', 'achievements', 'dailyChallenges', 'importExport', 'premiumShop'].forEach(id => {
+            ['shop', 'config', 'stats', 'missions', 'achievements', 'dailyChallenges', 'importExport', 'premiumShop', 'codes', 'feedback'].forEach(id => {
                 const p = document.getElementById(id);
                 if (p) p.style.display = 'none';
             });
@@ -2226,6 +2308,51 @@
         function closeDailyChallenges() { document.getElementById('dailyChallenges').style.display = 'none'; }
         function closeShop() { document.getElementById('shop').style.display = 'none'; }
         function closePremiumShop() { document.getElementById('premiumShop').style.display = 'none'; }
+        function closeCodes() { document.getElementById('codes').style.display = 'none'; }
+        function closeFeedback() { document.getElementById('feedback').style.display = 'none'; }
+        
+        function submitFeedback() {
+            const type = document.getElementById('feedbackType').value;
+            const text = document.getElementById('feedbackText').value;
+            if (!text.trim()) {
+                showNotification('⚠️ Escribe tu feedback primero');
+                return;
+            }
+            
+            const feedbackData = {
+                type, text, 
+                version: 'Beta 2',
+                timestamp: new Date().toISOString(),
+                stats: betaStats,
+                gameData: { level, coins, diamonds, prestige: gameData.prestige },
+                userAgent: navigator.userAgent,
+                url: window.location.href
+            };
+            
+            // Formato simplificado pero informativo
+            const issueTitle = `[${type.toUpperCase()}] ${text.substring(0, 40)}`;
+            const issueBody = `**${text}**\n\nNivel: ${level} | Coins: ${formatNumber(coins)} | Diamantes: ${diamonds}\nOrbes: ${betaStats.orbsCollected} | Tiempo: ${Math.floor((Date.now() - betaStats.sessionStart) / 60000)}min\n\n*Datos técnicos completos disponibles en console.log del navegador*`;
+            const githubUrl = `https://github.com/thisisfenix/FNCengine/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}&labels=beta-feedback,${type}`;
+            
+            // Siempre guardar en console.log
+            console.log('FEEDBACK BETA 2:', feedbackData);
+            
+            // Mostrar opciones al usuario
+            if (confirm('¿Cómo quieres enviar tu feedback?\n\nOK = GitHub Issue\nCancelar = Copiar texto')) {
+                window.open(githubUrl, '_blank');
+            } else {
+                // Copiar versión simplificada
+                const shortText = `[${type.toUpperCase()}] ${text}\nNivel ${level}, ${formatNumber(coins)} coins, ${diamonds} diamantes\nOrbes: ${betaStats.orbsCollected}, Tiempo: ${Math.floor((Date.now() - betaStats.sessionStart) / 60000)}min\n\n(Datos técnicos en console.log)`;
+                navigator.clipboard.writeText(shortText).then(() => {
+                    showNotification('📋 Feedback copiado');
+                }).catch(() => {
+                    showNotification('📋 Ver consola (F12)');
+                });
+            }
+            
+            document.getElementById('feedbackText').value = '';
+            closeFeedback();
+        }
         
         // Función para tabs del panel unificado
         function openAchievementTab(evt, tabName) {
@@ -2401,8 +2528,8 @@
                 
                 // Resetear bola completamente
                 ball.radius = 20;
-                ball.dx = 5;
-                ball.dy = 5;
+                ball.dx = ball.baseSpeed;
+                ball.dy = ball.baseSpeed;
                 ball.color = '#ff0000';
                 ball.x = width / 2;
                 ball.y = height / 2;
@@ -2446,10 +2573,18 @@
 
         function updateStats() {
             const playTime = Math.floor((Date.now() - playTimeStart) / 60000);
+            const sessionTime = Math.floor((Date.now() - betaStats.sessionStart) / 60000);
             document.getElementById('totalBounces').textContent = totalBounces;
             document.getElementById('totalCoins').textContent = totalCoins;
             document.getElementById('playTime').textContent = playTime + 'm';
             document.getElementById('bestCombo').textContent = bestCombo + 'x';
+            
+            // Estadísticas beta
+            if (document.getElementById('sessionTime')) document.getElementById('sessionTime').textContent = sessionTime + 'm';
+            if (document.getElementById('totalOrbs')) document.getElementById('totalOrbs').textContent = betaStats.orbsCollected;
+            if (document.getElementById('codesRedeemed')) document.getElementById('codesRedeemed').textContent = betaStats.codesRedeemed;
+            if (document.getElementById('eventsTriggered')) document.getElementById('eventsTriggered').textContent = betaStats.eventsTriggered;
+            if (document.getElementById('crashCount')) document.getElementById('crashCount').textContent = betaStats.crashes;
         }
 
         function generateMissions() {
@@ -2771,6 +2906,87 @@
             }
         }
         
+        function redeemCode() {
+            const code = document.getElementById('codeInput').value.toUpperCase().trim();
+            if (!code) return;
+            
+            if (redeemedCodes.includes(code)) {
+                showNotification('❌ Código ya canjeado');
+                return;
+            }
+            
+            const codes = {
+                'WELCOME2': { coins: 5000, diamonds: 15, speedBoost: 120, desc: 'Pack bienvenida beta' },
+                'BETA2024': { coins: 1000, diamonds: 5, desc: '1K coins + 5 diamantes' },
+                'FENIX2024': { coins: 500, diamonds: 3, desc: '500 coins + 3 diamantes' },
+                'BETATEST2': { coins: 2000, diamonds: 10, desc: '2K coins + 10 diamantes' },
+                'FEEDBACK': { coins: 1000, orb: 'mythic', desc: 'Orbe mítico + 1K coins' },
+                'GITHUB': { diamonds: 5, comboBoost: 60, desc: '5 diamantes + combo boost' },
+                'ORBES': { coins: 300, orb: 'rare', desc: '300 coins + orbe raro' },
+                'SPEED': { speedBoost: 60, desc: 'Velocidad x1.5 por 1 min' },
+                'COMBO': { comboBoost: 30, desc: 'Combo x2 por 30 seg' }
+            };
+            
+            if (codes[code]) {
+                const reward = codes[code];
+                redeemedCodes.push(code);
+                
+                if (reward.coins) {
+                    coins += reward.coins;
+                    gameData.coins = coins;
+                }
+                if (reward.diamonds) {
+                    diamonds += reward.diamonds;
+                    gameData.diamonds = diamonds;
+                }
+                if (reward.orb === 'rare') {
+                    const rareOrb = orbTypes.find(o => o.rarity === 'raro');
+                    if (rareOrb) {
+                        orbs.push({
+                            x: width / 2, y: height / 2, radius: 18, type: rareOrb,
+                            alpha: 1, life: 15000, maxLife: 15000, pulsePhase: 0
+                        });
+                    }
+                } else if (reward.orb === 'mythic') {
+                    const mythicOrb = orbTypes.find(o => o.rarity === 'mítico');
+                    if (mythicOrb) {
+                        orbs.push({
+                            x: width / 2, y: height / 2, radius: 25, type: mythicOrb,
+                            alpha: 1, life: 25000, maxLife: 25000, pulsePhase: 0
+                        });
+                    }
+                }
+                if (reward.speedBoost) {
+                    // Aplicar boost temporal menor
+                    const currentSpeedX = Math.abs(ball.dx);
+                    const currentSpeedY = Math.abs(ball.dy);
+                    const directionX = ball.dx > 0 ? 1 : -1;
+                    const directionY = ball.dy > 0 ? 1 : -1;
+                    
+                    ball.dx = (currentSpeedX * 1.5) * directionX;
+                    ball.dy = (currentSpeedY * 1.5) * directionY;
+                    
+                    setTimeout(() => {
+                        ball.dx = currentSpeedX * directionX;
+                        ball.dy = currentSpeedY * directionY;
+                    }, reward.speedBoost * 1000);
+                }
+                if (reward.comboBoost) {
+                    combo *= 2;
+                    setTimeout(() => {
+                        combo = Math.max(1, combo / 2);
+                    }, reward.comboBoost * 1000);
+                }
+                
+                showNotification(`✅ Código canjeado: ${reward.desc}`);
+                document.getElementById('codeInput').value = '';
+                betaStats.codesRedeemed++;
+                updateUI();
+            } else {
+                showNotification('❌ Código inválido');
+            }
+        }
+        
         function buyAutoClicker(level) {
             const costs = { 1: 100, 2: 300, 3: 1000 };
             const cost = costs[level];
@@ -2810,6 +3026,16 @@
             autoSave();
             generateResources();
             generateEvent();
+            
+            // Verificar eventos por fecha
+            const newDateEvent = checkDateEvents();
+            if (newDateEvent && !dateEvent) {
+                dateEvent = newDateEvent;
+                showNotification(`🎉 ${dateEvent.name} activo!`);
+                betaStats.eventsTriggered++;
+            } else if (!newDateEvent && dateEvent) {
+                dateEvent = null;
+            }
             if (eventTimeLeft > 0) {
                 eventTimeLeft--;
                 if (!gameData.events) gameData.events = { current: null, timeLeft: 0 };
@@ -2854,6 +3080,9 @@
                 }
                 updateUI();
             }
+            
+            // Actualizar estadísticas en tiempo real
+            updateStats();
             
             // Reset diario de desafíos (cada 24 horas)
             const now = Date.now();
@@ -3031,8 +3260,8 @@
                 
                 // Resetear pelota a valores iniciales
                 ball.radius = 20;
-                ball.dx = 5;
-                ball.dy = 5;
+                ball.dx = ball.baseSpeed;
+                ball.dy = ball.baseSpeed;
                 ball.color = '#ff0000';
                 
                 generateMissions();
@@ -3229,6 +3458,7 @@
                 gameData.events.current = currentEvent;
                 gameData.events.timeLeft = eventTimeLeft;
                 showNotification(`🎪 Evento iniciado: ${currentEvent.name}`);
+                betaStats.eventsTriggered++;
             }
         }
         
@@ -3564,6 +3794,7 @@
             if (orb.type.rarity === 'épico' || orb.type.rarity === 'legendario' || orb.type.rarity === 'mítico') {
                 showNotification(`${rarityEmoji[orb.type.rarity]} ${orb.type.name} recogido!`);
             }
+            betaStats.orbsCollected++;
             updateUI();
         }
         
@@ -3598,6 +3829,45 @@
             });
         }
         
+        function checkDateEvents() {
+            const now = new Date();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            const dayOfWeek = now.getDay();
+            
+            // Fin de semana
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                return { name: 'Fin de Semana', desc: 'x2 monedas', multiplier: 2, type: 'coins' };
+            }
+            
+            // Halloween (Octubre)
+            if (month === 10) {
+                return { name: 'Halloween', desc: '+50% diamantes', multiplier: 1.5, type: 'diamonds' };
+            }
+            
+            // Navidad (Diciembre)
+            if (month === 12) {
+                return { name: 'Navidad', desc: 'x3 experiencia', multiplier: 3, type: 'experience' };
+            }
+            
+            // Año Nuevo (1 de Enero)
+            if (month === 1 && day === 1) {
+                return { name: 'Año Nuevo', desc: 'x1.5 todo', multiplier: 1.5, type: 'all' };
+            }
+            
+            // San Valentín (14 de Febrero)
+            if (month === 2 && day === 14) {
+                return { name: 'San Valentín', desc: 'Combo infinito', multiplier: 1, type: 'combo' };
+            }
+            
+            // San Patricio (17 de Marzo)
+            if (month === 3 && day === 17) {
+                return { name: 'San Patricio', desc: 'x5 suerte diamantes', multiplier: 5, type: 'diamonds' };
+            }
+            
+            return null;
+        }
+        
         function toggleControlsVisibility() {
             const controls = document.getElementById('controls');
             const toggleBtn = document.getElementById('toggleControls');
@@ -3616,8 +3886,26 @@
             }
         }
 
+        // Detector de errores automático
+        window.addEventListener('error', (e) => {
+            betaStats.crashes++;
+            console.error('ERROR DETECTADO:', {
+                message: e.message,
+                filename: e.filename,
+                lineno: e.lineno,
+                colno: e.colno,
+                stack: e.error?.stack,
+                gameState: { level, coins, diamonds, prestige: gameData.prestige }
+            });
+            showNotification('⚠️ Error detectado - Ver consola (F12)');
+        });
+        
         // Inicializar el juego
         window.addEventListener('load', () => {
+            dateEvent = checkDateEvents();
+            if (dateEvent) {
+                showNotification(`🎉 ${dateEvent.name} activo! ${dateEvent.desc}`);
+            }
             init();
             generateMissions();
             generateAdvancedMissions();
@@ -3625,6 +3913,14 @@
             updateDailyChallengesDisplay();
             selectRandomDailyChallenge();
             setInterval(updateResetTimer, 1000);
+            
+            // Mensaje de bienvenida para beta testers
+            if (!localStorage.getItem('betaWelcomeShown')) {
+                setTimeout(() => {
+                    showNotification('🎉 ¡Bienvenido a Beta 2! Usa WELCOME2 para empezar');
+                    localStorage.setItem('betaWelcomeShown', 'true');
+                }, 3000);
+            }
             
             // Ocultar flecha después de 15 segundos o al hacer clic en cualquier botón
             setTimeout(() => {
