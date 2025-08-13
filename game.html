@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Circle Bounce Coins Ultimate - Enhanced Edition Beta 2</title>
+    <title>Circle Bounce Coins Ultimate - Enhanced Edition</title>
     <style>
         :root {
             --primary: #667eea;
@@ -17,6 +17,7 @@
             --light: #ecf0f1;
             --glass: rgba(255, 255, 255, 0.1);
             --glass-border: rgba(255, 255, 255, 0.2);
+            --ui-scale: 1;
         }
 
         body {
@@ -62,6 +63,8 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
             min-width: 280px;
+            transform: scale(var(--ui-scale));
+            transform-origin: top left;
         }
         
         #controls {
@@ -135,6 +138,8 @@
             font-size: clamp(11px, 1.5vw, 14px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             pointer-events: auto;
+            transform: scale(var(--ui-scale));
+            transform-origin: top right;
         }
 
         .diamond-text {
@@ -580,13 +585,116 @@
                 max-width: calc(100vw - 30px);
             }
         }
+        
+        .config-section {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            backdrop-filter: blur(5px);
+        }
+        
+        .config-section h4 {
+            margin: 0 0 10px 0;
+            color: #fff;
+            font-size: 16px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 8px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            font-weight: bold;
+        }
+        
+        .config-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 12px 0;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+        }
+        
+        .config-item label {
+            flex: 1;
+            margin-right: 15px;
+            color: #fff;
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
+        .config-item select,
+        .config-item input[type="range"],
+        .config-item input[type="number"],
+        .config-item input[type="checkbox"] {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            color: #fff;
+            padding: 8px 12px;
+            min-width: 120px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .config-item select option {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .config-item select:focus,
+        .config-item input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+        }
+        
+        .config-item input[type="checkbox"] {
+            min-width: auto;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .config-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .config-buttons button {
+            flex: 1;
+            font-size: 12px;
+            padding: 8px 12px;
+            font-weight: bold;
+        }
+        
+        .config-main-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .config-main-buttons button {
+            flex: 1;
+            min-width: 100px;
+            font-size: 13px;
+            padding: 10px 15px;
+            font-weight: bold;
+        }
     </style>
 </head>
 
 <body>
     <div id="loadingScreen"
         style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #111; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; color: white;">
-        <h1>Circle Bounce Coins Ultimate - Enhanced Beta 2</h1>
+        <h1>Circle Bounce Coins Ultimate - Enhanced Edition</h1>
         <div style="width: 200px; height: 200px; position: relative; margin: 20px;">
             <div
                 style="width: 100%; height: 100%; border: 10px solid #333; border-top-color: var(--hud-color); border-radius: 50%; animation: spin 1s linear infinite;">
@@ -628,8 +736,8 @@
         
         <button id="toggleControls" onclick="toggleControlsVisibility()">▲</button>
         
-        <div id="betaIndicator" style="position: fixed; top: 5px; left: 5px; background: rgba(255, 165, 0, 0.8); color: black; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; z-index: 1000; pointer-events: none;">
-            BETA 2
+        <div id="versionIndicator" style="position: fixed; bottom: 5px; left: 5px; background: rgba(0, 0, 0, 0.6); color: white; padding: 3px 6px; border-radius: 4px; font-size: 9px; z-index: 1000; pointer-events: none;">
+            v1.0
         </div>
         </div>
 
@@ -650,48 +758,173 @@
 
     <!-- Config Panel -->
     <div id="config">
-        <h3>Configuración</h3>
-        <div style="margin: 10px 0;">
-            <label>Tema: </label>
-            <button id="themeToggle" onclick="toggleTheme()">Modo Claro</button>
+        <h3>⚙️ Configuración</h3>
+        
+        <!-- Apartado: Apariencia -->
+        <div class="config-section">
+            <h4>🎨 Apariencia</h4>
+            <div class="config-item">
+                <label>Tema:</label>
+                <button id="themeToggle" onclick="toggleTheme()">Modo Claro</button>
+            </div>
+            <div class="config-item">
+                <label>Tamaño de UI:</label>
+                <input type="range" id="uiScale" min="0.8" max="1.5" step="0.1" value="1" oninput="updateUIScale()">
+                <span id="uiScaleValue">100%</span>
+            </div>
+            <div class="config-item premium-feature" style="opacity: 0.5;">
+                <div class="premium-badge">PREMIUM</div>
+                <label>Color de la bola:</label>
+                <input type="color" id="ballColor" value="#ff0000" disabled>
+            </div>
+            <div class="config-item">
+                <label>Fondo del juego:</label>
+                <select id="backgroundType" style="background: var(--glass); color: white; border: 1px solid var(--glass-border); padding: 5px;">
+                    <option value="gradient">Degradado</option>
+                    <option value="solid">Sólido</option>
+                    <option value="stars">Estrellas</option>
+                    <option value="minimal">Minimalista</option>
+                </select>
+            </div>
         </div>
-        <div style="margin: 10px 0;">
-            <label>Sonidos: </label>
-            <input type="checkbox" id="soundToggle" checked>
+        
+        <!-- Apartado: Rendimiento -->
+        <div class="config-section">
+            <h4>⚡ Rendimiento</h4>
+            <div class="config-item">
+                <label>Calidad gráfica:</label>
+                <select id="graphicsQuality" style="background: var(--glass); color: white; border: 1px solid var(--glass-border); padding: 5px;">
+                    <option value="low">Baja (móvil)</option>
+                    <option value="medium" selected>Media</option>
+                    <option value="high">Alta (PC)</option>
+                    <option value="ultra">Ultra (PC potente)</option>
+                </select>
+            </div>
+            <div class="config-item">
+                <label>FPS objetivo:</label>
+                <select id="targetFPS" style="background: var(--glass); color: white; border: 1px solid var(--glass-border); padding: 5px;">
+                    <option value="30">30 FPS (móvil)</option>
+                    <option value="60" selected>60 FPS</option>
+                    <option value="120">120 FPS (PC)</option>
+                    <option value="144">144 FPS (PC gaming)</option>
+                </select>
+            </div>
+            <div class="config-item">
+                <label>Partículas:</label>
+                <input type="range" id="particleCountSlider" min="0" max="100" value="10" oninput="updateParticleValue()">
+                <span id="particleValue">10</span>
+            </div>
+            <div class="config-item">
+                <label>Modo rendimiento:</label>
+                <input type="checkbox" id="performanceMode">
+            </div>
+            <div class="config-item">
+                <label>Ahorro de batería:</label>
+                <input type="checkbox" id="batterySaver">
+            </div>
+            <div class="config-item">
+                <label>Reducir animaciones:</label>
+                <input type="checkbox" id="reduceAnimations">
+            </div>
         </div>
-        <div style="margin: 10px 0;">
-            <label>Modo rendimiento: </label>
-            <input type="checkbox" id="performanceMode">
+        
+        <!-- Apartado: Juego -->
+        <div class="config-section">
+            <h4>🎮 Juego</h4>
+            <div class="config-item">
+                <label>Velocidad de juego:</label>
+                <input type="range" id="gameSpeedSlider" min="0.5" max="3" step="0.1" value="1" oninput="updateSpeedValue()">
+                <span id="speedValue">1.0x</span>
+            </div>
+            <div class="config-item">
+                <label>Auto-pausa en segundo plano:</label>
+                <input type="checkbox" id="pauseBackground" checked>
+            </div>
+            <div class="config-item">
+                <label>Auto-guardado:</label>
+                <select id="autoSaveInterval" style="background: var(--glass); color: white; border: 1px solid var(--glass-border); padding: 5px;">
+                    <option value="5">Cada 5 segundos</option>
+                    <option value="10" selected>Cada 10 segundos</option>
+                    <option value="30">Cada 30 segundos</option>
+                    <option value="60">Cada minuto</option>
+                </select>
+            </div>
+            <div class="config-item">
+                <label>Confirmación de prestigio:</label>
+                <input type="checkbox" id="confirmPrestige" checked>
+            </div>
         </div>
-        <div style="margin: 10px 0;">
-            <label>Velocidad de juego: </label>
-            <input type="range" id="gameSpeed" min="0.5" max="2" step="0.1" value="1">
-            <span id="speedValue">1x</span>
+        
+        <!-- Apartado: Audio y Notificaciones -->
+        <div class="config-section">
+            <h4>🔊 Audio & Notificaciones</h4>
+            <div class="config-item">
+                <label>Sonidos:</label>
+                <input type="checkbox" id="soundToggle" checked>
+            </div>
+            <div class="config-item">
+                <label>Volumen:</label>
+                <input type="range" id="volumeSlider" min="0" max="100" value="50" oninput="updateVolumeValue()">
+                <span id="volumeValue">50%</span>
+            </div>
+            <div class="config-item">
+                <label>Notificaciones:</label>
+                <input type="checkbox" id="notificationsToggle" checked>
+            </div>
+            <div class="config-item">
+                <label>Vibración (móvil):</label>
+                <input type="checkbox" id="vibrationToggle" checked>
+            </div>
+            <div class="config-item">
+                <label>Sonidos de logros:</label>
+                <input type="checkbox" id="achievementSounds" checked>
+            </div>
         </div>
-        <div style="margin: 10px 0;">
-            <label>Partículas: </label>
-            <input type="range" id="particleCount" min="5" max="50" value="10">
-            <span id="particleValue">10</span>
+        
+        <!-- Apartado: Guardado -->
+        <div class="config-section">
+            <h4>💾 Guardado</h4>
+            <div class="config-item">
+                <label>Slot de guardado:</label>
+                <select id="saveSlot" style="background: var(--glass); color: white; border: 1px solid var(--glass-border); padding: 5px;">
+                    <option value="1">Slot 1</option>
+                    <option value="2">Slot 2</option>
+                    <option value="3">Slot 3</option>
+                </select>
+            </div>
+            <div class="config-buttons">
+                <button onclick="saveToSlot()">💾 Guardar Slot</button>
+                <button onclick="loadFromSlot()">📁 Cargar Slot</button>
+            </div>
         </div>
-        <div class="premium-feature" style="margin: 10px 0; opacity: 0.5;">
-            <div class="premium-badge">PREMIUM</div>
-            <label>Color de la bola: </label>
-            <input type="color" id="ballColor" value="#ff0000" disabled>
+        
+        <!-- Apartado: Avanzado -->
+        <div class="config-section">
+            <h4>🔧 Avanzado</h4>
+            <div class="config-item">
+                <label>Modo desarrollador:</label>
+                <input type="checkbox" id="devMode">
+            </div>
+            <div class="config-item">
+                <label>Mostrar FPS:</label>
+                <input type="checkbox" id="showFPS">
+            </div>
+            <div class="config-item">
+                <label>Debug de colisiones:</label>
+                <input type="checkbox" id="debugCollisions">
+            </div>
+            <div class="config-buttons">
+                <button onclick="exportSettings()">📤 Exportar Config</button>
+                <button onclick="importSettings()">📥 Importar Config</button>
+            </div>
         </div>
-        <div style="margin: 10px 0;">
-            <label>Slot de guardado: </label>
-            <select id="saveSlot">
-                <option value="1">Slot 1</option>
-                <option value="2">Slot 2</option>
-                <option value="3">Slot 3</option>
-            </select>
-        </div>
-        <div style="margin-top: 15px;">
-            <button onclick="applyConfig()">Aplicar</button>
-            <button onclick="saveToSlot()">Guardar Slot</button>
-            <button onclick="loadFromSlot()">Cargar Slot</button>
-            <button onclick="resetGame()">Reset Total</button>
-            <button onclick="closeConfig()">Cerrar</button>
+        
+        <!-- Botones principales -->
+        <div class="config-main-buttons">
+            <button onclick="applyConfig()" style="background: var(--success);">✓ Aplicar Todo</button>
+            <button onclick="resetSettings()" style="background: var(--warning); color: black;">🔄 Restaurar</button>
+            <button onclick="resetGame()" style="background: var(--danger);">⚠️ Reset Total</button>
+            <button onclick="closeConfig()">❌ Cerrar</button>
         </div>
     </div>
 
@@ -1294,7 +1527,7 @@
             <p>1. Escribe tu feedback y haz clic en "Enviar"</p>
             <p>2. Elige: GitHub Issue (recomendado) o copiar al portapapeles</p>
             <p>3. Si eliges portapapeles, envíamelo por Discord/email</p>
-            <p>Versión: Beta 2 | Build: <span id="buildNumber">2024.12</span></p>
+            <p>Versión: 1.0 | Build: <span id="buildNumber">2024.12</span></p>
         </div>
     </div>
 
@@ -1333,7 +1566,6 @@
     </div>
 
     <script>
-        // Variables del juego
         let gameData = {
             coins: 0,
             diamonds: 0,
@@ -1394,7 +1626,6 @@
         ];
         let activeOrbEffects = [];
 
-        // Inicialización
         function init() {
             canvas = document.getElementById('gameCanvas');
             ctx = canvas.getContext('2d');
@@ -1404,17 +1635,18 @@
             ball.x = width / 2;
             ball.y = height / 2;
             
-            // Asegurar velocidad inicial correcta
             ball.dx = ball.baseSpeed;
             ball.dy = ball.baseSpeed;
 
             loadGame();
             setupEventListeners();
             
-            // Aplicar efectos de velocidad después de cargar
             if (gameData.upgrades.speed.level > 0) {
                 applyUpgradeEffects('speed');
             }
+            
+            lastFrameTime = performance.now();
+            lastFPSUpdate = performance.now();
 
             setTimeout(() => {
                 document.getElementById('loadingScreen').style.display = 'none';
@@ -1456,19 +1688,65 @@
             window.addEventListener('focus', handleWindowFocus);
         }
 
+        let targetFPS = 60;
+        let fpsInterval = 1000 / targetFPS;
+        let then = performance.now();
+        
         function gameLoop() {
-            if (!gamePaused) {
-                update();
-                render();
-            }
             requestAnimationFrame(gameLoop);
+            
+            const now = performance.now();
+            const elapsed = now - then;
+            
+            // Control de FPS real
+            if (elapsed > fpsInterval) {
+                then = now - (elapsed % fpsInterval);
+                
+                // Calcular FPS real
+                frameCount++;
+                if (now - lastFPSUpdate >= 1000) {
+                    currentFPS = Math.round(frameCount * 1000 / (now - lastFPSUpdate));
+                    frameCount = 0;
+                    lastFPSUpdate = now;
+                    
+                    // Actualizar display de FPS
+                    const fpsDisplay = document.getElementById('fpsDisplay');
+                    if (fpsDisplay) {
+                        fpsDisplay.textContent = `FPS: ${currentFPS} / ${targetFPS}`;
+                    }
+                    
+                    // Actualizar stats panel
+                    const fpsCounter = document.getElementById('fpsCounter');
+                    if (fpsCounter) {
+                        fpsCounter.textContent = currentFPS;
+                    }
+                }
+                
+                // Optimización automática
+                if (elapsed > 33 && !batterySaverMode && particles.length > 20) {
+                    particles.splice(0, Math.floor(particles.length * 0.3));
+                }
+                
+                if (!gamePaused) {
+                    update();
+                    render();
+                }
+            }
+        }
+        
+        function updateFPSTarget() {
+            const newTargetFPS = parseInt(document.getElementById('targetFPS')?.value || 60);
+            if (newTargetFPS !== targetFPS) {
+                targetFPS = newTargetFPS;
+                fpsInterval = 1000 / targetFPS;
+                console.log(`FPS objetivo cambiado a: ${targetFPS}`);
+            }
         }
 
         function update() {
             ball.x += ball.dx * gameSpeed;
             ball.y += ball.dy * gameSpeed;
 
-            // Evitar que la pelota se quede atascada
             if (ball.x <= ball.radius) {
                 ball.x = ball.radius + 1;
                 ball.dx = Math.abs(ball.dx);
@@ -1499,8 +1777,15 @@
         }
 
         function render() {
-            ctx.fillStyle = '#222';
-            ctx.fillRect(0, 0, width, height);
+            // Optimización: Clear solo área necesaria
+            if (performanceMode) {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = 'rgba(34, 34, 34, 0.1)';
+                ctx.fillRect(0, 0, width, height);
+            } else {
+                ctx.fillStyle = '#222';
+                ctx.fillRect(0, 0, width, height);
+            }
 
             // Dibujar orbes
             orbs.forEach(orb => {
@@ -1547,48 +1832,48 @@
                 ctx.fill();
             }
 
-            // Dibujar partículas
-            particles.forEach(p => {
-                ctx.globalAlpha = p.alpha;
-                ctx.fillStyle = p.color;
-                ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
-            });
-            ctx.globalAlpha = 1;
+            // Dibujar partículas (optimizado)
+            if (particles.length > 0) {
+                particles.forEach(p => {
+                    // Culling: solo dibujar partículas visibles
+                    if (p.x > -10 && p.x < width + 10 && p.y > -10 && p.y < height + 10) {
+                        ctx.globalAlpha = p.alpha;
+                        ctx.fillStyle = p.color;
+                        ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+                    }
+                });
+                ctx.globalAlpha = 1;
+            }
         }
 
         function handleBounce() {
             bounces++;
             gameData.bounces = bounces;
 
-            // Calcular coins ganadas MEJORADAS PARA EL JUGADOR
-            let baseCoins = 2 + Math.floor(level / 10); // Más coins base
-            let coinMultiplier = Math.pow(1.15, gameData.upgrades.coinMult.level); // Mejor multiplicador
-            let comboMultiplier = Math.min(combo * (1 + gameData.upgrades.combo.level * 0.08), 30); // Combo más efectivo
-            let prestigeMultiplier = (1 + gameData.prestige * 0.1); // Mejor bonus prestigio
+            let baseCoins = 2 + Math.floor(level / 10);
+            let coinMultiplier = Math.pow(1.15, gameData.upgrades.coinMult.level);
+            let comboMultiplier = Math.min(combo * (1 + gameData.upgrades.combo.level * 0.08), 30);
+            let prestigeMultiplier = (1 + gameData.prestige * 0.1);
 
-            // Crítico mejorado
             let criticalMultiplier = 1;
-            if (Math.random() < Math.min(gameData.upgrades.critical.level * 0.02, 0.25)) { // Más chance crítico
-                criticalMultiplier = 3; // Críticos más poderosos
-                // Actualizar progreso de críticos
+            if (Math.random() < Math.min(gameData.upgrades.critical.level * 0.02, 0.25)) {
+                criticalMultiplier = 3;
                 if (currentDailyChallenge && currentDailyChallenge.id === 'critical') {
                     if (!currentDailyChallenge.criticalHits) currentDailyChallenge.criticalHits = 0;
                     currentDailyChallenge.criticalHits++;
                 }
             }
 
-            let coinsGained = Math.floor(baseCoins * coinMultiplier * comboMultiplier * prestigeMultiplier * criticalMultiplier * 0.8); // Más coins
-
-            // Aplicar efectos de colección
+            let coinsGained = Math.floor(baseCoins * coinMultiplier * comboMultiplier * prestigeMultiplier * criticalMultiplier * 0.8);
             const effects = applyCollectionEffects();
             coinsGained = Math.floor(coinsGained * effects.coinMultiplier);
             
-            // Aplicar eventos temporales
+
             if (currentEvent && currentEvent.effect === 'coins') {
                 coinsGained *= 3;
             }
 
-            // Aplicar investigaciones
+
             if (gameData.research.unlocked.includes('efficiency1')) coinsGained = Math.floor(coinsGained * 1.25);
             if (gameData.research.unlocked.includes('efficiency2')) coinsGained = Math.floor(coinsGained * 1.5);
             if (gameData.research.unlocked.includes('cosmic')) coinsGained = Math.floor(coinsGained * 5);
@@ -1622,58 +1907,73 @@
             coins += coinsGained;
             gameData.coins = coins;
 
-            // Experiencia mejorada
-            let expGained = Math.floor(coinsGained / 5); // Más experiencia base
-            if (gameData.upgrades.expMult.level > 0) expGained *= Math.pow(2.5, gameData.upgrades.expMult.level); // Mejor multiplicador
+            let expGained = Math.floor(coinsGained / 5);
+            if (gameData.upgrades.expMult.level > 0) expGained *= Math.pow(2.5, gameData.upgrades.expMult.level);
             expGained = Math.floor(expGained * effects.expMultiplier);
             experience += expGained;
             gameData.experience = experience;
 
-            // Generación de diamantes MEJORADA
-            let diamondChance = 0.015 + gameData.upgrades.diamondGen.level * 0.005; // Más chance
+            let diamondChance = 0.015 + gameData.upgrades.diamondGen.level * 0.005;
             if (currentEvent && currentEvent.effect === 'diamonds') diamondChance *= 2;
             if (dateEvent && dateEvent.type === 'diamonds') diamondChance *= dateEvent.multiplier;
             
             if (Math.random() < diamondChance) {
-                let diamondsGained = Math.floor(Math.random() * 3) + 1; // Más diamantes
+                let diamondsGained = Math.floor(Math.random() * 3) + 1;
                 if (currentEvent && currentEvent.effect === 'diamonds') diamondsGained = Math.floor(diamondsGained * 2);
                 diamonds += diamondsGained;
                 gameData.diamonds = diamonds;
             }
 
-            // Subir de nivel (más rápido)
+
             if (bounces >= level * 75) {
                 level++;
                 gameData.level = level;
-                // Solo notificar niveles importantes
+
                 if (level % 5 === 0 || level <= 10) {
                     showNotification(`¡Nivel ${level} alcanzado!`);
                 }
             }
 
-            // Combo mejorado para el jugador
-            let comboDecay = 0.01 - (gameData.upgrades.combo.level * 0.008); // Menos decay
+            let comboDecay = 0.01 - (gameData.upgrades.combo.level * 0.008);
             if (currentEvent && currentEvent.effect === 'combo') comboDecay = 0;
             combo = Math.max(1, combo - comboDecay);
-            combo = Math.min(combo + 0.15, 15 + gameData.upgrades.combo.level); // Más combo y límite más alto
+            combo = Math.min(combo + 0.15, 15 + gameData.upgrades.combo.level);
 
             createParticles(ball.x, ball.y);
             updateUI();
         }
 
         function createParticles(x, y) {
-            const count = document.getElementById('particleCount') ? parseInt(document.getElementById('particleCount').value) : 10;
+            const count = document.getElementById('particleCountSlider') ? parseInt(document.getElementById('particleCountSlider').value) : 10;
+            
             for (let i = 0; i < count; i++) {
-                particles.push({
-                    x: x,
-                    y: y,
-                    dx: (Math.random() - 0.5) * 10,
-                    dy: (Math.random() - 0.5) * 10,
-                    life: 1000,
-                    maxLife: 1000,
-                    alpha: 1,
-                    color: '#4CAF50'
-                });
+                let particle;
+                
+                // Reutilizar partícula del pool si está disponible
+                if (particlePool.length > 0) {
+                    particle = particlePool.pop();
+                    particle.x = x;
+                    particle.y = y;
+                    particle.dx = (Math.random() - 0.5) * 10;
+                    particle.dy = (Math.random() - 0.5) * 10;
+                    particle.life = 1000;
+                    particle.maxLife = 1000;
+                    particle.alpha = 1;
+                    particle.color = '#4CAF50';
+                } else {
+                    particle = {
+                        x: x,
+                        y: y,
+                        dx: (Math.random() - 0.5) * 10,
+                        dy: (Math.random() - 0.5) * 10,
+                        life: 1000,
+                        maxLife: 1000,
+                        alpha: 1,
+                        color: '#4CAF50'
+                    };
+                }
+                
+                particles.push(particle);
             }
             
             // Actualizar progreso de partículas
@@ -1684,13 +1984,25 @@
         }
 
         function updateParticles() {
-            particles = particles.filter(particle => {
+            // Optimización: Limitar partículas máximas
+            const maxParticles = batterySaverMode ? 20 : (performanceMode ? 50 : 100);
+            if (particles.length > maxParticles) {
+                particles.splice(0, particles.length - maxParticles);
+            }
+            
+            // Actualizar partículas con pooling
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const particle = particles[i];
                 particle.x += particle.dx;
                 particle.y += particle.dy;
                 particle.life -= 16;
                 particle.alpha = particle.life / particle.maxLife;
-                return particle.life > 0;
-            });
+                
+                if (particle.life <= 0) {
+                    // Reciclar partícula en pool
+                    particlePool.push(particles.splice(i, 1)[0]);
+                }
+            }
         }
 
         function updateUI() {
@@ -1831,8 +2143,14 @@
         }
 
         function doPrestige() {
+            const confirmPrestige = document.getElementById('confirmPrestige')?.checked ?? true;
+            
             if (level >= 25 && coins >= 500000) {
-                let prestigePointsGained = Math.floor(Math.log10(coins / 500000) + 2); // Más puntos de prestigio
+                if (confirmPrestige && !confirm('¿Estás seguro de que quieres prestigiar? Perderás todo tu progreso actual.')) {
+                    return;
+                }
+                
+                let prestigePointsGained = Math.floor(Math.log10(coins / 500000) + 2);
 
                 coins = 0;
                 bounces = 0;
@@ -1856,7 +2174,6 @@
                 gameData.prestigePoints += prestigePointsGained;
                 gameData.prestige++;
 
-                // Resetear pelota a valores iniciales
                 ball.radius = 20;
                 ball.dx = ball.baseSpeed;
                 ball.dy = ball.baseSpeed;
@@ -2273,6 +2590,13 @@
         let idleBonus = 1;
         let dateEvent = null;
         let betaStats = { sessionStart: Date.now(), orbsCollected: 0, codesRedeemed: 0, eventsTriggered: 0, crashes: 0 };
+        let frameSkip = 0;
+        let frameCount = 0;
+        let lastFrameTime = 0;
+        let lastFPSUpdate = performance.now();
+        let currentFPS = 60;
+        let particlePool = [];
+        let batterySaverMode = false;
 
         // Funciones UI
         // Sistema unificado de paneles
@@ -2442,24 +2766,257 @@
             if (lightMode) {
                 root.style.setProperty('--glass', 'rgba(0, 0, 0, 0.1)');
                 root.style.setProperty('--glass-border', 'rgba(0, 0, 0, 0.2)');
-                document.body.style.background = 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)';
+                document.body.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
+                if (canvas) canvas.style.background = 'radial-gradient(circle at center, rgba(200, 200, 200, 0.3) 0%, rgba(150, 150, 150, 0.5) 100%)';
                 document.getElementById('themeToggle').textContent = 'Modo Oscuro';
             } else {
                 root.style.setProperty('--glass', 'rgba(255, 255, 255, 0.1)');
                 root.style.setProperty('--glass-border', 'rgba(255, 255, 255, 0.2)');
                 document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                if (canvas) canvas.style.background = 'radial-gradient(circle at center, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.3) 100%)';
                 document.getElementById('themeToggle').textContent = 'Modo Claro';
             }
         }
+        
+        function updateVolumeValue() {
+            const value = document.getElementById('volumeSlider').value;
+            document.getElementById('volumeValue').textContent = value + '%';
+        }
+        
+        function resetSettings() {
+            if (confirm('¿Restaurar toda la configuración a valores por defecto?')) {
+                localStorage.removeItem('gameConfig');
+                location.reload();
+            }
+        }
+        
+        function exportSettings() {
+            const config = localStorage.getItem('gameConfig') || '{}';
+            const blob = new Blob([config], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'fnc_config.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showNotification('📤 Configuración exportada');
+        }
+        
+        function importSettings() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const config = JSON.parse(e.target.result);
+                            localStorage.setItem('gameConfig', JSON.stringify(config));
+                            loadConfig();
+                            showNotification('📥 Configuración importada');
+                        } catch (error) {
+                            showNotification('⚠️ Error al importar configuración');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
 
+        function updateSpeedValue() {
+            const value = document.getElementById('gameSpeedSlider').value;
+            document.getElementById('speedValue').textContent = parseFloat(value).toFixed(1) + 'x';
+        }
+        
+        function updateParticleValue() {
+            const value = document.getElementById('particleCountSlider').value;
+            document.getElementById('particleValue').textContent = value;
+        }
+        
+        function updateUIScale() {
+            const value = document.getElementById('uiScale').value;
+            document.getElementById('uiScaleValue').textContent = Math.round(value * 100) + '%';
+        }
+        
         function applyConfig() {
             soundEnabled = document.getElementById('soundToggle').checked;
             performanceMode = document.getElementById('performanceMode').checked;
-            gameSpeed = parseFloat(document.getElementById('gameSpeed').value);
-            document.getElementById('speedValue').textContent = gameSpeed + 'x';
-            document.getElementById('particleValue').textContent = document.getElementById('particleCount').value;
+            batterySaverMode = document.getElementById('batterySaver').checked;
+            gameSpeed = parseFloat(document.getElementById('gameSpeedSlider').value);
+            
+            // Aplicar calidad gráfica
+            const quality = document.getElementById('graphicsQuality').value;
+            
+            switch(quality) {
+                case 'low':
+                    document.getElementById('particleCountSlider').value = batterySaverMode ? 0 : 5;
+                    break;
+                case 'medium':
+                    document.getElementById('particleCountSlider').value = batterySaverMode ? 5 : 15;
+                    break;
+                case 'high':
+                    document.getElementById('particleCountSlider').value = batterySaverMode ? 10 : 30;
+                    break;
+                case 'ultra':
+                    document.getElementById('particleCountSlider').value = batterySaverMode ? 15 : 50;
+                    break;
+            }
+            
+            // Aplicar optimizaciones de batería
+            if (batterySaverMode) {
+                gameSpeed = Math.min(gameSpeed, 1.5);
+                document.getElementById('gameSpeedSlider').max = '1.5';
+            } else {
+                document.getElementById('gameSpeedSlider').max = '3';
+            }
+            
+            // Aplicar escala de UI
+            const uiScale = document.getElementById('uiScale').value;
+            document.documentElement.style.setProperty('--ui-scale', uiScale);
+            
+            // Aplicar tipo de fondo
+            const backgroundType = document.getElementById('backgroundType').value;
+            applyBackgroundType(backgroundType);
+            
+            // Actualizar FPS objetivo
+            updateFPSTarget();
+            
+            // Aplicar auto-save interval
+            const autoSaveInterval = parseInt(document.getElementById('autoSaveInterval').value) * 1000;
+            if (window.autoSaveTimer) clearInterval(window.autoSaveTimer);
+            window.autoSaveTimer = setInterval(autoSave, autoSaveInterval);
+            
+            // Aplicar mostrar FPS
+            const showFPS = document.getElementById('showFPS').checked;
+            let fpsDisplay = document.getElementById('fpsDisplay');
+            if (showFPS && !fpsDisplay) {
+                fpsDisplay = document.createElement('div');
+                fpsDisplay.id = 'fpsDisplay';
+                fpsDisplay.style.cssText = 'position: fixed; top: 5px; left: 5px; color: white; font-size: 12px; z-index: 1001; background: rgba(0,0,0,0.8); padding: 6px 10px; border-radius: 6px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2);';
+                fpsDisplay.textContent = 'FPS: --';
+                document.body.appendChild(fpsDisplay);
+            } else if (!showFPS && fpsDisplay) {
+                fpsDisplay.remove();
+            }
+            
+            updateSpeedValue();
+            updateParticleValue();
+            updateUIScale();
+            updateVolumeValue();
+            
             if (premiumUnlocked) ball.color = document.getElementById('ballColor').value;
+            
+            // Guardar configuración completa
+            const config = {
+                soundEnabled,
+                performanceMode,
+                gameSpeed,
+                graphicsQuality: quality,
+                targetFPS: document.getElementById('targetFPS').value,
+                uiScale,
+                vibration: document.getElementById('vibrationToggle').checked,
+                notifications: document.getElementById('notificationsToggle').checked,
+                batterySaver: batterySaverMode,
+                reduceAnimations: document.getElementById('reduceAnimations').checked,
+                pauseBackground: document.getElementById('pauseBackground').checked,
+                backgroundType: document.getElementById('backgroundType').value,
+                volume: document.getElementById('volumeSlider').value,
+                achievementSounds: document.getElementById('achievementSounds').checked,
+                autoSaveInterval: document.getElementById('autoSaveInterval').value,
+                confirmPrestige: document.getElementById('confirmPrestige').checked,
+                devMode: document.getElementById('devMode').checked,
+                showFPS: document.getElementById('showFPS').checked,
+                debugCollisions: document.getElementById('debugCollisions').checked,
+                lightMode
+            };
+            localStorage.setItem('gameConfig', JSON.stringify(config));
+            
+            showNotification('⚙️ Configuración aplicada');
             saveGame();
+        }
+        
+        function applyBackgroundType(type) {
+            const canvas = document.getElementById('gameCanvas');
+            if (!canvas) return;
+            
+            switch(type) {
+                case 'gradient':
+                    canvas.style.background = 'radial-gradient(circle at center, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.3) 100%)';
+                    break;
+                case 'solid':
+                    canvas.style.background = '#222';
+                    break;
+                case 'stars':
+                    canvas.style.background = '#000 url("data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3Cpattern id="stars" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"%3E%3Ccircle cx="10" cy="10" r="1" fill="%23fff" opacity="0.3"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width="100%" height="100%" fill="url(%23stars)"/%3E%3C/svg%3E")';
+                    break;
+                case 'minimal':
+                    canvas.style.background = '#111';
+                    break;
+            }
+        }
+        
+        function loadConfig() {
+            const savedConfig = localStorage.getItem('gameConfig');
+            if (savedConfig) {
+                try {
+                    const config = JSON.parse(savedConfig);
+                    if (config.gameSpeed) {
+                        document.getElementById('gameSpeedSlider').value = config.gameSpeed;
+                        gameSpeed = config.gameSpeed;
+                    }
+                    if (config.graphicsQuality) document.getElementById('graphicsQuality').value = config.graphicsQuality;
+                    if (config.targetFPS) document.getElementById('targetFPS').value = config.targetFPS;
+                    if (config.uiScale) {
+                        document.getElementById('uiScale').value = config.uiScale;
+                        document.documentElement.style.setProperty('--ui-scale', config.uiScale);
+                    }
+                    if (config.backgroundType) {
+                        document.getElementById('backgroundType').value = config.backgroundType;
+                        applyBackgroundType(config.backgroundType);
+                    }
+                    if (config.volume) {
+                        document.getElementById('volumeSlider').value = config.volume;
+                    }
+                    if (config.autoSaveInterval) {
+                        document.getElementById('autoSaveInterval').value = config.autoSaveInterval;
+                    }
+                    if (config.vibration !== undefined) document.getElementById('vibrationToggle').checked = config.vibration;
+                    if (config.notifications !== undefined) document.getElementById('notificationsToggle').checked = config.notifications;
+                    if (config.achievementSounds !== undefined) document.getElementById('achievementSounds').checked = config.achievementSounds;
+                    if (config.confirmPrestige !== undefined) document.getElementById('confirmPrestige').checked = config.confirmPrestige;
+                    if (config.devMode !== undefined) document.getElementById('devMode').checked = config.devMode;
+                    if (config.showFPS !== undefined) document.getElementById('showFPS').checked = config.showFPS;
+                    if (config.debugCollisions !== undefined) document.getElementById('debugCollisions').checked = config.debugCollisions;
+                    if (config.soundEnabled !== undefined) {
+                        document.getElementById('soundToggle').checked = config.soundEnabled;
+                        soundEnabled = config.soundEnabled;
+                    }
+                    if (config.performanceMode !== undefined) {
+                        document.getElementById('performanceMode').checked = config.performanceMode;
+                        performanceMode = config.performanceMode;
+                    }
+                    if (config.batterySaver !== undefined) {
+                        document.getElementById('batterySaver').checked = config.batterySaver;
+                        batterySaverMode = config.batterySaver;
+                    }
+                    if (config.reduceAnimations !== undefined) document.getElementById('reduceAnimations').checked = config.reduceAnimations;
+                    if (config.pauseBackground !== undefined) document.getElementById('pauseBackground').checked = config.pauseBackground;
+                    if (config.lightMode !== undefined) {
+                        lightMode = config.lightMode;
+                        if (lightMode) toggleTheme();
+                    }
+                    
+                    updateSpeedValue();
+                    updateParticleValue();
+                    updateUIScale();
+                    updateVolumeValue();
+                } catch (e) {
+                    console.log('Error cargando configuración');
+                }
+            }
         }
 
         function resetGame() {
@@ -2574,10 +3131,14 @@
         function updateStats() {
             const playTime = Math.floor((Date.now() - playTimeStart) / 60000);
             const sessionTime = Math.floor((Date.now() - betaStats.sessionStart) / 60000);
-            document.getElementById('totalBounces').textContent = totalBounces;
-            document.getElementById('totalCoins').textContent = totalCoins;
-            document.getElementById('playTime').textContent = playTime + 'm';
-            document.getElementById('bestCombo').textContent = bestCombo + 'x';
+            
+            // Estadísticas básicas
+            if (document.getElementById('fpsCounter')) document.getElementById('fpsCounter').textContent = currentFPS;
+            if (document.getElementById('particleCounter')) document.getElementById('particleCounter').textContent = particles.length;
+            if (document.getElementById('totalBounces')) document.getElementById('totalBounces').textContent = formatNumber(totalBounces);
+            if (document.getElementById('totalCoins')) document.getElementById('totalCoins').textContent = formatNumber(totalCoins);
+            if (document.getElementById('playTime')) document.getElementById('playTime').textContent = playTime + 'm';
+            if (document.getElementById('bestCombo')) document.getElementById('bestCombo').textContent = bestCombo.toFixed(1) + 'x';
             
             // Estadísticas beta
             if (document.getElementById('sessionTime')) document.getElementById('sessionTime').textContent = sessionTime + 'm';
@@ -2676,10 +3237,20 @@
         }
         
         function handleVisibilityChange() {
+            const pauseBackground = document.getElementById('pauseBackground')?.checked ?? true;
+            
             if (document.hidden) {
                 lastActivity = Date.now() - 60000; // Marca como inactivo hace 1 minuto
+                if (pauseBackground && !gamePaused) {
+                    gamePaused = true;
+                    console.log('Juego pausado automáticamente (segundo plano)');
+                }
             } else {
                 resetAfkTimer();
+                if (pauseBackground && gamePaused) {
+                    gamePaused = false;
+                    console.log('Juego reanudado automáticamente');
+                }
             }
         }
         
@@ -3637,7 +4208,7 @@
 
         // Funciones de orbes
         function spawnOrb() {
-            if (orbs.length < 8 && Math.random() < 0.008) { // 0.8% chance cada frame
+            if (orbs.length < 8 && Math.random() < 0.008) {
                 const orbType = getRandomOrbType();
                 const orb = {
                     x: Math.random() * (width - 100) + 50,
@@ -3645,16 +4216,47 @@
                     radius: 15 + (orbType.rarity === 'mítico' ? 10 : orbType.rarity === 'legendario' ? 5 : 0),
                     type: orbType,
                     alpha: 1,
-                    life: 15000 + (orbType.rarity === 'mítico' ? 10000 : 0), // Vida más larga para raros
+                    life: 15000 + (orbType.rarity === 'mítico' ? 10000 : 0),
                     maxLife: 15000 + (orbType.rarity === 'mítico' ? 10000 : 0),
                     pulsePhase: 0
                 };
                 orbs.push(orb);
-                // Solo notificar orbes raros o mejores
                 if (orb.type.rarity !== 'común') {
                     showNotification(`✨ ${orb.type.name} apareció!`);
                 }
             }
+        }
+        
+        function updateOrbs() {
+            spawnOrb();
+            
+            for (let i = orbs.length - 1; i >= 0; i--) {
+                const orb = orbs[i];
+                orb.life -= 16;
+                orb.alpha = orb.life / orb.maxLife;
+                orb.pulsePhase += 0.1;
+                
+                orb.radius = orb.type.rarity === 'mítico' ? 25 + Math.sin(orb.pulsePhase) * 5 : 
+                            orb.type.rarity === 'legendario' ? 20 + Math.sin(orb.pulsePhase) * 3 :
+                            15 + Math.sin(orb.pulsePhase) * 2;
+                
+                if (orb.life <= 0) {
+                    orbs.splice(i, 1);
+                }
+            }
+        }
+        
+        function checkOrbCollisions() {
+            orbs.forEach((orb, index) => {
+                const distance = Math.sqrt(
+                    Math.pow(ball.x - orb.x, 2) + Math.pow(ball.y - orb.y, 2)
+                );
+                
+                if (distance < ball.radius + orb.radius) {
+                    collectOrb(orb);
+                    orbs.splice(index, 1);
+                }
+            });
         }
         
         function getRandomOrbType() {
@@ -3723,7 +4325,6 @@
                 currentDailyChallenge.orbsCollected++;
             }
             
-            // Crear partículas especiales al recoger orbe
             for (let i = 0; i < 15; i++) {
                 particles.push({
                     x: orb.x,
@@ -3737,13 +4338,10 @@
                 });
             }
             
-            // Actualizar progreso de partículas
             if (currentDailyChallenge && currentDailyChallenge.id === 'particles') {
                 if (!currentDailyChallenge.particlesGenerated) currentDailyChallenge.particlesGenerated = 0;
                 currentDailyChallenge.particlesGenerated += 15;
             }
-            
-            // Aplicar efecto inmediato balanceado
             switch (orb.type.effect) {
                 case 'speed':
                     ball.dx *= orb.type.power;
@@ -3768,7 +4366,6 @@
                     gameData.experience = experience;
                     break;
                 case 'rainbow':
-                    // Efecto especial balanceado: todos los recursos
                     const rainbowCoins = Math.floor(level * orb.type.power * 8);
                     const rainbowDiamonds = Math.floor(orb.type.power);
                     const rainbowExp = Math.floor(level * orb.type.power * 4);
@@ -3790,7 +4387,6 @@
                 'mítico': '🌈'
             };
             
-            // Solo notificar recolección de orbes épicos o mejores
             if (orb.type.rarity === 'épico' || orb.type.rarity === 'legendario' || orb.type.rarity === 'mítico') {
                 showNotification(`${rarityEmoji[orb.type.rarity]} ${orb.type.name} recogido!`);
             }
@@ -3802,21 +4398,17 @@
             activeOrbEffects.forEach((effect, index) => {
                 effect.timeLeft -= 16;
                 
-                // Efectos continuos balanceados
                 if (effect.type === 'critical' && Math.random() < 0.05) {
                     const criticalCoins = Math.floor(level * effect.power * 0.5);
                     coins += criticalCoins;
                     gameData.coins = coins;
                 } else if (effect.type === 'time') {
-                    // Ralentizar el juego ligeramente
                     gameSpeed = Math.max(0.5, 1 * effect.power);
                 } else if (effect.type === 'combo' && Math.random() < 0.02) {
-                    // Mantener combo alto
                     combo = Math.min(combo + 0.1, 20);
                 }
                 
                 if (effect.timeLeft <= 0) {
-                    // Revertir efectos al terminar
                     if (effect.type === 'speed') {
                         ball.dx /= effect.power;
                         ball.dy /= effect.power;
@@ -3835,32 +4427,21 @@
             const day = now.getDate();
             const dayOfWeek = now.getDay();
             
-            // Fin de semana
             if (dayOfWeek === 0 || dayOfWeek === 6) {
                 return { name: 'Fin de Semana', desc: 'x2 monedas', multiplier: 2, type: 'coins' };
             }
-            
-            // Halloween (Octubre)
             if (month === 10) {
                 return { name: 'Halloween', desc: '+50% diamantes', multiplier: 1.5, type: 'diamonds' };
             }
-            
-            // Navidad (Diciembre)
             if (month === 12) {
                 return { name: 'Navidad', desc: 'x3 experiencia', multiplier: 3, type: 'experience' };
             }
-            
-            // Año Nuevo (1 de Enero)
             if (month === 1 && day === 1) {
                 return { name: 'Año Nuevo', desc: 'x1.5 todo', multiplier: 1.5, type: 'all' };
             }
-            
-            // San Valentín (14 de Febrero)
             if (month === 2 && day === 14) {
                 return { name: 'San Valentín', desc: 'Combo infinito', multiplier: 1, type: 'combo' };
             }
-            
-            // San Patricio (17 de Marzo)
             if (month === 3 && day === 17) {
                 return { name: 'San Patricio', desc: 'x5 suerte diamantes', multiplier: 5, type: 'diamonds' };
             }
@@ -3886,10 +4467,9 @@
             }
         }
 
-        // Detector de errores automático
         window.addEventListener('error', (e) => {
             betaStats.crashes++;
-            console.error('ERROR DETECTADO:', {
+            console.error('ERROR:', {
                 message: e.message,
                 filename: e.filename,
                 lineno: e.lineno,
@@ -3899,14 +4479,13 @@
             });
             showNotification('⚠️ Error detectado - Ver consola (F12)');
         });
-        
-        // Inicializar el juego
         window.addEventListener('load', () => {
             dateEvent = checkDateEvents();
             if (dateEvent) {
                 showNotification(`🎉 ${dateEvent.name} activo! ${dateEvent.desc}`);
             }
             init();
+            loadConfig();
             generateMissions();
             generateAdvancedMissions();
             syncCollectionData();
@@ -3914,11 +4493,11 @@
             selectRandomDailyChallenge();
             setInterval(updateResetTimer, 1000);
             
-            // Mensaje de bienvenida para beta testers
-            if (!localStorage.getItem('betaWelcomeShown')) {
+            // Mensaje de bienvenida
+            if (!localStorage.getItem('welcomeShown')) {
                 setTimeout(() => {
-                    showNotification('🎉 ¡Bienvenido a Beta 2! Usa WELCOME2 para empezar');
-                    localStorage.setItem('betaWelcomeShown', 'true');
+                    showNotification('🎉 ¡Bienvenido! Usa WELCOME2 para empezar');
+                    localStorage.setItem('welcomeShown', 'true');
                 }, 3000);
             }
             
