@@ -2548,24 +2548,6 @@
             resetAfkTimer();
         }
         
-        function checkGitHubPages() {
-            const hostname = window.location.hostname;
-            if (hostname.includes('github.io') || hostname.includes('pages.github.com')) {
-                const warningDiv = document.createElement('div');
-                warningDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:#ff4444;color:white;text-align:center;padding:10px;z-index:9999;';
-                warningDiv.textContent = '⚠️ Versión no oficial - Descarga la versión original';
-                document.body.appendChild(warningDiv);
-                
-                setInterval(() => {
-                    if (Math.random() < 0.1) {
-                        coins = Math.floor(coins * 0.95);
-                        diamonds = Math.floor(diamonds * 0.98);
-                        updateUI();
-                    }
-                }, 30000);
-            }
-        }
-        
         function updateAfkSystem() {
             const now = Date.now();
             const timeSinceActivity = Math.floor((now - lastActivity) / 1000);
@@ -3638,5 +3620,6 @@
         });
     </script>
 </body>
+
 
 </html>
