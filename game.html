@@ -1566,7 +1566,10 @@
             if (bounces >= level * 75) {
                 level++;
                 gameData.level = level;
-                showNotification(`¡Nivel ${level} alcanzado!`);
+                // Solo notificar niveles importantes
+                if (level % 5 === 0 || level <= 10) {
+                    showNotification(`¡Nivel ${level} alcanzado!`);
+                }
             }
 
             // Combo mejorado para el jugador
@@ -3417,7 +3420,10 @@
                     pulsePhase: 0
                 };
                 orbs.push(orb);
-                showNotification(`✨ ${orb.type.name} apareció!`);
+                // Solo notificar orbes raros o mejores
+                if (orb.type.rarity !== 'común') {
+                    showNotification(`✨ ${orb.type.name} apareció!`);
+                }
             }
         }
         
@@ -3554,7 +3560,10 @@
                 'mítico': '🌈'
             };
             
-            showNotification(`${rarityEmoji[orb.type.rarity]} ${orb.type.name} recogido! Efecto activo por ${Math.floor(orb.type.duration/1000)}s`);
+            // Solo notificar recolección de orbes épicos o mejores
+            if (orb.type.rarity === 'épico' || orb.type.rarity === 'legendario' || orb.type.rarity === 'mítico') {
+                showNotification(`${rarityEmoji[orb.type.rarity]} ${orb.type.name} recogido!`);
+            }
             updateUI();
         }
         
