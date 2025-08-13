@@ -1353,9 +1353,18 @@
 
             ball.x = width / 2;
             ball.y = height / 2;
+            
+            // Asegurar velocidad inicial correcta
+            ball.dx = 5;
+            ball.dy = 5;
 
             loadGame();
             setupEventListeners();
+            
+            // Aplicar efectos de velocidad después de cargar
+            if (gameData.upgrades.speed.level > 0) {
+                applyUpgradeEffects('speed');
+            }
 
             setTimeout(() => {
                 document.getElementById('loadingScreen').style.display = 'none';
@@ -1722,9 +1731,17 @@
         function applyUpgradeEffects(upgradeId) {
             switch (upgradeId) {
                 case 'speed':
-                    let speedMultiplier = 1.1;
-                    ball.dx = ball.dx > 0 ? Math.abs(ball.dx) * speedMultiplier : -Math.abs(ball.dx) * speedMultiplier;
-                    ball.dy = ball.dy > 0 ? Math.abs(ball.dy) * speedMultiplier : -Math.abs(ball.dy) * speedMultiplier;
+                    // Aplicar velocidad base más incremento por nivel
+                    const baseSpeed = 5;
+                    const speedIncrease = gameData.upgrades.speed.level * 0.5;
+                    const newSpeed = baseSpeed + speedIncrease;
+                    
+                    // Mantener la dirección actual
+                    const directionX = ball.dx > 0 ? 1 : -1;
+                    const directionY = ball.dy > 0 ? 1 : -1;
+                    
+                    ball.dx = newSpeed * directionX;
+                    ball.dy = newSpeed * directionY;
                     break;
                 case 'size':
                     ball.radius = 20 + gameData.upgrades.size.level * 2;
@@ -1773,9 +1790,11 @@
                 gameData.prestigePoints += prestigePointsGained;
                 gameData.prestige++;
 
+                // Resetear pelota a valores iniciales
                 ball.radius = 20;
                 ball.dx = 5;
                 ball.dy = 5;
+                ball.color = '#ff0000';
 
                 generateMissions();
                 updateUI();
@@ -2393,11 +2412,13 @@
                     upgrades: { target: 3, progress: 0, reward: 2000, completed: false }
                 };
                 
-                // Resetear bola
+                // Resetear bola completamente
                 ball.radius = 20;
                 ball.dx = 5;
                 ball.dy = 5;
                 ball.color = '#ff0000';
+                ball.x = width / 2;
+                ball.y = height / 2;
                 
                 // Regenerar misiones y actualizar UI
                 generateMissions();
@@ -2552,7 +2573,7 @@
             const hostname = window.location.hostname;
             const officialDomains = ['thisisfenix.github.io', 'localhost', '127.0.0.1'];
             
-            // Solo mostrar advertencia si NO es un dominio oficial
+            // Solo aplicar penalizaciones si NO es un dominio oficial
             if ((hostname.includes('github.io') || hostname.includes('pages.github.com')) && 
                 !officialDomains.some(domain => hostname.includes(domain))) {
                 const warningDiv = document.createElement('div');
@@ -2560,10 +2581,13 @@
                 warningDiv.textContent = '⚠️ Versión no oficial - Juega en thisisfenix.github.io/FNCengine/game.html';
                 document.body.appendChild(warningDiv);
                 
+                // Penalizaciones solo para sitios no oficiales
                 setInterval(() => {
                     if (Math.random() < 0.1) {
                         coins = Math.floor(coins * 0.95);
                         diamonds = Math.floor(diamonds * 0.98);
+                        ball.dx *= 0.99; // Reducir velocidad gradualmente
+                        ball.dy *= 0.99;
                         updateUI();
                     }
                 }, 30000);
@@ -3039,9 +3063,11 @@
                 gameData.ascensionPoints += ascensionPointsGained;
                 gameData.ascension++;
                 
+                // Resetear pelota a valores iniciales
                 ball.radius = 20;
                 ball.dx = 5;
                 ball.dy = 5;
+                ball.color = '#ff0000';
                 
                 generateMissions();
                 updateUI();
