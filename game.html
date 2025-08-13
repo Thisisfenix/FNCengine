@@ -449,23 +449,7 @@
             opacity: 0.7;
         }
         
-        .notification-close {
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            font-size: 16px;
-            padding: 0;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .notification-close:hover {
-            color: white;
-        }
+
         
         .notification-text {
             font-weight: 500;
@@ -918,7 +902,7 @@
                 <h3>Sistema de Prestigio</h3>
                 <p>Reinicia tu progreso pero ganas bonificadores permanentes</p>
                 <p>Puntos de Prestigio: <span id="prestigePoints">0</span></p>
-                <p>Requiere nivel 50+ y 1M+ coins</p>
+                <p>Requiere nivel 25+ y 500K+ coins</p>
                 <button onclick="doPrestige()">Prestigiar</button>
             </div>
             <div class="upgrade">
@@ -1508,16 +1492,16 @@
             bounces++;
             gameData.bounces = bounces;
 
-            // Calcular coins ganadas BALANCEADAS
-            let baseCoins = 1 + Math.floor(level / 20);
-            let coinMultiplier = Math.pow(1.1, gameData.upgrades.coinMult.level);
-            let comboMultiplier = Math.min(combo * (1 + gameData.upgrades.combo.level * 0.05), 50);
-            let prestigeMultiplier = (1 + gameData.prestige * 0.05);
+            // Calcular coins ganadas MEJORADAS PARA EL JUGADOR
+            let baseCoins = 2 + Math.floor(level / 10); // Más coins base
+            let coinMultiplier = Math.pow(1.15, gameData.upgrades.coinMult.level); // Mejor multiplicador
+            let comboMultiplier = Math.min(combo * (1 + gameData.upgrades.combo.level * 0.08), 30); // Combo más efectivo
+            let prestigeMultiplier = (1 + gameData.prestige * 0.1); // Mejor bonus prestigio
 
-            // Crítico
+            // Crítico mejorado
             let criticalMultiplier = 1;
-            if (Math.random() < gameData.upgrades.critical.level * 0.01) {
-                criticalMultiplier = 2;
+            if (Math.random() < Math.min(gameData.upgrades.critical.level * 0.02, 0.25)) { // Más chance crítico
+                criticalMultiplier = 3; // Críticos más poderosos
                 // Actualizar progreso de críticos
                 if (currentDailyChallenge && currentDailyChallenge.id === 'critical') {
                     if (!currentDailyChallenge.criticalHits) currentDailyChallenge.criticalHits = 0;
@@ -1525,7 +1509,7 @@
                 }
             }
 
-            let coinsGained = Math.floor(baseCoins * coinMultiplier * comboMultiplier * prestigeMultiplier * criticalMultiplier * 0.3);
+            let coinsGained = Math.floor(baseCoins * coinMultiplier * comboMultiplier * prestigeMultiplier * criticalMultiplier * 0.8); // Más coins
 
             // Aplicar efectos de colección
             const effects = applyCollectionEffects();
@@ -1560,36 +1544,36 @@
             coins += coinsGained;
             gameData.coins = coins;
 
-            // Experiencia con multiplicador
-            let expGained = Math.floor(coinsGained / 10);
-            if (gameData.upgrades.expMult.level > 0) expGained *= Math.pow(2, gameData.upgrades.expMult.level);
+            // Experiencia mejorada
+            let expGained = Math.floor(coinsGained / 5); // Más experiencia base
+            if (gameData.upgrades.expMult.level > 0) expGained *= Math.pow(2.5, gameData.upgrades.expMult.level); // Mejor multiplicador
             expGained = Math.floor(expGained * effects.expMultiplier);
             experience += expGained;
             gameData.experience = experience;
 
-            // Generación de diamantes BALANCEADA
-            let diamondChance = 0.005 + gameData.upgrades.diamondGen.level * 0.003;
-            if (currentEvent && currentEvent.effect === 'diamonds') diamondChance *= 1.5;
+            // Generación de diamantes MEJORADA
+            let diamondChance = 0.015 + gameData.upgrades.diamondGen.level * 0.005; // Más chance
+            if (currentEvent && currentEvent.effect === 'diamonds') diamondChance *= 2;
             
             if (Math.random() < diamondChance) {
-                let diamondsGained = Math.floor(Math.random() * 2) + 1;
-                if (currentEvent && currentEvent.effect === 'diamonds') diamondsGained = Math.floor(diamondsGained * 1.5);
+                let diamondsGained = Math.floor(Math.random() * 3) + 1; // Más diamantes
+                if (currentEvent && currentEvent.effect === 'diamonds') diamondsGained = Math.floor(diamondsGained * 2);
                 diamonds += diamondsGained;
                 gameData.diamonds = diamonds;
             }
 
-            // Subir de nivel
-            if (bounces >= level * 100) {
+            // Subir de nivel (más rápido)
+            if (bounces >= level * 75) {
                 level++;
                 gameData.level = level;
                 showNotification(`¡Nivel ${level} alcanzado!`);
             }
 
-            // Combo con duración mejorada
-            let comboDecay = 0.02 - (gameData.upgrades.combo.level * 0.005);
-            if (currentEvent && currentEvent.effect === 'combo') comboDecay = 0; // Combo no decae durante evento
+            // Combo mejorado para el jugador
+            let comboDecay = 0.01 - (gameData.upgrades.combo.level * 0.008); // Menos decay
+            if (currentEvent && currentEvent.effect === 'combo') comboDecay = 0;
             combo = Math.max(1, combo - comboDecay);
-            combo = Math.min(combo + 0.1, 10 + gameData.upgrades.combo.level);
+            combo = Math.min(combo + 0.15, 15 + gameData.upgrades.combo.level); // Más combo y límite más alto
 
             createParticles(ball.x, ball.y);
             updateUI();
@@ -1765,8 +1749,8 @@
         }
 
         function doPrestige() {
-            if (level >= 50 && coins >= 1e6) {
-                let prestigePointsGained = Math.floor(Math.log10(coins / 1e6) + 1);
+            if (level >= 25 && coins >= 500000) {
+                let prestigePointsGained = Math.floor(Math.log10(coins / 500000) + 2); // Más puntos de prestigio
 
                 coins = 0;
                 bounces = 0;
@@ -1800,7 +1784,7 @@
                 updateUI();
                 showNotification(`¡Prestigio completado! +${prestigePointsGained} puntos`);
             } else {
-                showNotification('Necesitas nivel 50+ y 1M+ coins para prestigiar');
+                showNotification('Necesitas nivel 25+ y 500K+ coins para prestigiar');
             }
         }
 
@@ -1880,13 +1864,13 @@
 
         function generateResources() {
             if (gameData.upgrades.diamondGen.level > 0) {
-                diamonds += gameData.upgrades.diamondGen.level * 0.1;
+                diamonds += gameData.upgrades.diamondGen.level * 0.2; // Doble generación
                 gameData.diamonds = diamonds;
             }
 
             if (gameData.prestigePoints > 0) {
-                diamonds += gameData.prestigePoints * 0.01;
-                coins += gameData.prestigePoints * 10;
+                diamonds += gameData.prestigePoints * 0.02; // Doble generación pasiva
+                coins += gameData.prestigePoints * 25; // Más coins pasivas
                 gameData.diamonds = diamonds;
                 gameData.coins = coins;
             }
@@ -1940,14 +1924,14 @@
                 gameData.diamonds = diamonds;
             }
             
-            // Investigaciones pasivas
+            // Investigaciones pasivas mejoradas
             if (gameData.research.unlocked.includes('automation1')) {
-                coins += Math.floor(level * 1);
+                coins += Math.floor(level * 3); // Triple generación
                 gameData.coins = coins;
             }
             if (gameData.research.unlocked.includes('automation2')) {
-                coins += Math.floor(level * 2);
-                diamonds += Math.floor(level / 10);
+                coins += Math.floor(level * 6); // Triple generación
+                diamonds += Math.floor(level / 5); // Doble generación de diamantes
                 gameData.coins = coins;
                 gameData.diamonds = diamonds;
             }
@@ -2113,12 +2097,12 @@
         let bestCombo = 1;
         let playTimeStart = Date.now();
         let missions = {
-            bounces: { target: 100, progress: 0, reward: 50, completed: false },
-            coins: { target: 1000, progress: 0, reward: 100, completed: false },
-            diamonds: { target: 5, progress: 0, reward: 2, completed: false },
-            level: { target: 3, progress: 0, reward: 200, completed: false },
-            combo: { target: 8, progress: 0, reward: 150, completed: false },
-            upgrades: { target: 2, progress: 0, reward: 300, completed: false }
+            bounces: { target: 50, progress: 0, reward: 100, completed: false },
+            coins: { target: 500, progress: 0, reward: 200, completed: false },
+            diamonds: { target: 3, progress: 0, reward: 5, completed: false },
+            level: { target: 5, progress: 0, reward: 500, completed: false },
+            combo: { target: 5, progress: 0, reward: 300, completed: false },
+            upgrades: { target: 3, progress: 0, reward: 1000, completed: false }
         };
         let missionSet = 1;
         let completedMissions = 0;
@@ -2172,18 +2156,18 @@
         let currentEvent = null;
         let eventTimeLeft = 0;
         let dailyChallenges = [
-            { id: 'bounces', name: 'Rebotador Experto', desc: 'Haz 500 rebotes', target: 500, progress: 0, reward: 1000, type: 'coins', completed: false },
-            { id: 'coins', name: 'Coleccionista Diario', desc: 'Gana 10K coins', target: 10000, progress: 0, reward: 3, type: 'diamonds', completed: false },
-            { id: 'diamonds', name: 'Cazador de Gemas', desc: 'Consigue 10 diamantes', target: 10, progress: 0, reward: 2000, type: 'coins', completed: false },
-            { id: 'combo', name: 'Combo Diario', desc: 'Alcanza combo 12x', target: 12, progress: 0, reward: 2, type: 'diamonds', completed: false },
-            { id: 'levels', name: 'Subir de Nivel', desc: 'Sube 3 niveles', target: 3, progress: 0, reward: 1500, type: 'coins', completed: false },
-            { id: 'speed', name: 'Velocidad Extrema', desc: 'Alcanza velocidad 20+', target: 20, progress: 0, reward: 5, type: 'diamonds', completed: false },
-            { id: 'upgrades', name: 'Mejorador', desc: 'Compra 5 mejoras', target: 5, progress: 0, reward: 3000, type: 'coins', completed: false },
-            { id: 'orbs', name: 'Recolector de Orbes', desc: 'Recoge 10 orbes', target: 10, progress: 0, reward: 4, type: 'diamonds', completed: false },
-            { id: 'prestige', name: 'Prestigio Rápido', desc: 'Haz 1 prestigio', target: 1, progress: 0, reward: 10, type: 'diamonds', completed: false },
-            { id: 'experience', name: 'Sabio', desc: 'Gana 50K experiencia', target: 50000, progress: 0, reward: 5000, type: 'coins', completed: false },
-            { id: 'critical', name: 'Crítico Maestro', desc: 'Haz 100 críticos', target: 100, progress: 0, reward: 6, type: 'diamonds', completed: false },
-            { id: 'particles', name: 'Lluvia de Partículas', desc: 'Genera 1000 partículas', target: 1000, progress: 0, reward: 2500, type: 'coins', completed: false }
+            { id: 'bounces', name: 'Rebotador Experto', desc: 'Haz 200 rebotes', target: 200, progress: 0, reward: 1500, type: 'coins', completed: false },
+            { id: 'coins', name: 'Coleccionista Diario', desc: 'Gana 5K coins', target: 5000, progress: 0, reward: 5, type: 'diamonds', completed: false },
+            { id: 'diamonds', name: 'Cazador de Gemas', desc: 'Consigue 5 diamantes', target: 5, progress: 0, reward: 3000, type: 'coins', completed: false },
+            { id: 'combo', name: 'Combo Diario', desc: 'Alcanza combo 8x', target: 8, progress: 0, reward: 3, type: 'diamonds', completed: false },
+            { id: 'levels', name: 'Subir de Nivel', desc: 'Sube 2 niveles', target: 2, progress: 0, reward: 2000, type: 'coins', completed: false },
+            { id: 'speed', name: 'Velocidad Extrema', desc: 'Alcanza velocidad 15+', target: 15, progress: 0, reward: 4, type: 'diamonds', completed: false },
+            { id: 'upgrades', name: 'Mejorador', desc: 'Compra 3 mejoras', target: 3, progress: 0, reward: 2500, type: 'coins', completed: false },
+            { id: 'orbs', name: 'Recolector de Orbes', desc: 'Recoge 5 orbes', target: 5, progress: 0, reward: 6, type: 'diamonds', completed: false },
+            { id: 'prestige', name: 'Prestigio Rápido', desc: 'Haz 1 prestigio', target: 1, progress: 0, reward: 15, type: 'diamonds', completed: false },
+            { id: 'experience', name: 'Sabio', desc: 'Gana 20K experiencia', target: 20000, progress: 0, reward: 4000, type: 'coins', completed: false },
+            { id: 'critical', name: 'Crítico Maestro', desc: 'Haz 50 críticos', target: 50, progress: 0, reward: 8, type: 'diamonds', completed: false },
+            { id: 'particles', name: 'Lluvia de Partículas', desc: 'Genera 500 partículas', target: 500, progress: 0, reward: 3500, type: 'coins', completed: false }
         ];
         
         let advancedMissions = [
@@ -2404,12 +2388,12 @@
                 
                 // Resetear misiones
                 missions = {
-                    bounces: { target: 50, progress: 0, reward: 100, completed: false },
-                    coins: { target: 500, progress: 0, reward: 200, completed: false },
-                    diamonds: { target: 10, progress: 0, reward: 5, completed: false },
+                    bounces: { target: 50, progress: 0, reward: 200, completed: false },
+                    coins: { target: 500, progress: 0, reward: 300, completed: false },
+                    diamonds: { target: 3, progress: 0, reward: 5, completed: false },
                     level: { target: 5, progress: 0, reward: 1000, completed: false },
                     combo: { target: 5, progress: 0, reward: 500, completed: false },
-                    upgrades: { target: 3, progress: 0, reward: 2000, completed: false }
+                    upgrades: { target: 3, progress: 0, reward: 1500, completed: false }
                 };
                 
                 // Resetear bola completamente
@@ -3384,10 +3368,12 @@
             notification.innerHTML = `
                 <div class="notification-header">
                     <span class="notification-time">${timeString}</span>
-                    <button class="notification-close" onclick="removeNotification('${notification.id}')">×</button>
                 </div>
                 <div class="notification-text">${message}</div>
             `;
+            
+            // Hacer toda la notificación clickeable para cerrar
+            notification.onclick = () => removeNotification(notification.id);
             
             // Agregar al inicio de la lista
             notificationCenter.insertBefore(notification, notificationCenter.firstChild);
@@ -3418,7 +3404,7 @@
 
         // Funciones de orbes
         function spawnOrb() {
-            if (orbs.length < 3 && Math.random() < 0.003) { // 0.3% chance cada frame
+            if (orbs.length < 8 && Math.random() < 0.008) { // 0.8% chance cada frame
                 const orbType = getRandomOrbType();
                 const orb = {
                     x: Math.random() * (width - 100) + 50,
@@ -3599,7 +3585,6 @@
                     }
                     
                     activeOrbEffects.splice(index, 1);
-                    showNotification(`⏰ Efecto de ${effect.name.split(' ')[1] || effect.type} terminado`);
                 }
             });
         }
