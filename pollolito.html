@@ -2112,19 +2112,10 @@
 
                 gameState.ally.active = false;
                 gameState.ally.hp = 0;
-
-                // Mostrar diálogo sin bloquear permanentemente
-                BattleSystem.showDialogue("¡Tu aliado ha sido derrotado!", 2000);
-
-                setTimeout(() => {
-                    BattleSystem.updateAllyUI();
-                    // Asegurar que el juego continúe
-                    if (gameState.currentTurn === 'player') {
-                        BattleSystem.forceUnlockUI();
-                        BattleSystem.enableUI();
-                        BattleSystem.showMainMenu();
-                    }
-                }, 2000);
+                BattleSystem.updateAllyUI();
+                
+                // NO mostrar diálogo que bloquee la UI durante turno enemigo
+                console.log('🔥 Aliado derrotado - continuando sin bloquear UI');
             }
 
             static activateAngryMode() {
@@ -3186,7 +3177,6 @@
                 }
                 if (gameState.player.comboCount > 2) {
                     weights[4] += 0.2; // Más ataques poderosos contra combos
-                    BattleSystem.showDialogue("Pollolito: ¡Basta de combos!");
                 }
 
                 if (gameState.enemy.defenseDown) weights[0] += 0.2;
@@ -3237,7 +3227,6 @@
                 // Contraataques específicos
                 if (mostUsedAction === 'defend' && gameState.enemy.playerPatterns.defend > 2) {
                     weights[4] += 0.2; // Más ataques poderosos contra defensores
-                    BattleSystem.showDialogue("Pollolito: ¡Deja de defenderte, cobarde!");
                 }
 
                 if (gameState.player.stamina < 30) {
@@ -3317,7 +3306,6 @@
 
                 if (gameState.ally.active && gameState.ally.hp <= 0) {
                     BattleSystem.removeAlly();
-                    return;
                 }
 
                 setTimeout(() => {
