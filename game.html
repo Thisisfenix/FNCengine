@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Circle Bounce Coins Ultimate - Enhanced Edition</title>
+    <title>Chef's Kitchen Frenzy - Cooking Challenge</title>
     <style>
         :root {
-            --primary: #667eea;
-            --secondary: #764ba2;
-            --accent: #f093fb;
-            --success: #4facfe;
-            --warning: #f6d365;
-            --danger: #ff6b6b;
+            --primary: #ff6b35;
+            --secondary: #f7931e;
+            --accent: #ffd700;
+            --success: #27ae60;
+            --warning: #e74c3c;
+            --danger: #c0392b;
             --dark: #2c3e50;
             --light: #ecf0f1;
             --glass: rgba(255, 255, 255, 0.1);
@@ -24,15 +24,16 @@
             margin: 0;
             overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
             transition: all 0.5s ease;
         }
 
         canvas {
             display: block;
-            background: radial-gradient(circle at center, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.3) 100%);
+            background: radial-gradient(circle at center, rgba(255, 107, 53, 0.1) 0%, rgba(247, 147, 30, 0.3) 100%);
             backdrop-filter: blur(10px);
             transition: all 0.5s ease;
+            transform-origin: center;
         }
 
         #ui-container {
@@ -47,43 +48,39 @@
 
         #ui {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: 10px;
+            left: 10px;
             color: white;
-            font-size: clamp(10px, 1.2vw, 12px);
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            padding: 12px;
-            border-radius: 20px;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #ff6b35;
+            padding: 15px;
+            border-radius: 8px;
             pointer-events: auto;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            min-width: 280px;
-            transform: scale(var(--ui-scale));
-            transform-origin: top left;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 200px;
+            font-weight: bold;
+            transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
         }
         
         #controls {
             position: fixed;
-            bottom: 20px;
+            bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff6b35;
             padding: 10px;
-            border-radius: 20px;
+            border-radius: 8px;
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
             justify-content: center;
             pointer-events: auto;
             z-index: 100;
-            transition: all 0.3s ease;
+            transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
         }
         
         #controls.hidden {
@@ -104,16 +101,16 @@
             cursor: pointer;
             z-index: 101;
             font-size: 12px;
+            transition: transform 0.3s ease;
         }
 
         .stat-item {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 4px;
-            padding: 4px 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            font-size: 11px;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 107, 53, 0.3);
+            font-size: 13px;
         }
 
         .stat-label {
@@ -127,22 +124,21 @@
 
         #currency-display {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #ff6b35;
             color: white;
             padding: 15px;
-            border-radius: 20px;
-            font-size: clamp(11px, 1.5vw, 14px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            font-size: 14px;
             pointer-events: auto;
-            transform: scale(var(--ui-scale));
-            transform-origin: top right;
+            min-width: 200px;
+            font-weight: bold;
+            transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .diamond-text {
+        .gold-text {
             color: var(--accent);
             text-shadow: 0 0 10px var(--accent);
             font-weight: 600;
@@ -204,7 +200,7 @@
         .tab button.active {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
         }
 
         .tabcontent {
@@ -303,12 +299,12 @@
             border-radius: 12px;
             transition: all 0.3s ease;
             pointer-events: auto;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
         }
 
         button:hover {
             transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
         }
 
         button:disabled {
@@ -407,81 +403,7 @@
             text-align: center;
         }
 
-        /* Sistema de Notificaciones Móvil */
-        .notification-center {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 300px;
-            max-height: 400px;
-            overflow-y: auto;
-            z-index: 2000;
-            pointer-events: none;
-        }
-        
-        .notification-item {
-            background: rgba(0, 0, 0, 0.85);
-            color: white;
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            border-radius: 12px;
-            font-size: 14px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: slideInNotif 0.3s ease-out;
-            pointer-events: auto;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .notification-item:hover {
-            background: rgba(0, 0, 0, 0.95);
-            transform: translateX(-5px);
-        }
-        
-        .notification-item.removing {
-            animation: slideOutNotif 0.3s ease-in forwards;
-        }
-        
-        .notification-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 4px;
-        }
-        
-        .notification-time {
-            font-size: 11px;
-            opacity: 0.7;
-        }
-        
 
-        
-        .notification-text {
-            font-weight: 500;
-        }
-        
-        @keyframes slideInNotif {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        
-        @keyframes slideOutNotif {
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-                height: 0;
-                margin-bottom: 0;
-                padding: 0;
-            }
-        }
 
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
@@ -688,13 +610,59 @@
             padding: 10px 15px;
             font-weight: bold;
         }
+        
+        .premium-tab {
+            transition: all 0.3s ease;
+        }
+        
+        .premium-tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .premium-tab.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary)) !important;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+        }
+        
+        .premium-content {
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Optimizaciones móviles */
+        @media (hover: none) and (pointer: coarse) {
+            button {
+                min-height: 44px;
+                touch-action: manipulation;
+            }
+            
+            input, select {
+                min-height: 40px;
+                font-size: 16px;
+                touch-action: manipulation;
+            }
+            
+            canvas {
+                touch-action: none;
+            }
+            
+            #ui, #currency-display, #controls {
+                -webkit-user-select: none;
+                user-select: none;
+            }
+        }
     </style>
 </head>
 
 <body>
     <div id="loadingScreen"
         style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #111; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; color: white;">
-        <h1>Circle Bounce Coins Ultimate - Enhanced Edition</h1>
+        <h1>Chef's Kitchen Frenzy - Cooking Challenge</h1>
         <div style="width: 200px; height: 200px; position: relative; margin: 20px;">
             <div
                 style="width: 100%; height: 100%; border: 10px solid #333; border-top-color: var(--hud-color); border-radius: 50%; animation: spin 1s linear infinite;">
@@ -703,38 +671,85 @@
                 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 30px; font-weight: bold;">
                 100%</div>
         </div>
-        <p>Cargando recursos avanzados...</p>
+        <p>Preparando la cocina...</p>
     </div>
 
     <canvas id="gameCanvas"></canvas>
 
     <div id="ui-container">
         <div id="ui">
-            <div class="stat-item"><span class="stat-icon">⚡</span><span class="stat-label">Rebotes:</span> <span id="bounces">0</span></div>
+            <div class="stat-item"><span class="stat-icon">🍳</span><span class="stat-label">Platos:</span> <span id="bounces">0</span></div>
             <div class="stat-item"><span class="stat-icon">🔥</span><span class="stat-label">Combo:</span> <span id="combo">1x</span></div>
-            <div class="stat-item"><span class="stat-icon">📊</span><span class="stat-label">Nivel:</span> <span id="level">1</span></div>
-            <div class="stat-item"><span class="stat-icon">👑</span><span class="stat-label">Prestigio:</span> <span id="prestige">0</span></div>
-            <div class="stat-item"><span class="stat-icon">🔮</span><span class="stat-label">Orbes:</span> <span id="orbCount">0</span></div>
+            <div class="stat-item"><span class="stat-icon">👨🍳</span><span class="stat-label">Chef Lv:</span> <span id="level">1</span></div>
+            <div class="stat-item"><span class="stat-icon">⭐</span><span class="stat-label">Michelin:</span> <span id="prestige">0</span></div>
+            <div class="stat-item"><span class="stat-icon">🥘</span><span class="stat-label">Recetas:</span> <span id="orbCount">0</span></div>
             <div class="stat-item"><span class="stat-icon">⏰</span><span class="stat-label">AFK:</span> <span id="afkTimer">0s</span></div>
+            <div class="stat-item"><span class="stat-icon">⚡</span><span class="stat-label">Racha:</span> <span id="streakDisplay">0x</span></div>
         </div>
         
         <div id="controls">
-            <button id="shopBtn" title="Abrir tienda de mejoras">🛒 Tienda</button>
+            <div id="musicControls" style="display: none; margin-bottom: 10px; padding: 10px; background: rgba(0,0,0,0.9); border-radius: 8px; border: 1px solid #4CAF50;">
+                <input type="file" id="musicFile" accept="audio/*,video/mp4,video/webm,video/ogg" style="margin-bottom: 5px; width: 100%;">
+                
+                <!-- Controles principales -->
+                <div style="display: flex; gap: 5px; align-items: center; margin-bottom: 8px;">
+                    <button id="playPauseBtn" onclick="toggleMusic()">▶️</button>
+                    <button onclick="stopMusic()">⏹️</button>
+                    <div id="musicProgress" style="flex: 1; height: 4px; background: #333; border-radius: 2px; margin: 0 5px; position: relative;">
+                        <div id="musicProgressBar" style="height: 100%; background: #4CAF50; border-radius: 2px; width: 0%; transition: width 0.1s;"></div>
+                    </div>
+                    <span id="musicTime" style="color: #4CAF50; font-size: 9px; min-width: 35px;">0:00</span>
+                </div>
+                
+                <!-- Info musical -->
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 9px;">
+                    <span style="color: #4CAF50;">🎵 <span id="musicBPM">-- BPM</span></span>
+                    <span style="color: #FF6B35;">🔊 <span id="musicIntensity">--</span>%</span>
+                    <span style="color: #FFD700;">🎯 <span id="musicBeatMultiplier">x1.0</span></span>
+                </div>
+                
+                <!-- Visualizador de frecuencias -->
+                <div id="musicVisualizer" style="display: flex; height: 20px; gap: 1px; margin-bottom: 8px; background: #111; border-radius: 3px; padding: 2px;">
+                    <!-- Barras generadas dinámicamente -->
+                </div>
+                
+                <!-- Controles avanzados -->
+                <div style="display: flex; gap: 8px; align-items: center; font-size: 9px;">
+                    <label style="color: #aaa;">Sensibilidad:</label>
+                    <input type="range" id="musicSensitivity" min="0.1" max="2" step="0.1" value="1" style="width: 60px;">
+                    <label style="color: #aaa;">Tema:</label>
+                    <select id="musicTheme" style="background: #333; color: white; border: 1px solid #555; font-size: 9px; padding: 2px;">
+                        <option value="disco">🕺 Disco</option>
+                        <option value="rock">🎸 Rock</option>
+                        <option value="electronic">🎛️ Electronic</option>
+                        <option value="chill">😌 Chill</option>
+                    </select>
+                </div>
+                
+                <div style="font-size: 8px; color: #666; text-align: center; margin-top: 5px;">
+                    🎵 <a href="https://freemusicarchive.org" target="_blank" style="color: #4CAF50;">FreeMusic</a> | 
+                    <a href="https://incompetech.com" target="_blank" style="color: #4CAF50;">Incompetech</a> | 
+                    💡 Tip: Usa música con beats marcados
+                </div>
+            </div>
+            <button id="shopBtn" title="Abrir tienda de mejoras">🛒 Mercado</button>
             <button id="achievementsBtn" title="Ver logros y eventos activos">🏆 Logros & Eventos</button>
-            <button id="dailyChallengesBtn" title="Desafíos diarios disponibles">🎯 Desafíos</button>
-            <button id="missionsBtn" title="Misiones del juego">📋 Misiones</button>
+            <button id="dailyChallengesBtn" title="Retos culinarios diarios">🎯 Retos</button>
+            <button id="missionsBtn" title="Misiones del juego">📋 Órdenes</button>
             <button id="statsBtn" title="Estadísticas del juego">📈 Stats</button>
             <button id="configBtn" title="Configuración del juego">⚙️ Config</button>
             <button id="pauseBtn" title="Pausar/Reanudar juego">⏸️ Pausa</button>
             <button id="importExportBtn" title="Guardar/Cargar datos">📁 Datos</button>
             <button id="codesBtn" title="Canjear códigos especiales">🎁 Códigos</button>
             <button id="feedbackBtn" title="Enviar feedback de beta">📝 Feedback</button>
-            <button id="prestigeBtn" title="Reiniciar con bonificadores">✨ Prestigio</button>
+            <button id="prestigeBtn" title="Reiniciar con bonificadores">⭐ Estrella</button>
         </div>
         
         <div id="controlsArrow" style="position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); color: white; font-size: 20px; animation: bounce 2s infinite; pointer-events: none; z-index: 99;">▼</div>
         
         <button id="toggleControls" onclick="toggleControlsVisibility()">▲</button>
+        
+        <button id="toggleUI" onclick="toggleUIVisibility()" style="position: fixed; top: 5px; right: 20px; background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); color: white; padding: 8px 12px; border-radius: 15px; cursor: pointer; z-index: 101; font-size: 12px;">◀</button>
         
         <div id="versionIndicator" style="position: fixed; bottom: 5px; left: 5px; background: rgba(0, 0, 0, 0.6); color: white; padding: 3px 6px; border-radius: 4px; font-size: 9px; z-index: 1000; pointer-events: none;">
             v1.0
@@ -742,18 +757,19 @@
         </div>
 
         <div id="currency-display">
-            <div>💰 Coins: <span id="coins">0</span></div>
-            <div class="diamond-text">💎 Diamantes: <span id="diamonds">0</span></div>
-            <div>⭐ Experiencia: <span id="experience">0</span></div>
-            <div style="color: #ff6b35;">🔥 Ascensión: <span id="ascensionPoints">0</span></div>
+            <div>🥕 Ingredientes: <span id="coins">0</span></div>
+            <div class="diamond-text">🧂 Especias: <span id="diamonds">0</span></div>
+            <div>👨🍳 Experiencia: <span id="experience">0</span></div>
+            <div style="color: #ff6b35;">🔥 Maestría: <span id="ascensionPoints">0</span></div>
             <div style="color: #ffd700;">🏆 Logros: <span id="achievementCount">0</span></div>
-            <div style="color: #00ff00;">🃏 Cartas: <span id="cardCount">0</span></div>
+            <div style="color: #00ff00;">📜 Recetas: <span id="cardCount">0</span></div>
             <div style="color: #ff69b4;">🎪 Evento: <span id="eventStatus">Ninguno</span></div>
+            <div style="color: #ffd700;">🏬 Reputación: <span id="reputation">0</span></div>
+            <div style="color: #87ceeb;">👥 Clientes: <span id="customerCount">0</span></div>
             <div id="activeOrbEffectsDisplay" style="color: #00ffff; font-size: 10px; margin-top: 5px;"></div>
         </div>
         
-        <!-- Centro de Notificaciones Móvil -->
-        <div id="notificationCenter" class="notification-center"></div>
+
     </div>
 
     <!-- Config Panel -->
@@ -776,6 +792,16 @@
                 <div class="premium-badge">PREMIUM</div>
                 <label>Color de la bola:</label>
                 <input type="color" id="ballColor" value="#ff0000" disabled>
+            </div>
+            <div class="config-item premium-feature" style="opacity: 0.5;">
+                <div class="premium-badge">PREMIUM</div>
+                <label>Efectos de aura:</label>
+                <input type="checkbox" id="auraEffects" disabled>
+            </div>
+            <div class="config-item premium-feature" style="opacity: 0.5;">
+                <div class="premium-badge">PREMIUM</div>
+                <label>Celebraciones épicas:</label>
+                <input type="checkbox" id="epicCelebrations" disabled>
             </div>
             <div class="config-item">
                 <label>Fondo del juego:</label>
@@ -879,6 +905,20 @@
                 <label>Sonidos de logros:</label>
                 <input type="checkbox" id="achievementSounds" checked>
             </div>
+            <div class="config-item">
+                <label>🎵 Modo Música:</label>
+                <input type="checkbox" id="musicMode" onchange="toggleMusicMode()">
+            </div>
+            <div class="config-item premium-feature" style="opacity: 0.5;">
+                <div class="premium-badge">PREMIUM</div>
+                <label>🎵 Temas musicales extra:</label>
+                <select id="premiumMusicThemes" disabled>
+                    <option>Synthwave</option>
+                    <option>Dubstep</option>
+                    <option>Jazz</option>
+                    <option>Classical</option>
+                </select>
+            </div>
         </div>
         
         <!-- Apartado: Guardado -->
@@ -895,6 +935,16 @@
             <div class="config-buttons">
                 <button onclick="saveToSlot()">💾 Guardar Slot</button>
                 <button onclick="loadFromSlot()">📁 Cargar Slot</button>
+            </div>
+            <div class="config-item premium-feature" style="opacity: 0.5;">
+                <div class="premium-badge">PREMIUM</div>
+                <label>☁️ Guardado en la nube:</label>
+                <button onclick="showPremiumRequired('Guardado en la nube')" disabled>Sincronizar</button>
+            </div>
+            <div class="config-item premium-feature" style="opacity: 0.5;">
+                <div class="premium-badge">PREMIUM</div>
+                <label>🔄 Auto-backup:</label>
+                <input type="checkbox" id="autoBackup" disabled>
             </div>
         </div>
         
@@ -945,6 +995,15 @@
             <div>Eventos activados: <span id="eventsTriggered">0</span></div>
             <div>Crashes detectados: <span id="crashCount">0</span></div>
         </div>
+        
+        <div class="premium-feature" style="opacity: 0.5; border-top: 1px solid #555; margin-top: 15px; padding-top: 15px;">
+            <div class="premium-badge">PREMIUM</div>
+            <h4>📊 Estadísticas Avanzadas</h4>
+            <button onclick="showPremiumRequired('Estadísticas avanzadas')" disabled>📈 Gráficos Detallados</button>
+            <button onclick="showPremiumRequired('Exportar datos')" disabled>📄 Exportar PDF</button>
+            <button onclick="showPremiumRequired('Predictor de metas')" disabled>🎯 Predictor IA</button>
+        </div>
+        
         <button onclick="closeStats()">Cerrar</button>
     </div>
 
@@ -1058,39 +1117,39 @@
 
         <div id="basic" class="tabcontent" style="display: block;">
             <div class="upgrade">
-                <h4>Multiplicador de Coins <span id="coinMultLevel">(Nivel 0)</span></h4>
-                <p>Aumenta coins por rebote</p>
-                <p>Costo: <span id="coinMultCost">100</span> coins</p>
+                <h4>Multiplicador de Ingredientes <span id="coinMultLevel">(Nivel 0)</span></h4>
+                <p>Aumenta ingredientes por plato</p>
+                <p>Costo: <span id="coinMultCost">100</span> ingredientes</p>
                 <button onclick="buyUpgrade('coinMult')">Comprar</button>
             </div>
             <div class="upgrade">
-                <h4>Velocidad <span id="speedLevel">(Nivel 0)</span></h4>
-                <p>Aumenta velocidad de la bola</p>
-                <p>Costo: <span id="speedCost">150</span> coins</p>
+                <h4>Velocidad de Cocina <span id="speedLevel">(Nivel 0)</span></h4>
+                <p>Aumenta velocidad de preparación</p>
+                <p>Costo: <span id="speedCost">150</span> ingredientes</p>
                 <button onclick="buyUpgrade('speed')">Comprar</button>
             </div>
             <div class="upgrade">
-                <h4>Tamaño <span id="sizeLevel">(Nivel 0)</span></h4>
-                <p>Aumenta tamaño de la bola</p>
-                <p>Costo: <span id="sizeCost">200</span> coins</p>
+                <h4>Tamaño de Sartén <span id="sizeLevel">(Nivel 0)</span></h4>
+                <p>Aumenta tamaño de la sartén</p>
+                <p>Costo: <span id="sizeCost">200</span> ingredientes</p>
                 <button onclick="buyUpgrade('size')">Comprar</button>
             </div>
             <div class="upgrade">
-                <h4>Combo Duración <span id="comboLevel">(Nivel 0)</span></h4>
-                <p>Aumenta duración del combo</p>
-                <p>Costo: <span id="comboCost">250</span> coins</p>
+                <h4>Combo Culinario <span id="comboLevel">(Nivel 0)</span></h4>
+                <p>Aumenta duración del combo de sabores</p>
+                <p>Costo: <span id="comboCost">250</span> ingredientes</p>
                 <button onclick="buyUpgrade('combo')">Comprar</button>
             </div>
             <div class="upgrade">
-                <h4>Crítico <span id="critLevel">(Nivel 0)</span></h4>
-                <p>Aumenta chance de rebote crítico</p>
-                <p>Costo: <span id="criticalCost">300</span> coins</p>
+                <h4>Plato Perfecto <span id="critLevel">(Nivel 0)</span></h4>
+                <p>Aumenta chance de plato perfecto</p>
+                <p>Costo: <span id="criticalCost">300</span> ingredientes</p>
                 <button onclick="buyUpgrade('critical')">Comprar</button>
             </div>
             <div class="upgrade">
-                <h4>Generador de Diamantes <span id="diamondGenLevel">(Nivel 0)</span></h4>
-                <p>Genera diamantes automáticamente</p>
-                <p>Costo: <span id="diamondGenCost">500</span> coins</p>
+                <h4>Generador de Especias <span id="diamondGenLevel">(Nivel 0)</span></h4>
+                <p>Genera especias automáticamente</p>
+                <p>Costo: <span id="diamondGenCost">500</span> ingredientes</p>
                 <button onclick="buyUpgrade('diamondGen')">Comprar</button>
             </div>
         </div>
@@ -1098,16 +1157,16 @@
         <div id="advanced" class="tabcontent">
             <div class="upgrade premium-feature">
                 <div class="diamond-badge">DIAMANTE</div>
-                <h4>Multiplicador de Experiencia <span id="expMultLevel">(Nivel 0)</span></h4>
-                <p>Aumenta ganancia de experiencia</p>
-                <p>Costo: <span id="expMultCost">10</span> 💎</p>
+                <h4>Multiplicador de Experiencia Culinaria <span id="expMultLevel">(Nivel 0)</span></h4>
+                <p>Aumenta ganancia de experiencia culinaria</p>
+                <p>Costo: <span id="expMultCost">10</span> 🧂</p>
                 <button onclick="buyUpgrade('expMult')">Comprar</button>
             </div>
             <div class="upgrade premium-feature">
                 <div class="diamond-badge">DIAMANTE</div>
-                <h4>Auto-Rebote <span id="autoLevel">(Nivel 0)</span></h4>
-                <p>La bola rebota automáticamente</p>
-                <p>Costo: <span id="autoCost">25</span> 💎</p>
+                <h4>Auto-Cocina <span id="autoLevel">(Nivel 0)</span></h4>
+                <p>Cocina platos automáticamente</p>
+                <p>Costo: <span id="autoCost">25</span> 🧂</p>
                 <button onclick="buyUpgrade('auto')">Comprar</button>
             </div>
         </div>
@@ -1115,16 +1174,16 @@
         <div id="legendary" class="tabcontent">
             <div class="upgrade legendary-upgrade">
                 <div class="legendary-badge">LEGENDARIO</div>
-                <h4>Ascensión Temporal <span id="timeAscLevel">(Nivel 0)</span></h4>
-                <p>Ralentiza el tiempo globalmente</p>
-                <p>Costo: <span id="timeAscCost">100</span> 💎</p>
+                <h4>Cocción Lenta <span id="timeAscLevel">(Nivel 0)</span></h4>
+                <p>Ralentiza el tiempo de cocción</p>
+                <p>Costo: <span id="timeAscCost">100</span> 🧂</p>
                 <button onclick="buyUpgrade('timeAsc')">Comprar</button>
             </div>
             <div class="upgrade legendary-upgrade">
                 <div class="legendary-badge">LEGENDARIO</div>
-                <h4>Dimensión Paralela <span id="dimensionLevel">(Nivel 0)</span></h4>
-                <p>Duplica todas las ganancias</p>
-                <p>Costo: <span id="dimensionCost">200</span> 💎</p>
+                <h4>Cocina Paralela <span id="dimensionLevel">(Nivel 0)</span></h4>
+                <p>Duplica todas las ganancias culinarias</p>
+                <p>Costo: <span id="dimensionCost">200</span> 🧂</p>
                 <button onclick="buyUpgrade('dimension')">Comprar</button>
             </div>
         </div>
@@ -1132,63 +1191,63 @@
         <div id="mythic" class="tabcontent">
             <div class="upgrade mythic-upgrade">
                 <div class="mythic-badge">MÍTICO</div>
-                <h4>Omnipotencia <span id="omniLevel">(Nivel 0)</span></h4>
+                <h4>Chef Supremo <span id="omniLevel">(Nivel 0)</span></h4>
                 <p>Multiplica TODAS las ganancias x10</p>
-                <p>Costo: <span id="omnipotenceCost">1000</span> 💎</p>
+                <p>Costo: <span id="omnipotenceCost">1000</span> 🧂</p>
                 <button onclick="buyUpgrade('omnipotence')">Comprar</button>
             </div>
             <div class="upgrade mythic-upgrade">
                 <div class="mythic-badge">MÍTICO</div>
-                <h4>Infinito <span id="infiniteLevel">(Nivel 0)</span></h4>
-                <p>Rompe los límites del juego</p>
-                <p>Costo: <span id="infiniteCost">5000</span> 💎</p>
+                <h4>Maestro Infinito <span id="infiniteLevel">(Nivel 0)</span></h4>
+                <p>Rompe los límites culinarios</p>
+                <p>Costo: <span id="infiniteCost">5000</span> 🧂</p>
                 <button onclick="buyUpgrade('infinite')">Comprar</button>
             </div>
         </div>
 
         <div id="prestige" class="tabcontent">
             <div class="prestige-section">
-                <h3>Sistema de Prestigio</h3>
+                <h3>Sistema de Estrellas Michelin</h3>
                 <p>Reinicia tu progreso pero ganas bonificadores permanentes</p>
-                <p>Puntos de Prestigio: <span id="prestigePoints">0</span></p>
-                <p>Requiere nivel 25+ y 500K+ coins</p>
-                <button onclick="doPrestige()">Prestigiar</button>
+                <p>Estrellas Michelin: <span id="prestigePoints">0</span></p>
+                <p>Requiere nivel chef 25+ y 500K+ ingredientes</p>
+                <button onclick="doPrestige()">Obtener Estrella</button>
             </div>
             <div class="upgrade">
                 <h4>Multiplicador Permanente</h4>
-                <p>+10% coins por punto de prestigio</p>
-                <p>Costo: 1 Punto de Prestigio</p>
+                <p>+10% ingredientes por estrella Michelin</p>
+                <p>Costo: 1 Estrella Michelin</p>
                 <button onclick="buyPrestigeUpgrade('coinBonus')">Comprar</button>
             </div>
         </div>
 
         <div id="ascension" class="tabcontent">
             <div class="prestige-section" style="background: linear-gradient(45deg, #ff6b35, #ff9500);">
-                <h3>🔥 Sistema de Ascensión 🔥</h3>
-                <p>Reinicia TODO incluyendo prestigio, pero desbloquea poder supremo</p>
-                <p>Puntos de Ascensión: <span id="ascensionPointsDisplay">0</span></p>
-                <p>Requiere 10+ Prestigios y 1B+ coins</p>
-                <button onclick="doAscension()">Ascender</button>
+                <h3>🔥 Sistema de Maestría Culinaria 🔥</h3>
+                <p>Reinicia TODO incluyendo estrellas, pero desbloquea poder supremo</p>
+                <p>Puntos de Maestría: <span id="ascensionPointsDisplay">0</span></p>
+                <p>Requiere 10+ Estrellas y 1B+ ingredientes</p>
+                <button onclick="doAscension()">Alcanzar Maestría</button>
             </div>
             <div class="upgrade legendary-upgrade">
                 <div class="legendary-badge">ASCENSIÓN</div>
-                <h4>Multiplicador Cósmico</h4>
-                <p>x2 a TODAS las ganancias por punto de ascensión</p>
-                <p>Costo: 1 Punto de Ascensión</p>
+                <h4>Multiplicador de Maestro</h4>
+                <p>x2 a TODAS las ganancias por punto de maestría</p>
+                <p>Costo: 1 Punto de Maestría</p>
                 <button onclick="buyAscensionUpgrade('cosmicMult')">Comprar</button>
             </div>
             <div class="upgrade legendary-upgrade">
                 <div class="legendary-badge">ASCENSIÓN</div>
-                <h4>Generador de Prestigio</h4>
-                <p>Genera puntos de prestigio automáticamente</p>
-                <p>Costo: 2 Puntos de Ascensión</p>
+                <h4>Generador de Estrellas</h4>
+                <p>Genera estrellas Michelin automáticamente</p>
+                <p>Costo: 2 Puntos de Maestría</p>
                 <button onclick="buyAscensionUpgrade('prestigeGen')">Comprar</button>
             </div>
             <div class="upgrade legendary-upgrade">
                 <div class="legendary-badge">ASCENSIÓN</div>
-                <h4>Acelerador Temporal</h4>
-                <p>El juego funciona 2x más rápido permanentemente</p>
-                <p>Costo: 3 Puntos de Ascensión</p>
+                <h4>Acelerador Culinario</h4>
+                <p>La cocina funciona 2x más rápido permanentemente</p>
+                <p>Costo: 3 Puntos de Maestría</p>
                 <button onclick="buyAscensionUpgrade('timeAccel')">Comprar</button>
             </div>
         </div>
@@ -1287,19 +1346,27 @@
                     <input type="checkbox" id="rainbowTrail" disabled>
                     <label for="rainbowTrail">Estela arcoíris</label>
                 </div>
+                <div style="margin: 5px 0;">
+                    <input type="checkbox" id="epicBurst" disabled>
+                    <label for="epicBurst">Explosiones épicas</label>
+                </div>
+                <div style="margin: 5px 0;">
+                    <input type="checkbox" id="customShapes" disabled>
+                    <label for="customShapes">Formas personalizadas</label>
+                </div>
                 <button onclick="showPremiumShop()">Desbloquear Premium</button>
             </div>
         </div>
 
         <div id="skins" class="tabcontent">
-            <h3>Selecciona una Skin</h3>
+            <h3>Selecciona Apariencia de Sartén</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 10px;">
                 <div class="skin-option selected" onclick="selectSkin('default')"
                     style="text-align: center; cursor: pointer; padding: 10px; border: 2px solid var(--hud-color); border-radius: 10px;">
                     <div
                         style="width: 40px; height: 40px; background: radial-gradient(circle, #ff0000, #aa0000); border-radius: 50%; margin: 0 auto 5px;">
                     </div>
-                    <div style="font-size: 10px;">Predeterminado</div>
+                    <div style="font-size: 10px;">Clásica</div>
                     <div style="font-size: 8px; color: #aaa;">Común</div>
                 </div>
                 <div class="skin-option" onclick="selectSkin('fire')"
@@ -1307,7 +1374,7 @@
                     <div
                         style="width: 40px; height: 40px; background: radial-gradient(circle, #ff9900, #ff3300); border-radius: 50%; margin: 0 auto 5px;">
                     </div>
-                    <div style="font-size: 10px;">Fuego</div>
+                    <div style="font-size: 10px;">Flambeada</div>
                     <div style="font-size: 8px; color: #aaa;">Común</div>
                 </div>
                 <div class="skin-option" onclick="selectSkin('ice')"
@@ -1315,7 +1382,7 @@
                     <div
                         style="width: 40px; height: 40px; background: radial-gradient(circle, #00ccff, #0066ff); border-radius: 50%; margin: 0 auto 5px;">
                     </div>
-                    <div style="font-size: 10px;">Hielo</div>
+                    <div style="font-size: 10px;">Congelada</div>
                     <div style="font-size: 8px; color: var(--hud-color);">Rara</div>
                 </div>
                 <div class="skin-option premium-feature" onclick="selectSkin('rainbow')"
@@ -1345,10 +1412,46 @@
                     <div style="font-size: 10px;">Cósmica</div>
                     <div style="font-size: 8px; color: #ff00ff;">Exclusiva</div>
                 </div>
+                <div class="skin-option premium-feature" onclick="selectSkin('neon')"
+                    style="text-align: center; cursor: pointer; padding: 10px; border: 2px solid transparent; border-radius: 10px; opacity: 0.5; position: relative;">
+                    <div class="premium-badge">PREMIUM</div>
+                    <div
+                        style="width: 40px; height: 40px; background: linear-gradient(45deg, #ff0080, #00ff80); border-radius: 50%; margin: 0 auto 5px;">
+                    </div>
+                    <div style="font-size: 10px;">Neón</div>
+                    <div style="font-size: 8px; color: gold;">Premium</div>
+                </div>
+                <div class="skin-option premium-feature" onclick="selectSkin('diamond')"
+                    style="text-align: center; cursor: pointer; padding: 10px; border: 2px solid transparent; border-radius: 10px; opacity: 0.5; position: relative;">
+                    <div class="premium-badge">PREMIUM</div>
+                    <div
+                        style="width: 40px; height: 40px; background: linear-gradient(45deg, #b9f2ff, #0099cc); border-radius: 50%; margin: 0 auto 5px; box-shadow: 0 0 10px rgba(185, 242, 255, 0.8);">
+                    </div>
+                    <div style="font-size: 10px;">Diamante</div>
+                    <div style="font-size: 8px; color: gold;">Premium</div>
+                </div>
             </div>
         </div>
 
         <div id="premium" class="tabcontent">
+            <div class="upgrade premium-feature" style="opacity: 0.5;">
+                <div class="premium-badge">PREMIUM</div>
+                <h4>🎮 Editor de Skins Personalizado</h4>
+                <p>Crea tus propias skins con herramientas avanzadas</p>
+                <button onclick="showPremiumRequired('Editor de skins')" disabled>🎨 Abrir Editor</button>
+            </div>
+            <div class="upgrade premium-feature" style="opacity: 0.5;">
+                <div class="premium-badge">PREMIUM</div>
+                <h4>🎬 Grabador de Replays</h4>
+                <p>Graba y comparte tus mejores jugadas</p>
+                <button onclick="showPremiumRequired('Grabador de replays')" disabled>📹 Iniciar Grabación</button>
+            </div>
+            <div class="upgrade premium-feature" style="opacity: 0.5;">
+                <div class="premium-badge">PREMIUM</div>
+                <h4>🏆 Títulos y Badges</h4>
+                <p>Desbloquea títulos exclusivos y badges únicos</p>
+                <button onclick="showPremiumRequired('Títulos y badges')" disabled>🎖️ Ver Colección</button>
+            </div>
             <div class="upgrade">
                 <h4>🌟 Desbloquear Premium 🌟</h4>
                 <p>Accede a todas las características premium:</p>
@@ -1566,6 +1669,10 @@
     </div>
 
     <script>
+        function showNotification(message) {
+            // Sistema de notificaciones deshabilitado
+        }
+        
         let gameData = {
             coins: 0,
             diamonds: 0,
@@ -1589,12 +1696,12 @@
             lastDailyReset: Date.now(),
             saveCount: 0,
             upgrades: {
-                coinMult: { level: 0, baseCost: 100, multiplier: 1.5, maxLevel: 1000 },
-                speed: { level: 0, baseCost: 150, multiplier: 1.6, maxLevel: 500 },
-                size: { level: 0, baseCost: 200, multiplier: 1.7, maxLevel: 200 },
-                combo: { level: 0, baseCost: 250, multiplier: 1.8, maxLevel: 100 },
-                critical: { level: 0, baseCost: 300, multiplier: 1.9, maxLevel: 50 },
-                diamondGen: { level: 0, baseCost: 500, multiplier: 2.0, maxLevel: 25 },
+                coinMult: { level: 0, baseCost: 100, multiplier: 1.3, maxLevel: 200 },
+                speed: { level: 0, baseCost: 150, multiplier: 1.35, maxLevel: 150 },
+                size: { level: 0, baseCost: 200, multiplier: 1.4, maxLevel: 100 },
+                combo: { level: 0, baseCost: 250, multiplier: 1.45, maxLevel: 75 },
+                critical: { level: 0, baseCost: 300, multiplier: 1.5, maxLevel: 50 },
+                diamondGen: { level: 0, baseCost: 500, multiplier: 1.6, maxLevel: 30 },
                 expMult: { level: 0, baseCost: 10, multiplier: 2.5, currency: 'diamonds', maxLevel: 100 },
                 auto: { level: 0, baseCost: 25, multiplier: 3.0, currency: 'diamonds', maxLevel: 10 },
                 timeAsc: { level: 0, baseCost: 100, multiplier: 5.0, currency: 'diamonds', maxLevel: 5 },
@@ -1609,20 +1716,24 @@
         };
 
         let canvas, ctx, width, height;
-        let coins = 0, diamonds = 0, experience = 0, bounces = 0, level = 1;
+        let coins = 0, diamonds = 0, experience = 0, bounces = 0, level = 1; // coins=ingredientes, diamonds=especias, bounces=platos
         let combo = 1, gamePaused = false;
-        let ball = { x: 0, y: 0, radius: 20, dx: 5, dy: 5, color: '#ff0000', baseSpeed: 5 };
+        let streak = 0, streakMultiplier = 1, lastBounceTime = 0;
+        let ball = { x: 0, y: 0, radius: 20, dx: 5, dy: 5, color: '#ff6b35', baseSpeed: 5, sizzleEffect: false, maxSpeed: 25 }; // ball=sartén
         let particles = [];
         let orbs = [];
         let orbTypes = [
-            { id: 'speed', name: 'Orbe de Velocidad', color: '#00ff00', effect: 'speed', power: 1.5, duration: 5000, rarity: 'común' },
-            { id: 'coins', name: 'Orbe de Fortuna', color: '#ffd700', effect: 'coins', power: 2, duration: 8000, rarity: 'común' },
-            { id: 'diamonds', name: 'Orbe de Gemas', color: '#ff69b4', effect: 'diamonds', power: 3, duration: 6000, rarity: 'raro' },
-            { id: 'combo', name: 'Orbe de Combo', color: '#ff4500', effect: 'combo', power: 1.8, duration: 10000, rarity: 'raro' },
-            { id: 'critical', name: 'Orbe Crítico', color: '#dc143c', effect: 'critical', power: 2.5, duration: 7000, rarity: 'épico' },
-            { id: 'experience', name: 'Orbe de Sabiduría', color: '#9370db', effect: 'experience', power: 3, duration: 9000, rarity: 'épico' },
-            { id: 'time', name: 'Orbe Temporal', color: '#00ffff', effect: 'time', power: 0.7, duration: 12000, rarity: 'legendario' },
-            { id: 'rainbow', name: 'Orbe Arcoíris', color: '#ffffff', effect: 'rainbow', power: 5, duration: 15000, rarity: 'mítico' }
+            { id: 'speed', name: 'Ingrediente Rápido', color: '#00ff00', effect: 'speed', power: 1.3, duration: 4000, rarity: 'común' },
+            { id: 'coins', name: 'Ingrediente Dorado', color: '#ffd700', effect: 'coins', power: 1.5, duration: 6000, rarity: 'común' },
+            { id: 'diamonds', name: 'Especia Rara', color: '#ff69b4', effect: 'diamonds', power: 2, duration: 5000, rarity: 'raro' },
+            { id: 'combo', name: 'Ingrediente Combo', color: '#ff4500', effect: 'combo', power: 1.5, duration: 8000, rarity: 'raro' },
+            { id: 'critical', name: 'Ingrediente Perfecto', color: '#dc143c', effect: 'critical', power: 2.5, duration: 7000, rarity: 'épico' },
+            { id: 'experience', name: 'Ingrediente Sabio', color: '#9370db', effect: 'experience', power: 3, duration: 9000, rarity: 'épico' },
+            { id: 'time', name: 'Ingrediente Temporal', color: '#00ffff', effect: 'time', power: 0.7, duration: 12000, rarity: 'legendario' },
+            { id: 'rainbow', name: 'Ingrediente Arcoíris', color: '#ffffff', effect: 'rainbow', power: 5, duration: 15000, rarity: 'mítico' },
+            { id: 'truffle', name: 'Trufa Negra', color: '#2c1810', effect: 'truffle', power: 10, duration: 20000, rarity: 'legendario' },
+            { id: 'saffron', name: 'Azafrán Dorado', color: '#f4c430', effect: 'saffron', power: 3, duration: 12000, rarity: 'épico' },
+            { id: 'wasabi', name: 'Wasabi Picante', color: '#7cb342', effect: 'wasabi', power: 2, duration: 8000, rarity: 'raro' }
         ];
         let activeOrbEffects = [];
 
@@ -1641,7 +1752,7 @@
             loadGame();
             setupEventListeners();
             
-            if (gameData.upgrades.speed.level > 0) {
+            if (gameData.upgrades.speed && gameData.upgrades.speed.level > 0) {
                 applyUpgradeEffects('speed');
             }
             
@@ -1650,6 +1761,7 @@
 
             setTimeout(() => {
                 document.getElementById('loadingScreen').style.display = 'none';
+                initPremiumSystem();
                 gameLoop();
             }, 2000);
         }
@@ -1729,6 +1841,7 @@
                 
                 if (!gamePaused) {
                     update();
+                    updateMusicEffects();
                     render();
                 }
             }
@@ -1744,6 +1857,14 @@
         }
 
         function update() {
+            // Aplicar límite de velocidad
+            const currentSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+            if (currentSpeed > ball.maxSpeed) {
+                const ratio = ball.maxSpeed / currentSpeed;
+                ball.dx *= ratio;
+                ball.dy *= ratio;
+            }
+            
             ball.x += ball.dx * gameSpeed;
             ball.y += ball.dy * gameSpeed;
 
@@ -1777,7 +1898,7 @@
         }
 
         function render() {
-            // Optimización: Clear solo área necesaria
+            // Clear con efectos musicales
             if (performanceMode) {
                 ctx.clearRect(0, 0, width, height);
                 ctx.fillStyle = 'rgba(34, 34, 34, 0.1)';
@@ -1786,60 +1907,133 @@
                 ctx.fillStyle = '#222';
                 ctx.fillRect(0, 0, width, height);
             }
+            
+            // Dibujar ondas de fondo musicales
+            if (musicMode && backgroundWaves.length > 0) {
+                backgroundWaves.forEach(wave => {
+                    ctx.globalAlpha = wave.life / 1000;
+                    ctx.strokeStyle = wave.color;
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(wave.x, wave.y, wave.radius, 0, Math.PI * 2);
+                    ctx.stroke();
+                });
+                ctx.globalAlpha = 1;
+            }
+            
+            // Dibujar estela musical
+            if (musicMode && musicTrail.length > 0) {
+                musicTrail.forEach(trail => {
+                    ctx.globalAlpha = trail.life / trail.maxLife * 0.6;
+                    ctx.fillStyle = trail.color;
+                    ctx.beginPath();
+                    ctx.arc(trail.x, trail.y, trail.size * (trail.life / trail.maxLife), 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                ctx.globalAlpha = 1;
+            }
 
-            // Dibujar orbes
+            // Dibujar orbes (mejorado para orbes musicales)
             orbs.forEach(orb => {
                 ctx.globalAlpha = orb.alpha;
-                ctx.beginPath();
-                ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
                 
-                // Efecto de resplandor según rareza
-                const glowSize = orb.type.rarity === 'mítico' ? 30 : orb.type.rarity === 'legendario' ? 20 : 15;
-                const gradient = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, glowSize);
-                gradient.addColorStop(0, orb.type.color);
-                gradient.addColorStop(0.7, orb.type.color + '80');
-                gradient.addColorStop(1, orb.type.color + '00');
-                
-                ctx.fillStyle = gradient;
-                ctx.fill();
+                // Efecto especial para orbes musicales
+                if (orb.musical) {
+                    const pulseSize = orb.radius + Math.sin(orb.pulsePhase * 3) * 5;
+                    ctx.beginPath();
+                    ctx.arc(orb.x, orb.y, pulseSize, 0, Math.PI * 2);
+                    
+                    const gradient = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, pulseSize);
+                    gradient.addColorStop(0, orb.type.color);
+                    gradient.addColorStop(0.5, orb.type.color + (orb.type.color.startsWith('#') ? '80' : ''));
+                    gradient.addColorStop(1, orb.type.color + (orb.type.color.startsWith('#') ? '00' : ''));
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                } else {
+                    // Orbes normales
+                    ctx.beginPath();
+                    ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
+                    
+                    const glowSize = orb.type.rarity === 'mítico' ? 30 : orb.type.rarity === 'legendario' ? 20 : 15;
+                    const gradient = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, glowSize);
+                    gradient.addColorStop(0, orb.type.color);
+                    gradient.addColorStop(0.7, orb.type.color.startsWith('#') ? orb.type.color + '80' : 'rgba(255,255,255,0.5)');
+                    gradient.addColorStop(1, orb.type.color.startsWith('#') ? orb.type.color + '00' : 'rgba(255,255,255,0)');
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                }
                 
                 // Núcleo del orbe
                 ctx.beginPath();
                 ctx.arc(orb.x, orb.y, orb.radius * 0.6, 0, Math.PI * 2);
                 ctx.fillStyle = orb.type.color;
                 ctx.fill();
-                
-                // Texto del tipo de orbe
-                ctx.fillStyle = 'white';
-                ctx.font = '10px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText(orb.type.name.split(' ')[1] || orb.type.id, orb.x, orb.y - orb.radius - 5);
             });
             ctx.globalAlpha = 1;
 
-            // Dibujar bola
+            // Dibujar bola con efectos musicales
             ctx.beginPath();
             ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-            ctx.fillStyle = ball.color;
+            
+            // Gradiente musical si está activo
+            if (musicMode && audioSource && !audioSource.paused) {
+                const ballGradient = ctx.createRadialGradient(ball.x, ball.y, 0, ball.x, ball.y, ball.radius);
+                ballGradient.addColorStop(0, ball.color);
+                if (ball.color.startsWith('#')) {
+                    ballGradient.addColorStop(0.7, ball.color + 'CC');
+                    ballGradient.addColorStop(1, ball.color + '66');
+                } else if (ball.color.startsWith('hsl')) {
+                    ballGradient.addColorStop(0.7, ball.color.replace(')', ', 0.8)').replace('hsl', 'hsla'));
+                    ballGradient.addColorStop(1, ball.color.replace(')', ', 0.4)').replace('hsl', 'hsla'));
+                } else {
+                    ballGradient.addColorStop(0.7, 'rgba(255,107,53,0.8)');
+                    ballGradient.addColorStop(1, 'rgba(255,107,53,0.4)');
+                }
+                ctx.fillStyle = ballGradient;
+            } else {
+                ctx.fillStyle = ball.color;
+            }
             ctx.fill();
             
-            // Efecto de aura si hay efectos activos
+            // Aura de efectos activos
             if (activeOrbEffects.length > 0) {
                 const auraGradient = ctx.createRadialGradient(ball.x, ball.y, ball.radius, ball.x, ball.y, ball.radius * 2);
-                auraGradient.addColorStop(0, activeOrbEffects[0].color + '40');
-                auraGradient.addColorStop(1, activeOrbEffects[0].color + '00');
+                const effectColor = activeOrbEffects[0].color;
+                if (effectColor.startsWith('#')) {
+                    auraGradient.addColorStop(0, effectColor + '40');
+                    auraGradient.addColorStop(1, effectColor + '00');
+                } else {
+                    auraGradient.addColorStop(0, 'rgba(255,107,53,0.25)');
+                    auraGradient.addColorStop(1, 'rgba(255,107,53,0)');
+                }
                 ctx.fillStyle = auraGradient;
                 ctx.fill();
             }
 
-            // Dibujar partículas (optimizado)
+            // Dibujar partículas (mejorado para partículas musicales)
             if (particles.length > 0) {
                 particles.forEach(p => {
-                    // Culling: solo dibujar partículas visibles
                     if (p.x > -10 && p.x < width + 10 && p.y > -10 && p.y < height + 10) {
                         ctx.globalAlpha = p.alpha;
                         ctx.fillStyle = p.color;
-                        ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+                        
+                        if (p.musical) {
+                            // Partículas musicales más elaboradas
+                            ctx.beginPath();
+                            ctx.arc(p.x, p.y, p.size || 3, 0, Math.PI * 2);
+                            ctx.fill();
+                            
+                            // Efecto de brillo
+                            ctx.shadowColor = p.color;
+                            ctx.shadowBlur = 10;
+                            ctx.fill();
+                            ctx.shadowBlur = 0;
+                        } else {
+                            // Partículas normales
+                            ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+                        }
                     }
                 });
                 ctx.globalAlpha = 1;
@@ -1850,10 +2044,10 @@
             bounces++;
             gameData.bounces = bounces;
 
-            let baseCoins = 2 + Math.floor(level / 10);
-            let coinMultiplier = Math.pow(1.15, gameData.upgrades.coinMult.level);
-            let comboMultiplier = Math.min(combo * (1 + gameData.upgrades.combo.level * 0.08), 30);
-            let prestigeMultiplier = (1 + gameData.prestige * 0.1);
+            let baseCoins = 1 + Math.floor(level / 5);
+            let coinMultiplier = Math.pow(1.08, gameData.upgrades.coinMult.level);
+            let comboMultiplier = Math.min(combo * (1 + gameData.upgrades.combo.level * 0.05), 15);
+            let prestigeMultiplier = (1 + gameData.prestige * 0.05);
 
             let criticalMultiplier = 1;
             if (Math.random() < Math.min(gameData.upgrades.critical.level * 0.02, 0.25)) {
@@ -1866,7 +2060,7 @@
 
             let coinsGained = Math.floor(baseCoins * coinMultiplier * comboMultiplier * prestigeMultiplier * criticalMultiplier * 0.8);
             const effects = applyCollectionEffects();
-            coinsGained = Math.floor(coinsGained * effects.coinMultiplier);
+            coinsGained = Math.floor(coinsGained * effects.coinMultiplier * streakMultiplier);
             
 
             if (currentEvent && currentEvent.effect === 'coins') {
@@ -1877,6 +2071,8 @@
             if (gameData.research.unlocked.includes('efficiency1')) coinsGained = Math.floor(coinsGained * 1.25);
             if (gameData.research.unlocked.includes('efficiency2')) coinsGained = Math.floor(coinsGained * 1.5);
             if (gameData.research.unlocked.includes('cosmic')) coinsGained = Math.floor(coinsGained * 5);
+            
+            let expGained = Math.floor(coinsGained / 5);
             
             // Aplicar eventos especiales
             if (currentEvent) {
@@ -1900,20 +2096,29 @@
             }
 
             // Mejoras legendarias y míticas
-            if (gameData.upgrades.dimension.level > 0) coinsGained *= Math.pow(2, gameData.upgrades.dimension.level);
-            if (gameData.upgrades.omnipotence.level > 0) coinsGained *= Math.pow(10, gameData.upgrades.omnipotence.level);
-            if (gameData.upgrades.infinite.level > 0) coinsGained *= Math.pow(100, gameData.upgrades.infinite.level);
+            if (gameData.upgrades.dimension && gameData.upgrades.dimension.level > 0) coinsGained *= Math.pow(2, gameData.upgrades.dimension.level);
+            if (gameData.upgrades.omnipotence && gameData.upgrades.omnipotence.level > 0) coinsGained *= Math.pow(10, gameData.upgrades.omnipotence.level);
+            if (gameData.upgrades.infinite && gameData.upgrades.infinite.level > 0) coinsGained *= Math.pow(100, gameData.upgrades.infinite.level);
 
+            // Aplicar multiplicador musical
+            if (musicMode && musicBeatMultiplier > 1) {
+                coinsGained = Math.floor(coinsGained * musicBeatMultiplier);
+                
+                // Bonus por combo musical
+                if (musicComboStreak > 10) {
+                    coinsGained = Math.floor(coinsGained * (1 + musicComboStreak * 0.01));
+                    showNotification(`🎵 Combo Musical x${musicComboStreak}!`);
+                }
+            }
+            
             coins += coinsGained;
             gameData.coins = coins;
-
-            let expGained = Math.floor(coinsGained / 5);
-            if (gameData.upgrades.expMult.level > 0) expGained *= Math.pow(2.5, gameData.upgrades.expMult.level);
+            if (gameData.upgrades.expMult && gameData.upgrades.expMult.level > 0) expGained *= Math.pow(2.5, gameData.upgrades.expMult.level);
             expGained = Math.floor(expGained * effects.expMultiplier);
             experience += expGained;
             gameData.experience = experience;
 
-            let diamondChance = 0.015 + gameData.upgrades.diamondGen.level * 0.005;
+            let diamondChance = 0.008 + gameData.upgrades.diamondGen.level * 0.003;
             if (currentEvent && currentEvent.effect === 'diamonds') diamondChance *= 2;
             if (dateEvent && dateEvent.type === 'diamonds') diamondChance *= dateEvent.multiplier;
             
@@ -1925,21 +2130,48 @@
             }
 
 
-            if (bounces >= level * 75) {
+            if (bounces >= level * 100 + Math.pow(level, 1.2) * 25) {
                 level++;
                 gameData.level = level;
+                saveGame(); // Guardar al subir de nivel
 
-                if (level % 5 === 0 || level <= 10) {
-                    showNotification(`¡Nivel ${level} alcanzado!`);
+                if (level % 10 === 0 && Date.now() - notificationCooldown.level > 5000) {
+                    showNotification(`👨‍🍳 ¡Chef Nivel ${level}!`);
+                    notificationCooldown.level = Date.now();
                 }
             }
 
             let comboDecay = 0.01 - (gameData.upgrades.combo.level * 0.008);
             if (currentEvent && currentEvent.effect === 'combo') comboDecay = 0;
+            // Sistema de rachas
+            const now = Date.now();
+            if (now - lastBounceTime < 500) {
+                streak++;
+                streakMultiplier = 1 + (streak * 0.02);
+            } else {
+                streak = 0;
+                streakMultiplier = 1;
+            }
+            lastBounceTime = now;
+            
             combo = Math.max(1, combo - comboDecay);
             combo = Math.min(combo + 0.15, 15 + gameData.upgrades.combo.level);
 
             createParticles(ball.x, ball.y);
+            // Efectos visuales mejorados
+            ball.sizzleEffect = true;
+            setTimeout(() => ball.sizzleEffect = false, 200);
+            
+            // Vibración en móvil
+            if (navigator.vibrate && streak > 5) {
+                navigator.vibrate(50);
+            }
+            
+            // Efecto de pantalla al hacer combo alto
+            if (combo > 10) {
+                document.body.style.filter = `hue-rotate(${combo * 10}deg)`;
+                setTimeout(() => document.body.style.filter = '', 100);
+            }
             updateUI();
         }
 
@@ -2018,6 +2250,8 @@
             if (document.getElementById('ascensionPointsDisplay')) document.getElementById('ascensionPointsDisplay').textContent = gameData.ascensionPoints;
             if (document.getElementById('achievementCount')) document.getElementById('achievementCount').textContent = (gameData.achievements || []).length;
             if (document.getElementById('cardCount')) document.getElementById('cardCount').textContent = (gameData.cards || []).length;
+            if (document.getElementById('reputation')) document.getElementById('reputation').textContent = restaurantData.reputation;
+            if (document.getElementById('customerCount')) document.getElementById('customerCount').textContent = restaurantData.customers.length;
             
             // Actualizar contador de orbes
             if (document.getElementById('orbCount')) {
@@ -2047,6 +2281,10 @@
                 const afkMinutes = Math.floor(afkTime / 60);
                 const afkSeconds = afkTime % 60;
                 document.getElementById('afkTimer').textContent = afkMinutes > 0 ? `${afkMinutes}m${afkSeconds}s` : `${afkSeconds}s`;
+            }
+            
+            if (document.getElementById('streakDisplay')) {
+                document.getElementById('streakDisplay').textContent = streak > 0 ? `${streak}x` : '0x';
             }
             
             updateShopUI();
@@ -2104,6 +2342,7 @@
 
                 applyUpgradeEffects(upgradeId);
                 updateUI();
+                saveGame(); // Guardar inmediatamente después de comprar mejora
             }
         }
 
@@ -2112,7 +2351,7 @@
                 case 'speed':
                     // Recalcular velocidad base con mejoras
                     const speedIncrease = gameData.upgrades.speed.level * 0.5;
-                    const newSpeed = ball.baseSpeed + speedIncrease;
+                    const newSpeed = Math.min(ball.baseSpeed + speedIncrease, ball.maxSpeed);
                     
                     // Mantener la dirección actual
                     const directionX = ball.dx > 0 ? 1 : -1;
@@ -2145,7 +2384,7 @@
         function doPrestige() {
             const confirmPrestige = document.getElementById('confirmPrestige')?.checked ?? true;
             
-            if (level >= 25 && coins >= 500000) {
+            if (level >= 50 && coins >= 1000000) {
                 if (confirmPrestige && !confirm('¿Estás seguro de que quieres prestigiar? Perderás todo tu progreso actual.')) {
                     return;
                 }
@@ -2181,9 +2420,10 @@
 
                 generateMissions();
                 updateUI();
+                saveGame(); // Guardar después del prestigio
                 showNotification(`¡Prestigio completado! +${prestigePointsGained} puntos`);
             } else {
-                showNotification('Necesitas nivel 25+ y 500K+ coins para prestigiar');
+                // Sin notificación de error
             }
         }
 
@@ -2192,6 +2432,7 @@
                 gameData.prestigePoints -= 1;
                 gameData.prestige += 0.1;
                 updateUI();
+                saveGame(); // Guardar después de comprar mejora de prestigio
                 showNotification('¡Multiplicador permanente comprado! +10% coins');
             }
         }
@@ -2217,6 +2458,7 @@
                 }
                 
                 updateUI();
+                saveGame(); // Guardar después de investigación
                 showNotification(`¡Investigación ${researchId} completada!`);
             }
         }
@@ -2262,19 +2504,19 @@
         }
 
         function generateResources() {
-            if (gameData.upgrades.diamondGen.level > 0) {
-                diamonds += gameData.upgrades.diamondGen.level * 0.2; // Doble generación
+            if (gameData.upgrades.diamondGen && gameData.upgrades.diamondGen.level > 0) {
+                diamonds += gameData.upgrades.diamondGen.level * 0.1;
                 gameData.diamonds = diamonds;
             }
 
             if (gameData.prestigePoints > 0) {
-                diamonds += gameData.prestigePoints * 0.02; // Doble generación pasiva
-                coins += gameData.prestigePoints * 25; // Más coins pasivas
+                diamonds += gameData.prestigePoints * 0.01;
+                coins += gameData.prestigePoints * 10;
                 gameData.diamonds = diamonds;
                 gameData.coins = coins;
             }
 
-            if (gameData.upgrades.auto.level > 0 && !gamePaused) {
+            if (gameData.upgrades.auto && gameData.upgrades.auto.level > 0 && !gamePaused) {
                 if (Math.random() < 0.05 * gameData.upgrades.auto.level) {
                     handleBounce();
                 }
@@ -2339,8 +2581,17 @@
         }
 
         function autoSave() {
+            saveGame();
+        }
+        
+        function saveGame() {
+            gameData.coins = coins;
+            gameData.diamonds = diamonds;
+            gameData.experience = experience;
+            gameData.bounces = bounces;
+            gameData.level = level;
             gameData.lastSave = Date.now();
-            gameData.saveCount++;
+            gameData.saveCount = (gameData.saveCount || 0) + 1;
             
             const saveData = {
                 coins, diamonds, experience, bounces, level,
@@ -2357,6 +2608,7 @@
                 timestamp: gameData.lastSave
             };
             localStorage.setItem('circleBounceUltimate', JSON.stringify(saveData));
+            console.log('Juego guardado automáticamente');
         }
 
         function loadGame() {
@@ -2388,7 +2640,33 @@
                     gameData.saveCount = Math.max(0, data.saveCount || 0);
                     
                     premiumUnlocked = Boolean(data.premiumUnlocked);
+                    gameData.premiumUnlocked = premiumUnlocked;
                     selectedSkin = data.selectedSkin || 'default';
+                    
+                    // Aplicar skin guardada
+                    if (selectedSkin) {
+                        const colors = { 
+                            default: '#ff6b35', 
+                            fire: '#ff6600', 
+                            ice: '#00ccff', 
+                            rainbow: '#ff0000', 
+                            galaxy: '#9900ff', 
+                            cosmic: '#00ffff',
+                            neon: '#ff0080',
+                            diamond: '#b9f2ff'
+                        };
+                        ball.color = colors[selectedSkin] || '#ff6b35';
+                    }
+                    
+                    if (premiumUnlocked) {
+                        setTimeout(() => {
+                            document.querySelectorAll('.premium-feature').forEach(el => {
+                                el.style.opacity = '1';
+                                el.style.pointerEvents = 'auto';
+                            });
+                            document.querySelectorAll('.premium-feature input, .premium-feature select, .premium-feature button').forEach(el => el.disabled = false);
+                        }, 100);
+                    }
                     missionSet = Math.max(1, Math.min(data.missionSet || 1, 1000));
                     completedMissions = Math.max(0, Math.min(data.completedMissions || 0, 1000));
                     totalBounces = Math.max(0, Math.min(data.totalBounces || 0, 1e12));
@@ -2496,12 +2774,12 @@
         let bestCombo = 1;
         let playTimeStart = Date.now();
         let missions = {
-            bounces: { target: 50, progress: 0, reward: 100, completed: false },
-            coins: { target: 500, progress: 0, reward: 200, completed: false },
-            diamonds: { target: 3, progress: 0, reward: 5, completed: false },
-            level: { target: 5, progress: 0, reward: 500, completed: false },
-            combo: { target: 5, progress: 0, reward: 300, completed: false },
-            upgrades: { target: 3, progress: 0, reward: 1000, completed: false }
+            bounces: { target: 100, progress: 0, reward: 150, completed: false },
+            coins: { target: 1000, progress: 0, reward: 250, completed: false },
+            diamonds: { target: 5, progress: 0, reward: 3, completed: false },
+            level: { target: 8, progress: 0, reward: 400, completed: false },
+            combo: { target: 8, progress: 0, reward: 200, completed: false },
+            upgrades: { target: 5, progress: 0, reward: 600, completed: false }
         };
         let missionSet = 1;
         let completedMissions = 0;
@@ -2509,17 +2787,17 @@
         let lightMode = false;
         let redeemedCodes = [];
         let achievements = [
-            { id: 'first100', name: 'Primer Centenar', desc: 'Alcanza 100 rebotes', target: 100, type: 'bounces', unlocked: false, reward: 500 },
-            { id: 'first1000', name: 'Mil Rebotes', desc: 'Alcanza 1000 rebotes', target: 1000, type: 'bounces', unlocked: false, reward: 2000 },
-            { id: 'first10k', name: 'Maestro Rebotador', desc: 'Alcanza 10K rebotes', target: 10000, type: 'bounces', unlocked: false, reward: 10000 },
-            { id: 'millionaire', name: 'Millonario', desc: 'Consigue 1M coins', target: 1000000, type: 'coins', unlocked: false, reward: 1000 },
+            { id: 'first100', name: 'Primer Centenar', desc: 'Alcanza 100 rebotes', target: 100, type: 'bounces', unlocked: false, reward: 200 },
+            { id: 'first1000', name: 'Mil Rebotes', desc: 'Alcanza 1000 rebotes', target: 1000, type: 'bounces', unlocked: false, reward: 800 },
+            { id: 'first10k', name: 'Maestro Rebotador', desc: 'Alcanza 10K rebotes', target: 10000, type: 'bounces', unlocked: false, reward: 3000 },
+            { id: 'millionaire', name: 'Millonario', desc: 'Consigue 1M coins', target: 1000000, type: 'coins', unlocked: false, reward: 500 },
             { id: 'billionaire', name: 'Billonario', desc: 'Consigue 1B coins', target: 1000000000, type: 'coins', unlocked: false, reward: 50000 },
-            { id: 'diamond10', name: 'Coleccionista', desc: 'Obtén 10 diamantes', target: 10, type: 'diamonds', unlocked: false, reward: 5 },
-            { id: 'diamond100', name: 'Cazador de Gemas', desc: 'Obtén 100 diamantes', target: 100, type: 'diamonds', unlocked: false, reward: 25 },
+            { id: 'diamond10', name: 'Coleccionista', desc: 'Obtén 10 diamantes', target: 10, type: 'diamonds', unlocked: false, reward: 2 },
+            { id: 'diamond100', name: 'Cazador de Gemas', desc: 'Obtén 100 diamantes', target: 100, type: 'diamonds', unlocked: false, reward: 8 },
             { id: 'prestige1', name: 'Renacimiento', desc: 'Haz tu primer prestigio', target: 1, type: 'prestige', unlocked: false, reward: 2000 },
             { id: 'prestige10', name: 'Veterano', desc: 'Haz 10 prestigios', target: 10, type: 'prestige', unlocked: false, reward: 20000 },
-            { id: 'level50', name: 'Medio Siglo', desc: 'Alcanza nivel 50', target: 50, type: 'level', unlocked: false, reward: 5000 },
-            { id: 'level100', name: 'Centurión', desc: 'Alcanza nivel 100', target: 100, type: 'level', unlocked: false, reward: 15000 },
+            { id: 'level50', name: 'Medio Siglo', desc: 'Alcanza nivel 50', target: 50, type: 'level', unlocked: false, reward: 1500 },
+            { id: 'level100', name: 'Centurión', desc: 'Alcanza nivel 100', target: 100, type: 'level', unlocked: false, reward: 4000 },
             { id: 'combo20', name: 'Combo Master', desc: 'Alcanza combo 20x', target: 20, type: 'combo', unlocked: false, reward: 8000 },
             { id: 'speed15', name: 'Velocista', desc: 'Alcanza velocidad 15+', target: 15, type: 'speed', unlocked: false, reward: 3000 },
             { id: 'size40', name: 'Gigante', desc: 'Tamaño de bola 40+', target: 40, type: 'size', unlocked: false, reward: 4000 },
@@ -2556,10 +2834,10 @@
         let currentEvent = null;
         let eventTimeLeft = 0;
         let dailyChallenges = [
-            { id: 'bounces', name: 'Rebotador Experto', desc: 'Haz 200 rebotes', target: 200, progress: 0, reward: 1500, type: 'coins', completed: false },
-            { id: 'coins', name: 'Coleccionista Diario', desc: 'Gana 5K coins', target: 5000, progress: 0, reward: 5, type: 'diamonds', completed: false },
-            { id: 'diamonds', name: 'Cazador de Gemas', desc: 'Consigue 5 diamantes', target: 5, progress: 0, reward: 3000, type: 'coins', completed: false },
-            { id: 'combo', name: 'Combo Diario', desc: 'Alcanza combo 8x', target: 8, progress: 0, reward: 3, type: 'diamonds', completed: false },
+            { id: 'bounces', name: 'Rebotador Experto', desc: 'Haz 500 rebotes', target: 500, progress: 0, reward: 800, type: 'coins', completed: false },
+            { id: 'coins', name: 'Coleccionista Diario', desc: 'Gana 10K coins', target: 10000, progress: 0, reward: 3, type: 'diamonds', completed: false },
+            { id: 'diamonds', name: 'Cazador de Gemas', desc: 'Consigue 8 diamantes', target: 8, progress: 0, reward: 1500, type: 'coins', completed: false },
+            { id: 'combo', name: 'Combo Diario', desc: 'Alcanza combo 12x', target: 12, progress: 0, reward: 2, type: 'diamonds', completed: false },
             { id: 'levels', name: 'Subir de Nivel', desc: 'Sube 2 niveles', target: 2, progress: 0, reward: 2000, type: 'coins', completed: false },
             { id: 'speed', name: 'Velocidad Extrema', desc: 'Alcanza velocidad 15+', target: 15, progress: 0, reward: 4, type: 'diamonds', completed: false },
             { id: 'upgrades', name: 'Mejorador', desc: 'Compra 3 mejoras', target: 3, progress: 0, reward: 2500, type: 'coins', completed: false },
@@ -2590,6 +2868,9 @@
         let idleBonus = 1;
         let dateEvent = null;
         let betaStats = { sessionStart: Date.now(), orbsCollected: 0, codesRedeemed: 0, eventsTriggered: 0, crashes: 0 };
+        let notificationCooldown = { level: 0, achievement: 0, event: 0 };
+
+        let restaurantData = { reputation: 0, customers: [], menuSpecial: null };
         let frameSkip = 0;
         let frameCount = 0;
         let lastFrameTime = 0;
@@ -2597,6 +2878,23 @@
         let currentFPS = 60;
         let particlePool = [];
         let batterySaverMode = false;
+        let musicMode = false;
+        let audioContext = null;
+        let analyser = null;
+        let audioSource = null;
+        let frequencyData = null;
+        let musicSensitivity = 1;
+        let musicTheme = 'disco';
+        let musicBPM = 0;
+        let beatHistory = [];
+        let lastBeatTime = 0;
+        let musicBeatMultiplier = 1;
+        let musicComboStreak = 0;
+        let visualizerBars = [];
+        let musicTrail = [];
+        let backgroundWaves = [];
+        let strobeEffect = false;
+        let musicOrbSpawnRate = 0;
 
         // Funciones UI
         // Sistema unificado de paneles
@@ -2742,11 +3040,17 @@
         }
         
         let controlsVisible = true;
+        let uiVisible = true;
+        
         function toggleControlsVisibility() {
             const controls = document.getElementById('controls');
             const toggleBtn = document.getElementById('toggleControls');
             
             controlsVisible = !controlsVisible;
+            
+            // Añadir animación de rotación
+            toggleBtn.style.transform = 'rotate(180deg)';
+            setTimeout(() => toggleBtn.style.transform = '', 300);
             
             if (controlsVisible) {
                 controls.classList.remove('hidden');
@@ -2756,6 +3060,26 @@
                 toggleBtn.textContent = '▼';
             }
         }
+        
+        function toggleUIVisibility() {
+            const ui = document.getElementById('ui');
+            const currencyDisplay = document.getElementById('currency-display');
+            const toggleBtn = document.getElementById('toggleUI');
+            
+            uiVisible = !uiVisible;
+            
+            if (uiVisible) {
+                ui.style.display = 'flex';
+                currencyDisplay.style.display = 'block';
+                toggleBtn.textContent = '◀';
+            } else {
+                ui.style.display = 'none';
+                currencyDisplay.style.display = 'none';
+                toggleBtn.textContent = '▶';
+            }
+        }
+        
+
         
 
         function showPremiumShop() { togglePanel('premiumShop'); }
@@ -2841,11 +3165,530 @@
             document.getElementById('uiScaleValue').textContent = Math.round(value * 100) + '%';
         }
         
+        function toggleMusicMode() {
+            musicMode = document.getElementById('musicMode').checked;
+            const musicControls = document.getElementById('musicControls');
+            
+            if (musicMode) {
+                musicControls.style.display = 'block';
+                initAudioContext();
+                setupMusicEventListeners();
+                showNotification('🎵 ¡MODO MÚSICA ÉPICO ACTIVADO! 🎧✨');
+            } else {
+                musicControls.style.display = 'none';
+                stopMusic();
+                resetMusicEffects();
+                showNotification('🎵 Modo Música desactivado');
+            }
+        }
+        
+        function setupMusicEventListeners() {
+            document.getElementById('musicSensitivity').addEventListener('input', (e) => {
+                musicSensitivity = parseFloat(e.target.value);
+            });
+            
+            document.getElementById('musicTheme').addEventListener('change', (e) => {
+                musicTheme = e.target.value;
+                applyMusicTheme();
+            });
+        }
+        
+        function applyMusicTheme() {
+            const themes = {
+                disco: { hueShift: 0, saturation: 1.5, brightness: 1.2 },
+                rock: { hueShift: 30, saturation: 1.8, brightness: 0.9 },
+                electronic: { hueShift: 180, saturation: 2.0, brightness: 1.4 },
+                chill: { hueShift: 240, saturation: 0.8, brightness: 0.7 }
+            };
+            
+            const theme = themes[musicTheme] || themes.disco;
+            document.documentElement.style.setProperty('--music-hue-shift', theme.hueShift);
+            document.documentElement.style.setProperty('--music-saturation', theme.saturation);
+            document.documentElement.style.setProperty('--music-brightness', theme.brightness);
+        }
+        
+        function initAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 512; // Mayor resolución
+                analyser.smoothingTimeConstant = 0.8;
+                frequencyData = new Uint8Array(analyser.frequencyBinCount);
+                initMusicVisualizer();
+            }
+        }
+        
+        function initMusicVisualizer() {
+            const visualizer = document.getElementById('musicVisualizer');
+            visualizer.innerHTML = '';
+            visualizerBars = [];
+            
+            for (let i = 0; i < 32; i++) {
+                const bar = document.createElement('div');
+                bar.style.cssText = `
+                    width: 3px;
+                    background: linear-gradient(to top, #FF6B35, #4CAF50, #FFD700);
+                    border-radius: 1px;
+                    height: 2px;
+                    transition: height 0.1s ease;
+                `;
+                visualizer.appendChild(bar);
+                visualizerBars.push(bar);
+            }
+        }
+        
+        function toggleMusic() {
+            const fileInput = document.getElementById('musicFile');
+            const playBtn = document.getElementById('playPauseBtn');
+            
+            if (!fileInput.files[0]) {
+                showNotification('⚠️ Selecciona un archivo de música primero');
+                return;
+            }
+            
+            if (audioSource && !audioSource.paused) {
+                audioSource.pause();
+                playBtn.textContent = '▶️ Play';
+            } else {
+                playMusic(fileInput.files[0]);
+                playBtn.textContent = '⏸️ Pause';
+            }
+        }
+        
+        function playMusic(file) {
+            const url = URL.createObjectURL(file);
+            audioSource = new Audio(url);
+            audioSource.loop = true;
+            
+            audioSource.addEventListener('canplay', () => {
+                const source = audioContext.createMediaElementSource(audioSource);
+                source.connect(analyser);
+                analyser.connect(audioContext.destination);
+                audioSource.play();
+                
+                // Actualizar progreso
+                setInterval(() => {
+                    if (audioSource && !audioSource.paused) {
+                        updateMusicProgress();
+                    }
+                }, 100);
+            });
+            
+            // Detectar metadatos
+            audioSource.addEventListener('loadedmetadata', () => {
+                const fileName = file.name.replace(/\.[^/.]+$/, "");
+                showNotification(`🎵 Reproduciendo: ${fileName}`);
+            });
+        }
+        
+        function updateMusicProgress() {
+            if (!audioSource) return;
+            
+            const progress = (audioSource.currentTime / audioSource.duration) * 100;
+            document.getElementById('musicProgressBar').style.width = progress + '%';
+            
+            const minutes = Math.floor(audioSource.currentTime / 60);
+            const seconds = Math.floor(audioSource.currentTime % 60);
+            document.getElementById('musicTime').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function stopMusic() {
+            if (audioSource) {
+                audioSource.pause();
+                audioSource.currentTime = 0;
+                document.getElementById('playPauseBtn').textContent = '▶️ Play';
+            }
+            resetMusicEffects();
+        }
+        
+        function updateMusicEffects() {
+            if (!musicMode || !analyser || !audioSource || audioSource.paused) {
+                resetMusicEffects();
+                return;
+            }
+            
+            analyser.getByteFrequencyData(frequencyData);
+            
+            // Análisis avanzado de frecuencias
+            const bass = frequencyData.slice(0, 32).reduce((sum, v) => sum + v, 0) / 32 / 255;
+            const mid = frequencyData.slice(32, 128).reduce((sum, v) => sum + v, 0) / 96 / 255;
+            const high = frequencyData.slice(128, 256).reduce((sum, v) => sum + v, 0) / 128 / 255;
+            const average = (bass + mid + high) / 3;
+            const intensity = average * musicSensitivity;
+            
+            // Actualizar visualizador
+            updateVisualizer();
+            
+            // Detectar BPM y beats
+            detectBeatAndBPM(intensity);
+            
+            // Efectos de zoom y rotación épicos
+            const isBeat = intensity > 0.6;
+            if (isBeat) {
+                // Zoom explosivo
+                const zoomIntensity = 1 + (intensity * 0.15);
+                canvas.style.transform = `scale(${zoomIntensity}) rotate(${intensity * 2}deg)`;
+                canvas.style.transition = 'transform 0.08s ease-out';
+                
+                // Efecto estroboscópico
+                if (musicTheme === 'electronic' && intensity > 0.8) {
+                    document.body.style.filter = `brightness(${1 + intensity}) contrast(${1 + intensity * 0.5})`;
+                    setTimeout(() => document.body.style.filter = '', 50);
+                }
+                
+                // Reset suave
+                setTimeout(() => {
+                    canvas.style.transform = 'scale(1) rotate(0deg)';
+                    canvas.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                }, 120);
+                
+                // Multiplicador de beat
+                musicBeatMultiplier = 1 + (intensity * 0.5);
+                musicComboStreak++;
+            } else {
+                musicBeatMultiplier = Math.max(1, musicBeatMultiplier * 0.98);
+                if (intensity < 0.2) musicComboStreak = Math.max(0, musicComboStreak - 1);
+            }
+            
+            // HUD reactiva con temas
+            updateMusicHUD(bass, mid, high, intensity);
+            
+            // Pelota con estela musical
+            updateMusicBall(bass, mid, high, intensity);
+            
+            // Partículas explosivas
+            if (isBeat) {
+                createMusicParticles(intensity, bass, mid, high);
+            }
+            
+            // Ondas de fondo
+            updateBackgroundWaves(intensity);
+            
+            // Orbes musicales especiales
+            if (Math.random() < intensity * 0.02) {
+                spawnMusicOrb(intensity);
+            }
+            
+            // Velocidad adaptativa
+            gameSpeed = 1 + (intensity * 0.4 * musicSensitivity);
+            
+            // Actualizar displays
+            document.getElementById('musicIntensity').textContent = Math.round(intensity * 100);
+            document.getElementById('musicBeatMultiplier').textContent = 'x' + musicBeatMultiplier.toFixed(1);
+        }
+        
+        function updateVisualizer() {
+            visualizerBars.forEach((bar, i) => {
+                const dataIndex = Math.floor(i * frequencyData.length / visualizerBars.length);
+                const value = frequencyData[dataIndex] / 255;
+                const height = Math.max(2, value * 18);
+                
+                bar.style.height = height + 'px';
+                bar.style.background = `hsl(${value * 120 + (i * 8)}, 80%, ${50 + value * 30}%)`;
+                bar.style.boxShadow = value > 0.7 ? `0 0 ${value * 8}px currentColor` : 'none';
+            });
+        }
+        
+        function detectBeatAndBPM(intensity) {
+            const now = Date.now();
+            
+            if (intensity > 0.7 && now - lastBeatTime > 200) {
+                beatHistory.push(now);
+                lastBeatTime = now;
+                
+                // Mantener solo últimos 8 beats
+                if (beatHistory.length > 8) beatHistory.shift();
+                
+                // Calcular BPM
+                if (beatHistory.length >= 4) {
+                    const intervals = [];
+                    for (let i = 1; i < beatHistory.length; i++) {
+                        intervals.push(beatHistory[i] - beatHistory[i-1]);
+                    }
+                    const avgInterval = intervals.reduce((a, b) => a + b) / intervals.length;
+                    musicBPM = Math.round(60000 / avgInterval);
+                    document.getElementById('musicBPM').textContent = musicBPM + ' BPM';
+                }
+            }
+        }
+        
+        function updateMusicHUD(bass, mid, high, intensity) {
+            const themeMultiplier = {
+                disco: { hue: 0, sat: 1.5, bright: 1.2 },
+                rock: { hue: 30, sat: 1.8, bright: 0.9 },
+                electronic: { hue: 180, sat: 2.0, bright: 1.4 },
+                chill: { hue: 240, sat: 0.8, bright: 0.7 }
+            }[musicTheme];
+            
+            const elements = [
+                { el: document.getElementById('ui'), freq: bass, base: 0 },
+                { el: document.getElementById('currency-display'), freq: mid, base: 120 },
+                { el: document.getElementById('controls'), freq: high, base: 240 }
+            ];
+            
+            elements.forEach(({ el, freq, base }) => {
+                if (!el) return;
+                
+                const hue = (base + themeMultiplier.hue + freq * 180) % 360;
+                const saturation = Math.min(100, (40 + intensity * 60) * themeMultiplier.sat);
+                const lightness = Math.min(80, (30 + intensity * 30) * themeMultiplier.bright);
+                
+                el.style.background = `hsla(${hue}, ${saturation}%, ${lightness}%, 0.95)`;
+                el.style.borderColor = `hsl(${hue + 60}, ${saturation + 20}%, ${lightness + 20}%)`;
+                el.style.boxShadow = `0 0 ${15 + intensity * 30}px hsla(${hue}, ${saturation}%, ${lightness}%, 0.8)`;
+            });
+        }
+        
+        function updateMusicBall(bass, mid, high, intensity) {
+            // Tamaño reactivo
+            ball.radius = (20 + gameData.upgrades.size.level * 2) + (intensity * 20);
+            
+            // Color dinámico
+            const hue = (bass * 60 + mid * 180 + high * 300) % 360;
+            ball.color = `hsl(${hue}, ${80 + intensity * 20}%, ${50 + intensity * 30}%)`;
+            
+            // Estela musical
+            if (intensity > 0.3) {
+                musicTrail.push({
+                    x: ball.x, y: ball.y,
+                    color: ball.color,
+                    life: 500 + intensity * 300,
+                    maxLife: 500 + intensity * 300,
+                    size: ball.radius * 0.8
+                });
+            }
+            
+            // Actualizar estela
+            for (let i = musicTrail.length - 1; i >= 0; i--) {
+                musicTrail[i].life -= 16;
+                if (musicTrail[i].life <= 0) {
+                    musicTrail.splice(i, 1);
+                }
+            }
+        }
+        
+        function createMusicParticles(intensity, bass, mid, high) {
+            const count = Math.floor(5 + intensity * 15);
+            
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: ball.x + (Math.random() - 0.5) * 80,
+                    y: ball.y + (Math.random() - 0.5) * 80,
+                    dx: (Math.random() - 0.5) * 30,
+                    dy: (Math.random() - 0.5) * 30,
+                    life: 600 + intensity * 800,
+                    maxLife: 600 + intensity * 800,
+                    alpha: 1,
+                    color: `hsl(${(bass * 60 + mid * 180 + high * 300 + i * 30) % 360}, 100%, ${60 + intensity * 40}%)`,
+                    size: 2 + intensity * 4,
+                    musical: true
+                });
+            }
+        }
+        
+        function updateBackgroundWaves(intensity) {
+            if (intensity > 0.5) {
+                backgroundWaves.push({
+                    x: ball.x, y: ball.y,
+                    radius: 0,
+                    maxRadius: 100 + intensity * 200,
+                    life: 1000,
+                    color: `hsla(${intensity * 360}, 70%, 50%, 0.3)`
+                });
+            }
+            
+            for (let i = backgroundWaves.length - 1; i >= 0; i--) {
+                const wave = backgroundWaves[i];
+                wave.radius += 3;
+                wave.life -= 16;
+                
+                if (wave.life <= 0 || wave.radius >= wave.maxRadius) {
+                    backgroundWaves.splice(i, 1);
+                }
+            }
+        }
+        
+        function spawnMusicOrb(intensity) {
+            const musicOrbTypes = [
+                { id: 'beat', name: 'Orbe del Beat', color: '#FF1493', effect: 'beat', power: intensity * 2, duration: 8000, rarity: 'musical' },
+                { id: 'bass', name: 'Orbe de Graves', color: '#8A2BE2', effect: 'bass', power: intensity * 1.5, duration: 6000, rarity: 'musical' },
+                { id: 'melody', name: 'Orbe Melódico', color: '#00CED1', effect: 'melody', power: intensity * 3, duration: 10000, rarity: 'musical' }
+            ];
+            
+            const orbType = musicOrbTypes[Math.floor(Math.random() * musicOrbTypes.length)];
+            
+            orbs.push({
+                x: Math.random() * (width - 100) + 50,
+                y: Math.random() * (height - 100) + 50,
+                radius: 18 + intensity * 8,
+                type: orbType,
+                alpha: 1,
+                life: orbType.duration,
+                maxLife: orbType.duration,
+                pulsePhase: 0,
+                musical: true
+            });
+        }
+        
+        function resetMusicEffects() {
+            // Resetear estilos de HUD
+            const ui = document.getElementById('ui');
+            const currencyDisplay = document.getElementById('currency-display');
+            const controls = document.getElementById('controls');
+            
+            if (ui) {
+                ui.style.background = '';
+                ui.style.borderColor = '';
+                ui.style.boxShadow = '';
+            }
+            
+            if (currencyDisplay) {
+                currencyDisplay.style.background = '';
+                currencyDisplay.style.borderColor = '';
+                currencyDisplay.style.boxShadow = '';
+            }
+            
+            if (controls) {
+                controls.style.background = '';
+                controls.style.borderColor = '';
+                controls.style.boxShadow = '';
+            }
+            
+            // Resetear canvas
+            if (canvas) {
+                canvas.style.transform = 'scale(1)';
+                canvas.style.transition = '';
+            }
+            
+            // Resetear pelota
+            ball.radius = 20 + gameData.upgrades.size.level * 2;
+            ball.color = '#ff6b35';
+            gameSpeed = 1;
+        }
+        
+        // Sistema Premium Integrado
+        function showPremiumRequired(featureName) {
+            showNotification(`💎 ${featureName} requiere Premium - Solo personalización, sin ventajas de gameplay`);
+            setTimeout(() => showPremiumShop(), 1000);
+        }
+        
+        function initPremiumSystem() {
+            if (gameData.premiumUnlocked) {
+                premiumUnlocked = true;
+                document.querySelectorAll('.premium-feature').forEach(el => {
+                    el.style.opacity = '1';
+                    el.style.pointerEvents = 'auto';
+                });
+                document.querySelectorAll('.premium-feature input, .premium-feature button, .premium-feature select').forEach(el => el.disabled = false);
+            }
+            
+            document.querySelectorAll('.premium-feature input, .premium-feature button, .premium-feature select').forEach(el => {
+                if (!premiumUnlocked) {
+                    el.addEventListener('click', (e) => {
+                        if (!premiumUnlocked) {
+                            e.preventDefault();
+                            showPremiumRequired(el.closest('.premium-feature').querySelector('label')?.textContent || 'Esta característica');
+                        }
+                    });
+                }
+            });
+        }
+        
+        // Funciones Premium Específicas
+        function enablePremiumFeatures() {
+            // Efectos de aura
+            if (document.getElementById('auraEffects')?.checked && premiumUnlocked) {
+                ball.auraEnabled = true;
+            }
+            
+            // Celebraciones épicas
+            if (document.getElementById('epicCelebrations')?.checked && premiumUnlocked) {
+                window.epicCelebrationsEnabled = true;
+            }
+            
+            // Temas musicales premium
+            const premiumTheme = document.getElementById('premiumMusicThemes')?.value;
+            if (premiumTheme && premiumUnlocked) {
+                applyPremiumMusicTheme(premiumTheme);
+            }
+        }
+        
+        function applyPremiumMusicTheme(theme) {
+            const themes = {
+                'Synthwave': { hue: 300, saturation: 2.5, brightness: 1.8 },
+                'Dubstep': { hue: 120, saturation: 3.0, brightness: 2.0 },
+                'Jazz': { hue: 45, saturation: 1.2, brightness: 0.8 },
+                'Classical': { hue: 200, saturation: 1.0, brightness: 1.1 }
+            };
+            
+            if (themes[theme]) {
+                const themeData = themes[theme];
+                document.documentElement.style.setProperty('--premium-hue', themeData.hue);
+                document.documentElement.style.setProperty('--premium-saturation', themeData.saturation);
+                document.documentElement.style.setProperty('--premium-brightness', themeData.brightness);
+            }
+        }
+        
+        function exportStatsAsPDF() {
+            if (!premiumUnlocked) {
+                showPremiumRequired('Exportar estadísticas');
+                return;
+            }
+            
+            const statsData = {
+                nivel: level,
+                coins: formatNumber(coins),
+                diamantes: diamonds,
+                rebotes: formatNumber(bounces),
+                prestigio: gameData.prestige,
+                tiempoJugado: Math.floor((Date.now() - playTimeStart) / 60000) + 'm',
+                mejorCombo: bestCombo.toFixed(1) + 'x'
+            };
+            
+            const csvContent = Object.entries(statsData).map(([key, value]) => `${key},${value}`).join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `fnc_stats_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showNotification('📄 Estadísticas exportadas como CSV');
+        }
+        
+        function openSkinEditor() {
+            if (!premiumUnlocked) {
+                showPremiumRequired('Editor de skins');
+                return;
+            }
+            showNotification('🎨 Editor de skins disponible en próxima actualización');
+        }
+        
+        function startReplayRecording() {
+            if (!premiumUnlocked) {
+                showPremiumRequired('Grabador de replays');
+                return;
+            }
+            showNotification('📹 Grabación de replay iniciada (simulación)');
+        }
+        
+        function showTitlesAndBadges() {
+            if (!premiumUnlocked) {
+                showPremiumRequired('Títulos y badges');
+                return;
+            }
+            const titles = ['Maestro Chef', 'Leyenda Culinaria', 'Rey de la Cocina', 'Estrella Michelin'];
+            const randomTitle = titles[Math.floor(Math.random() * titles.length)];
+            showNotification(`🏆 Título desbloqueado: ${randomTitle}`);
+        }
+        
         function applyConfig() {
             soundEnabled = document.getElementById('soundToggle').checked;
             performanceMode = document.getElementById('performanceMode').checked;
             batterySaverMode = document.getElementById('batterySaver').checked;
             gameSpeed = parseFloat(document.getElementById('gameSpeedSlider').value);
+            musicMode = document.getElementById('musicMode').checked;
             
             // Aplicar calidad gráfica
             const quality = document.getElementById('graphicsQuality').value;
@@ -2885,9 +3728,10 @@
             updateFPSTarget();
             
             // Aplicar auto-save interval
-            const autoSaveInterval = parseInt(document.getElementById('autoSaveInterval').value) * 1000;
+            const autoSaveInterval = parseInt(document.getElementById('autoSaveInterval')?.value || 10) * 1000;
             if (window.autoSaveTimer) clearInterval(window.autoSaveTimer);
             window.autoSaveTimer = setInterval(autoSave, autoSaveInterval);
+            console.log('Auto-guardado configurado cada', autoSaveInterval/1000, 'segundos');
             
             // Aplicar mostrar FPS
             const showFPS = document.getElementById('showFPS').checked;
@@ -2907,7 +3751,10 @@
             updateUIScale();
             updateVolumeValue();
             
-            if (premiumUnlocked) ball.color = document.getElementById('ballColor').value;
+            if (premiumUnlocked) {
+                ball.color = document.getElementById('ballColor').value;
+                enablePremiumFeatures();
+            }
             
             // Guardar configuración completa
             const config = {
@@ -3083,11 +3930,11 @@
                     upgrades: { target: 3, progress: 0, reward: 1500, completed: false }
                 };
                 
-                // Resetear bola completamente
+                // Resetear sartén completamente
                 ball.radius = 20;
                 ball.dx = ball.baseSpeed;
                 ball.dy = ball.baseSpeed;
-                ball.color = '#ff0000';
+                ball.color = '#ff6b35';
                 ball.x = width / 2;
                 ball.y = height / 2;
                 
@@ -3099,16 +3946,42 @@
         }
 
         function selectSkin(skin) {
-            if (skin.includes('premium') && !premiumUnlocked) {
+            // Verificar si es premium
+            const premiumSkins = ['rainbow', 'galaxy', 'cosmic', 'neon', 'diamond'];
+            if (premiumSkins.includes(skin) && !premiumUnlocked) {
                 showPremiumShop();
                 return;
             }
+            
             selectedSkin = skin;
             document.querySelectorAll('.skin-option').forEach(el => el.classList.remove('selected'));
-            event.target.closest('.skin-option').classList.add('selected');
-            const colors = { default: '#ff0000', fire: '#ff6600', ice: '#00ccff', rainbow: '#ff0000', galaxy: '#9900ff', cosmic: '#00ffff' };
-            ball.color = colors[skin] || '#ff0000';
+            
+            // Encontrar y seleccionar la skin clickeada
+            const skinElements = document.querySelectorAll('.skin-option');
+            skinElements.forEach(el => {
+                if (el.onclick && el.onclick.toString().includes(skin)) {
+                    el.classList.add('selected');
+                    el.style.border = '2px solid var(--primary)';
+                } else {
+                    el.style.border = '2px solid transparent';
+                }
+            });
+            
+            const colors = { 
+                default: '#ff6b35', 
+                fire: '#ff6600', 
+                ice: '#00ccff', 
+                rainbow: '#ff0000', 
+                galaxy: '#9900ff', 
+                cosmic: '#00ffff',
+                neon: '#ff0080',
+                diamond: '#b9f2ff'
+            };
+            
+            ball.color = colors[skin] || '#ff6b35';
+            gameData.selectedSkin = skin;
             saveGame();
+            showNotification(`🎨 Skin "${skin}" seleccionada`);
         }
 
         function buyPremium() {
@@ -3150,9 +4023,9 @@
 
         function generateMissions() {
             const missionTypes = [
-                { type: 'bounces', name: 'Realiza {target} rebotes', reward: 'coins', base: 200, scale: 1.8 },
-                { type: 'coins', name: 'Consigue {target} coins', reward: 'coins', base: 5000, scale: 2.2 },
-                { type: 'diamonds', name: 'Obtén {target} diamantes', reward: 'diamonds', base: 50, scale: 1.5 },
+                { type: 'bounces', name: 'Realiza {target} rebotes', reward: 'coins', base: 300, scale: 1.6 },
+                { type: 'coins', name: 'Consigue {target} coins', reward: 'coins', base: 8000, scale: 1.8 },
+                { type: 'diamonds', name: 'Obtén {target} diamantes', reward: 'diamonds', base: 30, scale: 1.4 },
                 { type: 'level', name: 'Alcanza nivel {target}', reward: 'coins', base: 10, scale: 1.3 },
                 { type: 'combo', name: 'Combo de {target}x', reward: 'coins', base: 8, scale: 1.4 },
                 { type: 'upgrades', name: 'Compra {target} mejoras', reward: 'coins', base: 15, scale: 1.6 }
@@ -3224,7 +4097,7 @@
                         completedMissions = 0;
                         missionSet++;
                         generateMissions();
-                        showNotification('¡Nuevas misiones disponibles!');
+                        // Sin notificación de nuevas misiones
                     }
                 }
             });
@@ -3298,7 +4171,7 @@
                 afkRewards = { coins: 0, diamonds: 0, experience: 0 };
                 updateUI();
             } else {
-                showNotification('No hay recompensas AFK disponibles');
+                // Sin notificación para AFK vacío
             }
         }
         
@@ -3359,7 +4232,7 @@
                         diamonds += currentDailyChallenge.reward;
                         gameData.diamonds = diamonds;
                     }
-                    showNotification(`🎯 Desafío completado: ${currentDailyChallenge.name}! +${currentDailyChallenge.reward} ${currentDailyChallenge.type}`);
+                    // Sin notificación de desafío completado
                     currentDailyChallenge = null;
                 }
             }
@@ -3419,7 +4292,7 @@
                             diamonds += mission.reward;
                             gameData.diamonds = diamonds;
                         }
-                        showNotification(`📋 Misión completada: ${mission.name}! +${mission.reward} ${mission.rewardType}`);
+                        // Sin notificación de misión completada
                     }
                 }
             });
@@ -3448,7 +4321,7 @@
                     showNotification('¡Todos los desafíos completados!');
                 }
             } else {
-                showNotification('Ya tienes un desafío activo');
+                // Sin notificación para desafío activo
             }
         }
         
@@ -3482,7 +4355,7 @@
             if (!code) return;
             
             if (redeemedCodes.includes(code)) {
-                showNotification('❌ Código ya canjeado');
+                // Sin notificación para códigos repetidos
                 return;
             }
             
@@ -3554,7 +4427,7 @@
                 betaStats.codesRedeemed++;
                 updateUI();
             } else {
-                showNotification('❌ Código inválido');
+                // Sin notificación para códigos inválidos
             }
         }
         
@@ -3621,36 +4494,33 @@
                 }
             }
             
-            // Contenido adicional para jugadores 24/7
-            if (Math.random() < 0.001) { // 0.1% chance cada segundo
-                const bonusEvents = [
-                    { name: 'Lluvia de Coins', reward: Math.floor(level * 10), type: 'coins' },
-                    { name: 'Gema Misteriosa', reward: Math.floor(level / 20) + 1, type: 'diamonds' },
-                    { name: 'Experiencia Súbita', reward: Math.floor(level * 5), type: 'experience' },
-                    { name: 'Combo Boost', effect: 'combo' },
-                    { name: 'Velocidad Temporal', effect: 'speed' }
+            // Sistema de clientes del restaurante
+            if (Math.random() < 0.0005 && restaurantData.customers.length < 3) {
+                const customerTypes = [
+                    { name: 'Cliente Regular', tip: Math.floor(level * 5), patience: 30 },
+                    { name: 'Crítico Gastronómico', tip: Math.floor(level * 15), patience: 60 },
+                    { name: 'Chef Visitante', tip: Math.floor(level * 8), patience: 45 }
                 ];
+                const customer = customerTypes[Math.floor(Math.random() * customerTypes.length)];
+                customer.arrivalTime = Date.now();
+                restaurantData.customers.push(customer);
                 
-                const bonus = bonusEvents[Math.floor(Math.random() * bonusEvents.length)];
-                if (bonus.type) {
-                    if (bonus.type === 'coins') coins += bonus.reward;
-                    else if (bonus.type === 'diamonds') diamonds += bonus.reward;
-                    else if (bonus.type === 'experience') experience += bonus.reward;
-                    showNotification(`🎁 ${bonus.name}: +${bonus.reward} ${bonus.type}`);
-                } else if (bonus.effect === 'combo') {
-                    combo += 1;
-                    showNotification(`🎁 ${bonus.name}: +1 combo`);
-                } else if (bonus.effect === 'speed') {
-                    ball.dx *= 1.2;
-                    ball.dy *= 1.2;
-                    showNotification(`🎁 ${bonus.name}: Velocidad aumentada`);
-                    setTimeout(() => {
-                        ball.dx /= 1.2;
-                        ball.dy /= 1.2;
-                    }, 5000);
-                }
-                updateUI();
+                // Sin notificación de cliente
             }
+            
+            // Procesar clientes
+            restaurantData.customers.forEach((customer, index) => {
+                const waitTime = (Date.now() - customer.arrivalTime) / 1000;
+                if (waitTime > customer.patience) {
+                    restaurantData.customers.splice(index, 1);
+                    restaurantData.reputation = Math.max(0, restaurantData.reputation - 5);
+                } else if (bounces % 50 === 0 && bounces > 0) {
+                    coins += customer.tip;
+                    restaurantData.reputation += 2;
+                    restaurantData.customers.splice(index, 1);
+                    gameData.coins = coins;
+                }
+            });
             
             // Actualizar estadísticas en tiempo real
             updateStats();
@@ -3694,20 +4564,7 @@
 
 
 
-        function saveGame() {
-            const saveData = {
-                coins, diamonds, experience, bounces, level,
-                prestige: gameData.prestige, prestigePoints: gameData.prestigePoints,
-                ascension: gameData.ascension, ascensionPoints: gameData.ascensionPoints,
-                achievements: gameData.achievements, cards: gameData.cards, pets: gameData.pets,
-                artifacts: gameData.artifacts, events: gameData.events, season: gameData.season,
-                infiniteLevels: gameData.infiniteLevels,
-                premiumUnlocked, selectedSkin, missionSet, completedMissions,
-                totalBounces, totalCoins, bestCombo, missions,
-                upgrades: gameData.upgrades, research: gameData.research
-            };
-            localStorage.setItem('circleBounceUltimate', JSON.stringify(saveData));
-        }
+
 
         function saveToSlot() {
             const now = Date.now();
@@ -3800,7 +4657,7 @@
 
 
         function doAscension() {
-            if (gameData.prestige >= 10 && coins >= 1e9) {
+            if (gameData.prestige >= 25 && coins >= 1e12) {
                 let ascensionPointsGained = Math.floor(Math.log10(coins / 1e9) + gameData.prestige / 5);
                 
                 coins = 0;
@@ -3829,11 +4686,11 @@
                 gameData.ascensionPoints += ascensionPointsGained;
                 gameData.ascension++;
                 
-                // Resetear pelota a valores iniciales
+                // Resetear sartén a valores iniciales
                 ball.radius = 20;
                 ball.dx = ball.baseSpeed;
                 ball.dy = ball.baseSpeed;
-                ball.color = '#ff0000';
+                ball.color = '#ff6b35';
                 
                 generateMissions();
                 updateUI();
@@ -3881,7 +4738,6 @@
                         gameData.achievements.push(achievement.id);
                         coins += achievement.reward;
                         gameData.coins = coins;
-                        showNotification(`🏆 Logro desbloqueado: ${achievement.name}! +${achievement.reward} coins`);
                         updateAchievementsDisplay();
                     }
                 }
@@ -4013,14 +4869,14 @@
         
         function generateEvent() {
             const events = [
-                { name: 'Lluvia de Diamantes', desc: 'x2 diamantes por 1 hora', duration: 3600, effect: 'diamonds' },
-                { name: 'Fiebre del Oro', desc: 'x3 coins por 30 min', duration: 1800, effect: 'coins' },
-                { name: 'Combo Infinito', desc: 'Combo no decae por 45 min', duration: 2700, effect: 'combo' },
-                { name: 'Velocidad Extrema', desc: 'x5 velocidad por 20 min', duration: 1200, effect: 'speed' },
-                { name: 'Críticos Salvajes', desc: '100% críticos por 15 min', duration: 900, effect: 'critical' },
-                { name: 'Experiencia Doble', desc: 'x4 experiencia por 40 min', duration: 2400, effect: 'experience' },
-                { name: 'Rebote Mágico', desc: 'Cada rebote da +10 diamantes por 10 min', duration: 600, effect: 'magic' },
-                { name: 'Tormenta Cósmica', desc: 'x10 a TODO por 5 min', duration: 300, effect: 'cosmic' }
+                { name: 'Festival de Especias', desc: 'x2 especias por 1 hora', duration: 3600, effect: 'diamonds' },
+                { name: 'Hora Pico del Restaurante', desc: 'x3 ingredientes por 30 min', duration: 1800, effect: 'coins' },
+                { name: 'Chef en Racha', desc: 'Combo no decae por 45 min', duration: 2700, effect: 'combo' },
+                { name: 'Cocina Rápida', desc: 'x5 velocidad por 20 min', duration: 1200, effect: 'speed' },
+                { name: 'Platos Perfectos', desc: '100% platos perfectos por 15 min', duration: 900, effect: 'critical' },
+                { name: 'Masterclass Culinaria', desc: 'x4 experiencia por 40 min', duration: 2400, effect: 'experience' },
+                { name: 'Cliente VIP', desc: 'Cada plato da +10 especias por 10 min', duration: 600, effect: 'magic' },
+                { name: 'Inspección Michelin', desc: 'x10 a TODO por 5 min', duration: 300, effect: 'cosmic' }
             ];
             if (!currentEvent && Math.random() < 0.008) {
                 currentEvent = events[Math.floor(Math.random() * events.length)];
@@ -4028,7 +4884,7 @@
                 if (!gameData.events) gameData.events = { current: null, timeLeft: 0 };
                 gameData.events.current = currentEvent;
                 gameData.events.timeLeft = eventTimeLeft;
-                showNotification(`🎪 Evento iniciado: ${currentEvent.name}`);
+                // Sin notificación de evento
                 betaStats.eventsTriggered++;
             }
         }
@@ -4308,16 +5164,25 @@
         }
         
         function collectOrb(orb) {
-            const effect = {
-                type: orb.type.effect,
-                power: orb.type.power,
-                duration: orb.type.duration,
-                timeLeft: orb.type.duration,
-                color: orb.type.color,
-                name: orb.type.name
-            };
+            // Buscar efecto existente del mismo tipo
+            const existingEffect = activeOrbEffects.find(e => e.type === orb.type.effect);
             
-            activeOrbEffects.push(effect);
+            if (existingEffect) {
+                // Acumular tiempo y poder si ya existe
+                existingEffect.timeLeft += orb.type.duration;
+                existingEffect.power = Math.max(existingEffect.power, orb.type.power);
+            } else {
+                // Crear nuevo efecto si no existe
+                const effect = {
+                    type: orb.type.effect,
+                    power: orb.type.power,
+                    duration: orb.type.duration,
+                    timeLeft: orb.type.duration,
+                    color: orb.type.color,
+                    name: orb.type.name
+                };
+                activeOrbEffects.push(effect);
+            }
             
             // Actualizar progreso de desafío de orbes
             if (currentDailyChallenge && currentDailyChallenge.id === 'orbs') {
@@ -4346,14 +5211,21 @@
                 case 'speed':
                     ball.dx *= orb.type.power;
                     ball.dy *= orb.type.power;
+                    // Aplicar límite después del boost
+                    const speedAfterBoost = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+                    if (speedAfterBoost > ball.maxSpeed) {
+                        const ratio = ball.maxSpeed / speedAfterBoost;
+                        ball.dx *= ratio;
+                        ball.dy *= ratio;
+                    }
                     break;
                 case 'coins':
-                    const coinsGained = Math.floor(level * orb.type.power * 5);
+                    const coinsGained = Math.floor(level * orb.type.power * 2);
                     coins += coinsGained;
                     gameData.coins = coins;
                     break;
                 case 'diamonds':
-                    const diamondsGained = Math.floor(orb.type.power);
+                    const diamondsGained = Math.floor(orb.type.power * 0.5);
                     diamonds += diamondsGained;
                     gameData.diamonds = diamonds;
                     break;
@@ -4366,9 +5238,9 @@
                     gameData.experience = experience;
                     break;
                 case 'rainbow':
-                    const rainbowCoins = Math.floor(level * orb.type.power * 8);
-                    const rainbowDiamonds = Math.floor(orb.type.power);
-                    const rainbowExp = Math.floor(level * orb.type.power * 4);
+                    const rainbowCoins = Math.floor(level * orb.type.power * 3);
+                    const rainbowDiamonds = Math.floor(orb.type.power * 0.5);
+                    const rainbowExp = Math.floor(level * orb.type.power * 2);
                     coins += rainbowCoins;
                     diamonds += rainbowDiamonds;
                     experience += rainbowExp;
@@ -4376,6 +5248,30 @@
                     gameData.coins = coins;
                     gameData.diamonds = diamonds;
                     gameData.experience = experience;
+                    break;
+                case 'truffle':
+                    coins += Math.floor(level * orb.type.power * 5);
+                    diamonds += Math.floor(orb.type.power * 0.8);
+                    restaurantData.reputation += 10;
+                    gameData.coins = coins;
+                    gameData.diamonds = diamonds;
+                    break;
+                case 'saffron':
+                    diamonds += Math.floor(orb.type.power * 3);
+                    combo += orb.type.power;
+                    gameData.diamonds = diamonds;
+                    break;
+                case 'wasabi':
+                    ball.dx *= orb.type.power;
+                    ball.dy *= orb.type.power;
+                    // Aplicar límite después del boost
+                    const wasabiSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+                    if (wasabiSpeed > ball.maxSpeed) {
+                        const ratio = ball.maxSpeed / wasabiSpeed;
+                        ball.dx *= ratio;
+                        ball.dy *= ratio;
+                    }
+                    combo += 1;
                     break;
             }
             
@@ -4387,9 +5283,7 @@
                 'mítico': '🌈'
             };
             
-            if (orb.type.rarity === 'épico' || orb.type.rarity === 'legendario' || orb.type.rarity === 'mítico') {
-                showNotification(`${rarityEmoji[orb.type.rarity]} ${orb.type.name} recogido!`);
-            }
+            // Sin notificaciones de rareza
             betaStats.orbsCollected++;
             updateUI();
         }
@@ -4477,13 +5371,11 @@
                 stack: e.error?.stack,
                 gameState: { level, coins, diamonds, prestige: gameData.prestige }
             });
-            showNotification('⚠️ Error detectado - Ver consola (F12)');
+            console.log('Error detectado');
         });
         window.addEventListener('load', () => {
             dateEvent = checkDateEvents();
-            if (dateEvent) {
-                showNotification(`🎉 ${dateEvent.name} activo! ${dateEvent.desc}`);
-            }
+
             init();
             loadConfig();
             generateMissions();
@@ -4493,13 +5385,12 @@
             selectRandomDailyChallenge();
             setInterval(updateResetTimer, 1000);
             
-            // Mensaje de bienvenida
-            if (!localStorage.getItem('welcomeShown')) {
-                setTimeout(() => {
-                    showNotification('🎉 ¡Bienvenido! Usa WELCOME2 para empezar');
-                    localStorage.setItem('welcomeShown', 'true');
-                }, 3000);
-            }
+            // Inicializar auto-guardado
+            const autoSaveInterval = 10000; // 10 segundos por defecto
+            setInterval(autoSave, autoSaveInterval);
+            console.log('Auto-guardado iniciado cada 10 segundos');
+            
+
             
             // Ocultar flecha después de 15 segundos o al hacer clic en cualquier botón
             setTimeout(() => {
