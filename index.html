@@ -350,12 +350,12 @@
 
         /* Estilos para créditos */
         .creditos-avatar {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid var(--color-menu);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             transition: var(--transicion-rapida);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
@@ -366,10 +366,8 @@
         }
 
         .creditos-container {
-            max-height: 65vh;
-            padding-bottom: 20px;
             color: var(--color-texto);
-            overflow-y: auto;
+            text-align: center;
         }
 
         .creditos-seccion {
@@ -1035,34 +1033,27 @@
             <h2 class="text-center mb-4">Créditos</h2>
 
             <div class="creditos-container">
-                <div class="row justify-content-center creditos-seccion">
-                    <div class="col-md-4 text-center">
-                        <img src="assets/images/9fc2a9df8789de0960974d06923f1929.png" class="creditos-avatar"
-                            alt="Desarrollador">
-                        <h4>Just Fenix</h4>
-                        <p class="text-muted">Desarrollador Principal</p>
+                <div class="mb-4">
+                    <h3 style="color: var(--color-menu); margin-bottom: 20px;">¡Gracias por jugar FNC Engine!</h3>
+                </div>
+                
+                <div class="row justify-content-center mb-4">
+                    <div class="col-6 text-center">
+                        <img src="assets/images/9fc2a9df8789de0960974d06923f1929.png" class="creditos-avatar" alt="Desarrollador">
+                        <h5>Just Fenix</h5>
+                        <p style="color: var(--color-texto); opacity: 0.7;" class="mb-0">Desarrollador Principal</p>
                     </div>
-                    <div class="col-md-4 text-center">
-                        <img src="assets/images/c323129d4ccb30882fcb89814a94b9f8.png" class="creditos-avatar"
-                            alt="Diseñador">
-                        <h4>Less</h4>
-                        <p class="text-muted">Idea principal</p>
+                    <div class="col-6 text-center">
+                        <img src="assets/images/c323129d4ccb30882fcb89814a94b9f8.png" class="creditos-avatar" alt="Diseñador">
+                        <h5>Less</h5>
+                        <p style="color: var(--color-texto); opacity: 0.7;" class="mb-0">Idea Principal</p>
                     </div>
                 </div>
 
-                <div class="update-item mt-4">
-                    <h5>Novedades v0.2.2</h5>
-                    <ul class="text-start">
-                        <li>✅ <strong>Pepe Quest:</strong> Nombre actualizado y bugs corregidos</li>
-                        <li>✅ <strong>vs Pollolito:</strong> Problemas de gameplay solucionados</li>
-                        <li>🆕 <strong>Chef's Kitchen Frenzy:</strong> Nuevo juego incremental de cocina</li>
-                        <li>🎵 <strong>Modo Música:</strong> Efectos visuales sincronizados</li>
-                        <li>💎 <strong>Sistema Premium:</strong> Personalización sin pay-to-win</li>
-                        <li>📱 <strong>Optimización móvil:</strong> Mejor experiencia táctil</li>
-                        <li>🐛 <strong>Bugfixes:</strong> Múltiples correcciones de estabilidad</li>
-                    </ul>
-                    <p class="mb-0">FNC Engine 0.2.2</p>
-                    <small class="text-muted">© 2025 Todos los derechos reservados</small>
+                <div class="mt-4">
+                    <h4 style="color: var(--color-menu);">FNC Engine 0.2.2</h4>
+                    <p class="mb-2" style="color: var(--color-texto);">© 2025 Todos los derechos reservados</p>
+                    <small style="color: var(--color-texto); opacity: 0.8;">Desarrollado con ❤️ para la comunidad</small>
                 </div>
             </div>
         </section>
@@ -1161,10 +1152,16 @@
         function showUpdateNotification() {
             const lastVersion = localStorage.getItem('fncLastVersion');
             if (lastVersion !== '0.2.2') {
-                setTimeout(() => {
-                    alert('🎉 ¡FNC Engine 0.2.2 disponible!\n\n✅ Pepe Quest y vs Pollolito arreglados\n🆕 Nuevo: Chef\'s Kitchen Frenzy\n🎵 Modo música épico\n📱 Optimización móvil\n🐛 Múltiples bugfixes');
-                    localStorage.setItem('fncLastVersion', '0.2.2');
-                }, 1000);
+                showNotification(
+                    'Nueva versión 0.2.2 disponible', 
+                    'info', 
+                    'Haz clic para ver las novedades',
+                    () => {
+                        showPanel('panel-actualizacion');
+                        unlockAchievement('achievement-updateChecker');
+                    }
+                );
+                localStorage.setItem('fncLastVersion', '0.2.2');
             }
         }
         
@@ -1182,7 +1179,6 @@
             setupAutoPlay();
             
             // Mostrar notificación de actualización v0.2.2
-            showUpdateNotification();
             setTimeout(() => {
                 showUpdateNotification();
             }, 1000);
