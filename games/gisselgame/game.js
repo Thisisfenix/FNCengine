@@ -189,13 +189,23 @@ function siguienteDialogo() {
     }
 }
 
+// Soporte para Android y móviles
 document.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' || e.key === ' ') {
         if (document.getElementById('dialogoFinalContainer').style.display !== 'none') {
             siguienteDialogoFinal();
         } else if (document.getElementById('dialogoContainer').style.display !== 'none') {
             siguienteDialogo();
         }
+    }
+});
+
+// Soporte táctil para Android
+document.addEventListener('touchstart', function(e) {
+    if (document.getElementById('dialogoContainer').style.display !== 'none') {
+        siguienteDialogo();
+    } else if (document.getElementById('dialogoFinalContainer').style.display !== 'none') {
+        siguienteDialogoFinal();
     }
 });
 
@@ -212,8 +222,36 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+// Detectar si es Android y añadir controles
+function setupMobileSupport() {
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    
+    if (isAndroid || isMobile) {
+        // Prevenir zoom en doble tap
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        });
+        
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(e) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+        
+        // Añadir clase CSS para móviles
+        document.body.classList.add('mobile-device');
+    }
+}
+
 window.addEventListener('load', function () {
     checksumNivel = generarChecksum(1);
+    setupMobileSupport();
 
     const nivelGuardado = cargarProgreso();
 
@@ -1272,9 +1310,11 @@ function iniciarFlappy() {
     const oldPipes = game.querySelectorAll('.flappy-pipe');
     oldPipes.forEach(pipe => pipe.remove());
 
-    // Eventos de control
+    // Eventos de control (Android compatible)
     document.addEventListener('keydown', flappyJump);
+    document.addEventListener('touchstart', flappyJump);
     game.addEventListener('click', flappyJump);
+    game.addEventListener('touchstart', flappyJump);
 
     // Countdown de 3 segundos
     let countdown = 3;
@@ -1307,11 +1347,14 @@ function iniciarFlappy() {
 }
 
 function flappyJump(e) {
-    if (!flappyStarted) return; // No puede volar hasta que inicie
+    if (!flappyStarted) return;
     if (!flappyGameRunning) return;
-    if (e.type === 'keydown' && e.code !== 'Space') return;
+    
+    // Soporte para teclado y táctil
+    if (e.type === 'keydown' && e.code !== 'Space' && e.key !== ' ') return;
+    if (e.type === 'touchstart') e.preventDefault();
 
-    flappyBird.velocity = -6; // Salto más controlado
+    flappyBird.velocity = -6;
 }
 
 function crearTuberia() {
@@ -3162,18 +3205,25 @@ setInterval(function () {
     const currentWidth = window.innerWidth;
     const currentHeight = window.innerHeight;
 
-    // Detectar cambios bruscos (inspector móvil)
-    if (Math.abs(currentWidth - lastWidth) > 100 || Math.abs(currentHeight - lastHeight) > 100) {
-        intentosTrampas++;
-        alert('🚨 INSPECTOR MÓVIL DETECTADO 🚨');
-        if (intentosTrampas >= 5) {
-            alert('😈 Demasiados intentos. Cierra el inspector.');
+    // Detectar cambios bruscos (inspector móvil) - Deshabilitado para Android
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    
+    if (!isAndroid && !isMobile) {
+        if (Math.abs(currentWidth - lastWidth) > 100 || Math.abs(currentHeight - lastHeight) > 100) {
+            intentosTrampas++;
+            alert('🚨 INSPECTOR MÓVIL DETECTADO 🚨');
+            if (intentosTrampas >= 5) {
+                alert('😈 Demasiados intentos. Cierra el inspector.');
+            }
         }
     }
 
-    // Detector clásico PC
-    if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
-        document.body.innerHTML = '<div style="background:#000;color:#fff;text-align:center;padding:50px;font-size:24px;">❌ INSPECTOR DETECTADO ❌<br><br>😈 Cierra las herramientas de desarrollador 😈<br><br>Recarga la página</div>';
+    // Detector clásico PC - Deshabilitado para móviles
+    if (!isAndroid && !isMobile) {
+        if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
+            document.body.innerHTML = '<div style="background:#000;color:#fff;text-align:center;padding:50px;font-size:24px;">❌ INSPECTOR DETECTADO ❌<br><br>😈 Cierra las herramientas de desarrollador 😈<br><br>Recarga la página</div>';
+        }
     }
 
     lastWidth = currentWidth;
