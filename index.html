@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Friday Night Cooking 0.2.2</title>
+    <title>Friday Night Cooking 0.2.3</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;700&display=swap"
+        rel="stylesheet">
+
     <style>
         :root {
             --color-menu: #e67e22;
@@ -241,7 +243,10 @@
         }
 
         /* Estilos para títulos */
-        h1, h2, h3, h4 {
+        h1,
+        h2,
+        h3,
+        h4 {
             font-weight: 700;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
             color: var(--color-texto);
@@ -496,6 +501,7 @@
             0% {
                 box-shadow: 0 0 20px rgba(155, 89, 182, 0.3);
             }
+
             100% {
                 box-shadow: 0 0 40px rgba(155, 89, 182, 0.7);
             }
@@ -523,6 +529,7 @@
                 transform: translate(0, 0);
                 opacity: 1;
             }
+
             100% {
                 transform: translate(var(--tx), var(--ty));
                 opacity: 0;
@@ -534,6 +541,7 @@
                 background-color: rgba(75, 0, 130, 0.95);
                 border-color: #9b59b6;
             }
+
             100% {
                 background-color: var(--color-fondo-panel);
                 border-color: var(--color-menu);
@@ -646,7 +654,7 @@
     <div id="color-picker-container">
         <input type="color" id="color-picker" value="#e67e22" title="Cambiar color del menú">
     </div>
-    
+
     <div id="fondo-oscuro"></div>
     <div class="notification-container"></div>
     <div class="konami-code">↑↑↓↓←→←→BA</div>
@@ -671,29 +679,32 @@
             <h2 class="text-center mb-4">Últimas Actualizaciones</h2>
             <div class="update-container">
                 <div class="update-item">
-                    <h4>Versión 0.2.2 <span class="badge bg-success ms-2">Nuevo</span></h4>
+                    <h4>Versión 0.2.3 <span class="badge bg-success ms-2">Nuevo</span></h4>
                     <ul>
-                        <li><strong>Juegos corregidos:</strong>
+                        <li><strong>Nuevo juego añadido:</strong>
                             <ul>
-                                <li>✅ Pepe Quest: Nombre actualizado y bugs eliminados</li>
-                                <li>✅ vs Pollolito: Problemas de gameplay solucionados</li>
+                                <li>🎮 Player Escape Minigames: 40 niveles de desafíos trolls</li>
+                                <li>🎯 Desde botones esquivos hasta matemáticas imposibles</li>
+                                <li>🏆 Sistema de progreso y guardado automático</li>
                             </ul>
                         </li>
-                        <li><strong>Nuevo contenido:</strong>
+                        <li><strong>Mejoras del sistema:</strong>
                             <ul>
-                                <li>🆕 Chef's Kitchen Frenzy: Rework de Circle Bounce como juego incremental</li>
-                                <li>🎵 Modo música épico con efectos visuales</li>
-                                <li>💎 Sistema premium sin pay-to-win</li>
+                                <li>🎵 Reproducción secuencial de música (1→2→3→loop)</li>
+                                <li>🔊 Audio activado con cualquier interacción</li>
+                                <li>⭐ Sistema de prestigio completamente funcional</li>
                             </ul>
                         </li>
-                        <li><strong>Mejoras técnicas:</strong>
+                        <li><strong>Nuevos logros:</strong>
                             <ul>
-                                <li>📱 Optimización móvil mejorada</li>
-                                <li>🐛 Múltiples correcciones de estabilidad</li>
+                                <li>🎮 Explorador de Escape Games</li>
+                                <li>🏃 Speedrunner de Minijuegos</li>
+                                <li>🧠 Maestro de Puzzles</li>
+                                <li>🎯 Completista Total</li>
                             </ul>
                         </li>
                     </ul>
-                    <small class="text-muted">Publicado: 29/06/2025</small>
+                    <small class="text-muted">Publicado: 30/06/2025</small>
                 </div>
             </div>
         </section>
@@ -952,6 +963,59 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Nuevos logros v0.2.3 -->
+                <div class="achievement" id="achievement-escapeExplorer">
+                    <div class="achievement-icon">
+                        <i class="fas fa-door-open"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Explorador de Escape Games</div>
+                        <div class="achievement-desc">Inicia Player Escape Minigames</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement" id="achievement-allGamesCompleted">
+                    <div class="achievement-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Completista Total</div>
+                        <div class="achievement-desc">Juega todos los 4 modos de juego disponibles</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement" id="achievement-musicSequencer">
+                    <div class="achievement-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Secuenciador Musical</div>
+                        <div class="achievement-desc">Escucha las 3 canciones en orden secuencial</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement" id="achievement-prestigeMaster">
+                    <div class="achievement-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Maestro del Prestigio</div>
+                        <div class="achievement-desc">Realiza tu primer prestigio en Kitchen Frenzy</div>
+                        <div class="achievement-progress">
+                            <div class="achievement-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -1036,24 +1100,27 @@
                 <div class="mb-4">
                     <h3 style="color: var(--color-menu); margin-bottom: 20px;">¡Gracias por jugar FNC Engine!</h3>
                 </div>
-                
+
                 <div class="row justify-content-center mb-4">
                     <div class="col-6 text-center">
-                        <img src="assets/images/9fc2a9df8789de0960974d06923f1929.png" class="creditos-avatar" alt="Desarrollador">
+                        <img src="assets/images/9fc2a9df8789de0960974d06923f1929.png" class="creditos-avatar"
+                            alt="Desarrollador">
                         <h5>Just Fenix</h5>
                         <p style="color: var(--color-texto); opacity: 0.7;" class="mb-0">Desarrollador Principal</p>
                     </div>
                     <div class="col-6 text-center">
-                        <img src="assets/images/c323129d4ccb30882fcb89814a94b9f8.png" class="creditos-avatar" alt="Diseñador">
+                        <img src="assets/images/c323129d4ccb30882fcb89814a94b9f8.png" class="creditos-avatar"
+                            alt="Diseñador">
                         <h5>Less</h5>
                         <p style="color: var(--color-texto); opacity: 0.7;" class="mb-0">Idea Principal</p>
                     </div>
                 </div>
 
                 <div class="mt-4">
-                    <h4 style="color: var(--color-menu);">FNC Engine 0.2.2</h4>
+                    <h4 style="color: var(--color-menu);">FNC Engine 0.2.3</h4>
                     <p class="mb-2" style="color: var(--color-texto);">© 2025 Todos los derechos reservados</p>
-                    <small style="color: var(--color-texto); opacity: 0.8;">Desarrollado con ❤️ para la comunidad</small>
+                    <small style="color: var(--color-texto); opacity: 0.8;">Desarrollado con ❤️ para la
+                        comunidad</small>
                 </div>
             </div>
         </section>
@@ -1071,15 +1138,25 @@
 
                 <div class="modo-juego" id="modo-supervivencia">
                     <h3>vs Pollolito ✅</h3>
-                    <p>¡Corregido! Enfréntate al temible Pollolito en batallas épicas. Todos los bugs han sido eliminados.
+                    <p>¡Corregido! Enfréntate al temible Pollolito en batallas épicas. Todos los bugs han sido
+                        eliminados.
                     </p>
                     <button class="btn-cocina mt-2" id="btn-jugar-supervivencia">Jugar</button>
                 </div>
 
                 <div class="modo-juego" id="modo-desafio">
                     <h3>Chef's Kitchen Frenzy 🆕</h3>
-                    <p>¡REWORK! El clásico Circle Bounce ahora es un juego incremental de cocina. Controla una sartén rebotante, desbloquea mejoras épicas y conviértete en el chef más famoso. Incluye modo música y sistema de prestigio.</p>
+                    <p>¡REWORK! El clásico Circle Bounce ahora es un juego incremental de cocina. Controla una sartén
+                        rebotante, desbloquea mejoras épicas y conviértete en el chef más famoso. Incluye modo música y
+                        sistema de prestigio.</p>
                     <button class="btn-cocina mt-2" id="btn-jugar-desafio">Jugar</button>
+                </div>
+
+                <div class="modo-juego" id="modo-escape">
+                    <h3>Player Escape Minigames 🎮</h3>
+                    <p>¡40 niveles de pura locura! Desde botones esquivos hasta matemáticas imposibles. ¿Podrás
+                        completar todos los desafíos trolls y obtener tu recompensa final?</p>
+                    <button class="btn-cocina mt-2" id="btn-jugar-escape">Jugar</button>
                 </div>
             </div>
         </section>
@@ -1088,21 +1165,25 @@
         <section id="panel-secreto" class="hud-panel popup-panel w-100" style="display: none;">
             <button id="btn-cerrar-secreto" class="close-btn">✕</button>
             <h2 class="text-center mb-4">Modo Secreto</h2>
-            
+
             <div class="text-center mb-4">
                 <p>Ingresa el código secreto para desbloquear contenido especial:</p>
-                <input type="text" id="secret-code-input" class="secret-code-input" placeholder="Introduce el código aquí">
+                <input type="text" id="secret-code-input" class="secret-code-input"
+                    placeholder="Introduce el código aquí">
                 <div class="d-flex justify-content-center gap-3">
-                    <button id="btn-verificar-codigo" class="btn-cocina" style="background-color: #9b59b6;">Verificar</button>
+                    <button id="btn-verificar-codigo" class="btn-cocina"
+                        style="background-color: #9b59b6;">Verificar</button>
                 </div>
             </div>
-            
-            <div id="particulas-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;"></div>
+
+            <div id="particulas-container"
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;">
+            </div>
         </section>
     </main>
 
     <footer class="text-center py-3">
-        © FNC Engine 0.2.2 - Todos los derechos reservados
+        © FNC Engine 0.2.3 - Todos los derechos reservados
     </footer>
 
     <!-- Audio Elements -->
@@ -1148,23 +1229,23 @@
         let menuActionsCompleted = 0;
         let menuSpeedrunStartTime = 0;
         const SECRET_CODE = "AbelitoJAJASALUDOS";
-        
+
         function showUpdateNotification() {
             const lastVersion = localStorage.getItem('fncLastVersion');
-            if (lastVersion !== '0.2.2') {
+            if (lastVersion !== '0.2.3') {
                 showNotification(
-                    'Nueva versión 0.2.2 disponible', 
-                    'info', 
+                    'Nueva versión 0.2.3 disponible',
+                    'info',
                     'Haz clic para ver las novedades',
                     () => {
                         showPanel('panel-actualizacion');
                         unlockAchievement('achievement-updateChecker');
                     }
                 );
-                localStorage.setItem('fncLastVersion', '0.2.2');
+                localStorage.setItem('fncLastVersion', '0.2.3');
             }
         }
-        
+
         // Variables para el atajo Alt+S
         let altPressed = false;
         let sPressed = false;
@@ -1177,17 +1258,19 @@
             setupThemeSystem();
             checkTimeForAchievements();
             setupAutoPlay();
-            
+
             // Mostrar notificación de actualización v0.2.2
             setTimeout(() => {
                 showUpdateNotification();
             }, 1000);
+
+            // Habilitar audio con cualquier interacción
+            enableAudioOnInteraction();
         });
 
         // Función para mostrar notificación de actualización (duplicada - eliminar)
         // Esta función ya está definida arriba
 
-        // Configurar todos los event listeners
         function setupEventListeners() {
             // Navegación entre paneles
             document.getElementById('btn-jugar').addEventListener('click', () => {
@@ -1242,7 +1325,7 @@
             document.getElementById('color-picker').addEventListener('input', handleColorChange);
 
             // Selector de tema
-            document.getElementById('selector-tema').addEventListener('change', function() {
+            document.getElementById('selector-tema').addEventListener('change', function () {
                 applyTheme(this.value);
                 debouncedSaveSettings();
             });
@@ -1255,54 +1338,59 @@
             document.getElementById('btn-jugar-clasico').addEventListener('click', () => startGame('classic'));
             document.getElementById('btn-jugar-supervivencia').addEventListener('click', () => startGame('survival'));
             document.getElementById('btn-jugar-desafio').addEventListener('click', () => startGame('challenge'));
+            document.getElementById('btn-jugar-escape').addEventListener('click', () => startGame('escape'));
 
             // Eventos de teclado
             document.addEventListener('keydown', handleKeyDown);
             document.addEventListener('keyup', handleKeyUp);
-            
-            // Verificación de código secreto
+
+            // Panel secreto
             document.getElementById('btn-verificar-codigo').addEventListener('click', verifySecretCode);
-            document.getElementById('secret-code-input').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    verifySecretCode();
-                }
-            });
-            
-            // Eventos táctiles para móviles
-            setupTouchEvents();
         }
 
-        // Configurar reproducción automática después de interacción
-        function setupAutoPlay() {
-            let hasInteracted = false;
-            
-            function enableAutoPlay() {
-                if (!hasInteracted) {
-                    hasInteracted = true;
-                    
-                    // Si está configurado para reproducir automáticamente
-                    if (window.shouldAutoPlay || document.getElementById('auto-play-music').checked) {
-                        setTimeout(() => {
-                            playMusic();
-                        }, 500);
-                    }
+        function enableAudioOnInteraction() {
+            let audioEnabled = false;
+
+            function activateAudio() {
+                if (!audioEnabled) {
+                    audioEnabled = true;
+                    const audioElements = document.querySelectorAll('audio');
+                    audioElements.forEach(audio => {
+                        audio.muted = false;
+                        audio.load();
+                    });
+
+                    const silentAudio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT');
+                    silentAudio.play().catch(() => { });
+
+                    // Iniciar reproducción secuencial desde la primera canción
+                    currentMusic = 0;
+                    setTimeout(() => {
+                        playMusic();
+                    }, 100);
                 }
             }
-            
-            // Escuchar cualquier interacción del usuario
-            document.addEventListener('click', enableAutoPlay, { once: true });
-            document.addEventListener('keydown', enableAutoPlay, { once: true });
-            document.addEventListener('touchstart', enableAutoPlay, { once: true });
+
+            document.addEventListener('click', activateAudio, { once: true });
+            document.addEventListener('touchstart', activateAudio, { once: true });
+            document.addEventListener('keydown', activateAudio, { once: true });
+        }
+
+        function setupAutoPlay() {
+            const audioElements = document.querySelectorAll('audio');
+            audioElements.forEach(audio => {
+                audio.muted = true;
+            });
         }
 
         // Configurar eventos táctiles para móviles
         function setupTouchEvents() {
             // Doble toque para activar el modo secreto (alternativa a Alt+S)
             let lastTap = 0;
-            document.addEventListener('touchend', function(e) {
+            document.addEventListener('touchend', function (e) {
                 const currentTime = new Date().getTime();
                 const tapLength = currentTime - lastTap;
-                
+
                 if (tapLength < 300 && tapLength > 0) {
                     // Doble toque detectado
                     if (!secretModeUnlocked) {
@@ -1311,11 +1399,11 @@
                             unlockAchievement('achievement-secretHunter');
                         }
                     }
-                    
+
                     // Mostrar el panel secreto
                     showPanel('panel-secreto');
                 }
-                
+
                 lastTap = currentTime;
             });
         }
@@ -1333,24 +1421,24 @@
             } else {
                 konamiIndex = 0;
             }
-            
+
             // Detectar Alt+S
             if (event.key === 'Alt' || event.key === 's' || event.key === 'S') {
                 if (event.key === 'Alt') altPressed = true;
                 if (event.key.toLowerCase() === 's') sPressed = true;
-                
+
                 // Verificar si ambas teclas están presionadas
                 if (altPressed && sPressed) {
                     // Mostrar el panel secreto
                     showPanel('panel-secreto');
-                    
+
                     if (!secretModeUnlocked) {
                         secretModeAttempts++;
                         if (secretModeAttempts >= 3) {
                             unlockAchievement('achievement-secretHunter');
                         }
                     }
-                    
+
                     // Resetear las teclas
                     altPressed = false;
                     sPressed = false;
@@ -1382,9 +1470,9 @@
         // Actualizar colores de scrollbar
         function updateScrollbarColors() {
             document.documentElement.style.setProperty('--scrollbar-thumb', getComputedStyle(document.documentElement).getPropertyValue('--color-menu'));
-            document.documentElement.style.setProperty('--scrollbar-track', 
+            document.documentElement.style.setProperty('--scrollbar-track',
                 document.body.classList.contains('tema-claro') ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.2)');
-            document.documentElement.style.setProperty('--close-btn-color', 
+            document.documentElement.style.setProperty('--close-btn-color',
                 document.body.classList.contains('tema-claro') ? '#333333' : '#ffffff');
         }
 
@@ -1400,26 +1488,26 @@
         function showPanel(panelId) {
             const panel = document.getElementById(panelId);
             const darkBg = document.getElementById('fondo-oscuro');
-            
+
             // Mostrar fondo oscuro con animación
             darkBg.style.display = 'block';
             setTimeout(() => {
                 darkBg.classList.add('active');
             }, 10);
-            
+
             // Mostrar panel con animación
             panel.style.display = 'block';
             setTimeout(() => {
                 panel.classList.add('active');
             }, 50);
-            
+
             document.body.style.overflow = 'hidden';
             playSoundEffect();
 
             // Registrar panel visitado
             visitedPanels.add(panelId);
             checkAllPanelsVisited();
-            
+
             // Intentar reproducir música si está configurado
             if (window.shouldAutoPlay && !isMusicPlaying) {
                 setTimeout(() => {
@@ -1433,32 +1521,58 @@
         function hidePanel(panelId) {
             const panel = document.getElementById(panelId);
             const darkBg = document.getElementById('fondo-oscuro');
-            
+
             // Ocultar panel con animación
             panel.classList.remove('active');
-            
+
             // Ocultar fondo oscuro con animación
             darkBg.classList.remove('active');
-            
+
             // Esperar a que termine la animación para ocultar completamente
             setTimeout(() => {
                 panel.style.display = 'none';
                 darkBg.style.display = 'none';
             }, 500);
-            
+
             document.body.style.overflow = 'auto';
             playSoundEffect();
         }
 
         // Control de música
         function playMusic() {
-            musicElements[currentMusic].element.play().catch(e => {
+            const currentAudio = musicElements[currentMusic].element;
+
+            // Configurar reproducción secuencial
+            currentAudio.addEventListener('ended', () => {
+                nextMusic();
+                checkMusicSequenceAchievement();
+            }, { once: true });
+
+            currentAudio.play().catch(e => {
                 console.log('Error al reproducir música:', e);
             });
             isMusicPlaying = true;
             document.getElementById('btn-play-music').style.display = 'none';
             document.getElementById('btn-pause-music').style.display = 'flex';
             unlockAchievement('achievement-musicLover');
+        }
+
+        function checkMusicSequenceAchievement() {
+            let musicSequence = JSON.parse(localStorage.getItem('musicSequence') || '[]');
+            musicSequence.push(currentMusic);
+
+            if (musicSequence.length > 3) {
+                musicSequence = musicSequence.slice(-3);
+            }
+
+            localStorage.setItem('musicSequence', JSON.stringify(musicSequence));
+
+            if (musicSequence.length === 3 &&
+                musicSequence[0] === 0 &&
+                musicSequence[1] === 1 &&
+                musicSequence[2] === 2) {
+                unlockAchievement('achievement-musicSequencer');
+            }
         }
 
         function pauseMusic() {
@@ -1519,16 +1633,16 @@
             document.documentElement.style.setProperty('--color-menu', color);
             document.documentElement.style.setProperty('--color-menu-hover', adjustColor(color, -20));
             document.documentElement.style.setProperty('--scrollbar-thumb', color);
-            
+
             // Guardar inmediatamente el color
             localStorage.setItem('fnc-menu-color', color);
-            
+
             unlockAchievement('achievement-colorChanger');
             debouncedSaveSettings();
         }
 
         function adjustColor(color, amount) {
-            return '#' + color.replace(/^#/, '').replace(/../g, color => 
+            return '#' + color.replace(/^#/, '').replace(/../g, color =>
                 ('0' + Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
         }
 
@@ -1536,7 +1650,7 @@
         function saveSettings() {
             // Guardar color por separado para mayor confiabilidad
             localStorage.setItem('fnc-menu-color', document.getElementById('color-picker').value);
-            
+
             const settings = {
                 theme: document.getElementById('selector-tema').value,
                 difficulty: document.getElementById('selector-dificultad').value,
@@ -1552,7 +1666,7 @@
             };
 
             localStorage.setItem('fncSettings', JSON.stringify(settings));
-            
+
             if (!settingsSaveTimeout) {
                 showNotification('Configuración guardada correctamente');
                 unlockAchievement('achievement-settingsSaver');
@@ -1658,7 +1772,7 @@
         // Manejo de temas
         function applyTheme(theme, skipSaving = false) {
             document.body.classList.remove('tema-claro');
-            
+
             if (!skipSaving) {
                 localStorage.setItem('fnc-theme', theme);
                 unlockAchievement('achievement-themeChanger');
@@ -1672,7 +1786,7 @@
             } else if (theme === 'light') {
                 document.body.classList.add('tema-claro');
             }
-            
+
             updateScrollbarColors();
         }
 
@@ -1703,7 +1817,7 @@
         function checkTimeForAchievements() {
             const now = new Date();
             const hours = now.getHours();
-            
+
             // Noctámbulo (entre 12 AM y 5 AM)
             if (hours >= 0 && hours < 5) {
                 unlockAchievement('achievement-nightOwl');
@@ -1731,20 +1845,20 @@
         function verifySecretCode() {
             const input = document.getElementById('secret-code-input');
             const code = input.value.trim();
-            
+
             if (code === SECRET_CODE) {
                 // Código correcto
                 createParticles(30, true);
                 unlockAchievement('achievement-secretUnlocked');
                 unlockAchievement('achievement-codeMaster');
                 secretModeUnlocked = true;
-                
+
                 // Mostrar notificación especial
                 showNotification('¡Código Secreto Correcto!', 'success', 'Modo Secreto desbloqueado', () => {
                     hidePanel('panel-secreto');
                     unlockSecretMode();
                 });
-                
+
                 // Ocultar después de 2 segundos
                 setTimeout(() => {
                     hidePanel('panel-secreto');
@@ -1756,15 +1870,15 @@
                 input.value = '';
                 input.focus();
                 secretModeAttempts++;
-                
+
                 // Logro por intentar el modo secreto
                 if (secretModeAttempts === 3) {
                     unlockAchievement('achievement-secretHunter');
                 }
-                
+
                 // Mostrar notificación de error
                 showNotification('Código incorrecto', 'error', 'Inténtalo de nuevo');
-                
+
                 // Cerrar panel si es el tercer intento fallido
                 if (secretModeAttempts >= 3) {
                     setTimeout(() => {
@@ -1772,7 +1886,7 @@
                     }, 1500);
                 }
             }
-            
+
             debouncedSaveSettings();
         }
 
@@ -1780,41 +1894,41 @@
         function unlockSecretMode() {
             const btnSecreto = document.getElementById('btn-secreto');
             btnSecreto.classList.add('unlocked');
-            
+
             // Mostrar logros secretos
             document.querySelectorAll('.secret-achievement').forEach(achievement => {
                 achievement.style.display = 'flex';
             });
-            
+
             debouncedSaveSettings();
         }
 
         function createParticles(count, isGreen) {
             const container = document.getElementById('particulas-container');
             container.innerHTML = '';
-            
+
             const panel = document.getElementById('panel-secreto');
             const panelRect = panel.getBoundingClientRect();
-            
+
             for (let i = 0; i < count; i++) {
                 const particula = document.createElement('div');
                 particula.className = `particula ${isGreen ? 'particula-verde' : 'particula-roja'}`;
-                
+
                 // Posición inicial en el centro del panel
                 const startX = panelRect.width / 2;
                 const startY = panelRect.height / 2;
-                
+
                 // Dirección aleatoria
                 const angle = Math.random() * Math.PI * 2;
                 const distance = 50 + Math.random() * 100;
                 const tx = Math.cos(angle) * distance;
                 const ty = Math.sin(angle) * distance;
-                
+
                 particula.style.left = `${startX}px`;
                 particula.style.top = `${startY}px`;
                 particula.style.setProperty('--tx', `${tx}px`);
                 particula.style.setProperty('--ty', `${ty}px`);
-                
+
                 container.appendChild(particula);
             }
         }
@@ -1822,7 +1936,7 @@
         // Mostrar notificación de logro al estilo Psych Engine
         function showAchievementNotification(title, description) {
             const container = document.querySelector('.notification-container');
-            
+
             const notification = document.createElement('div');
             notification.className = 'achievement-notification';
             notification.innerHTML = `
@@ -1836,12 +1950,12 @@
             `;
 
             container.appendChild(notification);
-            
+
             // Forzar reflow para que la animación funcione
             void notification.offsetWidth;
-            
+
             notification.classList.add('show');
-            
+
             // Reproducir sonido
             document.getElementById('achievement-sound').currentTime = 0;
             document.getElementById('achievement-sound').play().catch(e => console.log("Error al reproducir sonido:", e));
@@ -1850,7 +1964,7 @@
             setTimeout(() => {
                 notification.classList.remove('show');
                 notification.classList.add('hide');
-                
+
                 // Eliminar después de la animación
                 setTimeout(() => {
                     notification.remove();
@@ -1861,14 +1975,14 @@
         // Mostrar notificación genérica
         function showNotification(message, type = 'success', subtitle = '', callback = null) {
             const container = document.querySelector('.notification-container');
-            
+
             const notification = document.createElement('div');
             notification.className = `achievement-notification ${type}`;
             notification.innerHTML = `
                 <div class="achievement-notification-icon">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : 
-                                      type === 'info' ? 'info-circle' : 
-                                      'exclamation-circle'}"></i>
+                    <i class="fas fa-${type === 'success' ? 'check-circle' :
+                    type === 'info' ? 'info-circle' :
+                        'exclamation-circle'}"></i>
                 </div>
                 <div class="achievement-notification-text">
                     <p>${message}</p>
@@ -1882,17 +1996,17 @@
             }
 
             container.appendChild(notification);
-            
+
             // Forzar reflow para que la animación funcione
             void notification.offsetWidth;
-            
+
             notification.classList.add('show');
-            
+
             // Ocultar después de 5 segundos (o 10 para info)
             setTimeout(() => {
                 notification.classList.remove('show');
                 notification.classList.add('hide');
-                
+
                 // Eliminar después de la animación
                 setTimeout(() => {
                     notification.remove();
@@ -1913,13 +2027,30 @@
         // Función para iniciar el juego
         function startGame(mode) {
             unlockAchievement('achievement-gameExplorer');
-            
+
             if (mode === 'classic') {
                 window.location.href = 'hola.html';
             } else if (mode === 'survival') {
                 window.location.href = 'pollolito.html';
             } else if (mode === 'challenge') {
                 window.location.href = 'game.html';
+            } else if (mode === 'escape') {
+                unlockAchievement('achievement-escapeExplorer');
+                window.location.href = 'games/gisselgame/index.html';
+            }
+
+            checkAllGamesAchievement(mode);
+        }
+
+        function checkAllGamesAchievement(currentMode) {
+            let playedModes = JSON.parse(localStorage.getItem('playedModes') || '[]');
+            if (!playedModes.includes(currentMode)) {
+                playedModes.push(currentMode);
+                localStorage.setItem('playedModes', JSON.stringify(playedModes));
+            }
+
+            if (playedModes.length >= 4) {
+                unlockAchievement('achievement-allGamesCompleted');
             }
         }
 
@@ -1932,12 +2063,12 @@
         function trackMenuAction() {
             const now = Date.now();
             menuActionsCompleted++;
-            
+
             // Logro por completar todas las acciones del menú
             if (menuActionsCompleted >= 10) {
                 unlockAchievement('achievement-menuMaster');
             }
-            
+
             // Logro de clic rápido (5 menús en menos de 3 segundos)
             if (now - lastMenuClickTime < 3000) {
                 menuClickCount++;
@@ -1947,13 +2078,13 @@
             } else {
                 menuClickCount = 1;
             }
-            
+
             // Iniciar speedrun del menú si es la primera acción
             if (menuActionsCompleted === 1) {
                 menuSpeedrunStartTime = now;
                 setTimeout(checkMenuSpeedrun, 30000); // Verificar después de 30 segundos
             }
-            
+
             lastMenuClickTime = now;
             debouncedSaveSettings();
         }
@@ -1981,16 +2112,17 @@
                 'achievement-menuSpeedrun',
                 'achievement-codeMaster'
             ];
-            
+
             const allUnlocked = menuAchievements.every(achievementId => {
                 const element = document.getElementById(achievementId);
                 return element && element.querySelector('.achievement-progress-bar').style.width === '100%';
             });
-            
+
             if (allUnlocked) {
                 unlockAchievement('achievement-menuMaster');
             }
         }
     </script>
 </body>
+
 </html>
