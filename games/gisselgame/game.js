@@ -249,6 +249,30 @@ function setupMobileSupport() {
     }
 }
 
+// Función para abrir Gissel Challenge con advertencia Android
+function abrirGisselChallenge() {
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    
+    if (isAndroid) {
+        const confirmar = confirm(
+            '⚠️ ADVERTENCIA ANDROID ⚠️\n\n' +
+            'Esta versión del juego no está completamente optimizada para Android.\n\n' +
+            'Podrías experimentar:\n' +
+            '• Problemas de rendimiento\n' +
+            '• Controles menos precisos\n' +
+            '• Posibles errores visuales\n\n' +
+            '¿Estás seguro de que quieres continuar?'
+        );
+        
+        if (confirmar) {
+            window.open('https://gissel-vip-challenge.pages.dev', '_blank');
+        }
+    } else {
+        // PC - abrir normalmente
+        window.open('https://gissel-vip-challenge.pages.dev', '_blank');
+    }
+}
+
 window.addEventListener('load', function () {
     checksumNivel = generarChecksum(1);
     setupMobileSupport();
