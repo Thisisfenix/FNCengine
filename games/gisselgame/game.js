@@ -201,7 +201,7 @@ document.addEventListener('keydown', function (e) {
 });
 
 // Soporte táctil para Android
-document.addEventListener('touchstart', function(e) {
+document.addEventListener('touchstart', function (e) {
     if (document.getElementById('dialogoContainer').style.display !== 'none') {
         siguienteDialogo();
     } else if (document.getElementById('dialogoFinalContainer').style.display !== 'none') {
@@ -226,24 +226,24 @@ document.addEventListener('DOMContentLoaded', function () {
 function setupMobileSupport() {
     const isAndroid = /Android/i.test(navigator.userAgent);
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-    
+
     if (isAndroid || isMobile) {
         // Prevenir zoom en doble tap
-        document.addEventListener('touchstart', function(e) {
+        document.addEventListener('touchstart', function (e) {
             if (e.touches.length > 1) {
                 e.preventDefault();
             }
         });
-        
+
         let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(e) {
-            const now = (new Date()).getTime();
+        document.addEventListener('touchend', function (e) {
+            const now = Date.now();
             if (now - lastTouchEnd <= 300) {
                 e.preventDefault();
             }
             lastTouchEnd = now;
         }, false);
-        
+
         // Añadir clase CSS para móviles
         document.body.classList.add('mobile-device');
     }
@@ -1292,7 +1292,7 @@ function iniciarFlappy() {
     if (flappyAnimationId) cancelAnimationFrame(flappyAnimationId);
     if (flappyPipeInterval) clearInterval(flappyPipeInterval);
     document.removeEventListener('keydown', flappyJump);
-    
+
     flappyBird = { y: 150, velocity: 0 };
     flappyPipes = [];
     flappyScore = 0;
@@ -1322,7 +1322,7 @@ function iniciarFlappy() {
     countdownElement.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:4em;color:#ff0000;z-index:100;';
     countdownElement.textContent = countdown;
     game.appendChild(countdownElement);
-    
+
     const countdownTimer = setInterval(() => {
         countdown--;
         if (countdown > 0) {
@@ -1333,12 +1333,12 @@ function iniciarFlappy() {
                 countdownElement.remove();
                 flappyGameRunning = true;
                 flappyStarted = true;
-                
+
                 // Crear tuberías cada 2 segundos
                 flappyPipeInterval = setInterval(() => {
                     if (flappyGameRunning) crearTuberia();
                 }, 2000);
-                
+
                 flappyGameLoop();
             }, 500);
             clearInterval(countdownTimer);
@@ -1349,7 +1349,7 @@ function iniciarFlappy() {
 function flappyJump(e) {
     if (!flappyStarted) return;
     if (!flappyGameRunning) return;
-    
+
     // Soporte para teclado y táctil
     if (e.type === 'keydown' && e.code !== 'Space' && e.key !== ' ') return;
     if (e.type === 'touchstart') e.preventDefault();
@@ -1499,10 +1499,10 @@ function iniciarTetris() {
     tetrisGrid = Array(20).fill().map(() => Array(10).fill(0));
     tetrisLineas = 0;
     document.getElementById('tetrisLineas').textContent = '0';
-    
+
     const canvas = document.getElementById('tetrisCanvas');
     const ctx = canvas.getContext('2d');
-    
+
     tetrisTimer = setInterval(() => {
         if (tetrisLineas >= 3) {
             clearInterval(tetrisTimer);
@@ -1512,16 +1512,16 @@ function iniciarTetris() {
             iniciarEscape();
             return;
         }
-        
+
         // Simular línea completada cada 5 segundos
         tetrisLineas++;
         document.getElementById('tetrisLineas').textContent = tetrisLineas;
-        
+
         // Dibujar tetris falso
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, 300, 400);
         ctx.fillStyle = '#ff0000';
-        for(let i = 0; i < 5; i++) {
+        for (let i = 0; i < 5; i++) {
             ctx.fillRect(Math.random() * 280, Math.random() * 380, 20, 20);
         }
     }, 5000);
@@ -1535,10 +1535,10 @@ function iniciarEscape() {
     escapeItems = [];
     escapeTimer = 120;
     document.getElementById('escapeTimer').textContent = escapeTimer;
-    
+
     const room = document.getElementById('escapeRoom');
     room.innerHTML = '';
-    
+
     // Crear items ocultos
     const items = ['🗝️', '🔍', '📜'];
     items.forEach((item, i) => {
@@ -1548,11 +1548,11 @@ function iniciarEscape() {
         div.onclick = () => recogerItem(item, div);
         room.appendChild(div);
     });
-    
+
     const timer = setInterval(() => {
         escapeTimer--;
         document.getElementById('escapeTimer').textContent = escapeTimer;
-        
+
         if (escapeTimer <= 0) {
             clearInterval(timer);
             document.getElementById('errorEscape').style.display = 'block';
@@ -1568,7 +1568,7 @@ function recogerItem(item, element) {
     escapeItems.push(item);
     element.remove();
     document.getElementById('escapeItems').textContent = escapeItems.join(' ');
-    
+
     if (escapeItems.length >= 3) {
         guardarProgreso(39);
         document.getElementById('nivel38').style.display = 'none';
@@ -1587,12 +1587,12 @@ function iniciarBoss() {
     playerBossHP = 100;
     document.getElementById('bossHP').textContent = bossHP;
     document.getElementById('playerHPBoss').textContent = playerBossHP;
-    
+
     bossTimer = setInterval(() => {
         // Boss ataca
         playerBossHP -= Math.floor(Math.random() * 15) + 5;
         document.getElementById('playerHPBoss').textContent = Math.max(0, playerBossHP);
-        
+
         if (playerBossHP <= 0) {
             clearInterval(bossTimer);
             document.getElementById('errorBoss').style.display = 'block';
@@ -1606,10 +1606,10 @@ function iniciarBoss() {
 
 function atacarBoss() {
     if (bossHP <= 0) return;
-    
+
     bossHP -= Math.floor(Math.random() * 20) + 10;
     document.getElementById('bossHP').textContent = Math.max(0, bossHP);
-    
+
     if (bossHP <= 0) {
         clearInterval(bossTimer);
         guardarProgreso(40);
@@ -1625,7 +1625,7 @@ const finalCorrectOrder = ['red', 'blue', 'green', 'yellow'];
 function finalClick(color) {
     finalSequence.push(color);
     document.getElementById('finalSequence').textContent = finalSequence.join(' → ');
-    
+
     // Verificar si la secuencia es correcta hasta ahora
     for (let i = 0; i < finalSequence.length; i++) {
         if (finalSequence[i] !== finalCorrectOrder[i]) {
@@ -1637,7 +1637,7 @@ function finalClick(color) {
             return;
         }
     }
-    
+
     // Si completó la secuencia correctamente
     if (finalSequence.length === finalCorrectOrder.length) {
         localStorage.removeItem('gameProgress');
@@ -2393,7 +2393,7 @@ function iniciarMorse() {
     fraseDisplay.id = 'fraseDisplay';
     fraseDisplay.style.cssText = 'font-size:1.3em;margin:20px;padding:15px;background:#333;color:#fff;border-radius:10px;text-align:center;';
     fraseDisplay.textContent = `Escribe esta frase: "${phrase}"`;
-    
+
     const morseDisplayElement = document.getElementById('morseDisplay');
     if (!document.getElementById('fraseDisplay')) {
         morseDisplayElement.parentNode.insertBefore(fraseDisplay, morseDisplayElement);
@@ -2534,21 +2534,21 @@ let meteorosJuego = false;
 let meteorosTimer;
 let meteorosSegundos = 30;
 let meteorosEsquivados = 0;
-let playerMeteoros = {x: 200, y: 350};
+let playerMeteoros = { x: 200, y: 350 };
 let meteoros = [];
 
 function iniciarMeteoros() {
     // Limpiar elementos anteriores
     const existingGame = document.getElementById('meteorosGame');
     if (existingGame) existingGame.remove();
-    
+
     const container = document.getElementById('nivel32');
-    
+
     // Crear área de juego
     const gameArea = document.createElement('div');
     gameArea.id = 'meteorosGame';
     gameArea.style.cssText = 'position:relative;width:400px;height:300px;background:linear-gradient(180deg,#000428,#004e92);border:3px solid #ff4444;margin:20px auto;overflow:hidden;';
-    
+
     // Jugador
     const player = document.createElement('div');
     player.id = 'playerMeteoros';
@@ -2556,7 +2556,7 @@ function iniciarMeteoros() {
     player.textContent = '🚀';
     player.style.left = playerMeteoros.x + 'px';
     player.style.top = playerMeteoros.y + 'px';
-    
+
     // Contador y timer
     const stats = document.createElement('div');
     stats.style.cssText = 'text-align:center;margin:10px;';
@@ -2566,49 +2566,49 @@ function iniciarMeteoros() {
         <p id="meteorosWarning" style="color:#ff0000;font-size:1.1em;display:none;">⚠️ ¡EL SUELO SE DESTRUIRÁ! ¡Ve a la plataforma! ⚠️</p>
         <p style="color:#ff6666;font-size:1em;">Usa WASD o flechas para moverte</p>
     `;
-    
+
     const h1 = container.querySelector('h1');
     h1.insertAdjacentElement('afterend', stats);
     stats.insertAdjacentElement('afterend', gameArea);
     gameArea.appendChild(player);
-    
+
     // Resetear variables
     meteorosJuego = true;
     meteorosSegundos = 60;
     meteorosEsquivados = 0;
     meteoros = [];
-    playerMeteoros = {x: 200, y: 350};
-    
+    playerMeteoros = { x: 200, y: 350 };
+
     // Crear suelo inicial
     const suelo = document.createElement('div');
     suelo.id = 'sueloMeteoros';
     suelo.style.cssText = 'position:absolute;bottom:0;width:100%;height:30px;background:#8B4513;';
     gameArea.appendChild(suelo);
-    
+
     // Controles
     document.addEventListener('keydown', moverPlayerMeteoros);
-    
+
     // Timer principal
     meteorosTimer = setInterval(() => {
         meteorosSegundos--;
         document.getElementById('meteorosTimer').textContent = meteorosSegundos;
-        
+
         // Crear plataforma en segundo 40
         if (meteorosSegundos === 40) {
             crearPlataforma();
             document.getElementById('meteorosWarning').style.display = 'block';
         }
-        
+
         // Destruir suelo en segundo 35
         if (meteorosSegundos === 35) {
             destruirSuelo();
         }
-        
+
         // Mover plataforma en segundo 25
         if (meteorosSegundos === 25) {
             iniciarMovimientoPlataforma();
         }
-        
+
         if (meteorosSegundos <= 0) {
             if (meteorosEsquivados >= 25) {
                 meteorosVictoria();
@@ -2617,12 +2617,12 @@ function iniciarMeteoros() {
             }
         }
     }, 1000);
-    
+
     // Crear meteoros
     setInterval(() => {
         if (meteorosJuego) crearMeteoro();
     }, 800);
-    
+
     // Mover meteoros
     setInterval(() => {
         if (meteorosJuego) moverMeteoros();
@@ -2631,12 +2631,12 @@ function iniciarMeteoros() {
 
 function moverPlayerMeteoros(e) {
     if (!meteorosJuego) return;
-    
+
     const speed = 15;
     const suelo = document.getElementById('sueloMeteoros');
     const plataforma = document.getElementById('plataformaMeteoros');
-    
-    switch(e.key.toLowerCase()) {
+
+    switch (e.key.toLowerCase()) {
         case 'w':
         case 'arrowup':
             if (playerMeteoros.y > 0) playerMeteoros.y -= speed;
@@ -2664,7 +2664,7 @@ function moverPlayerMeteoros(e) {
             if (playerMeteoros.x < 370) playerMeteoros.x += speed;
             break;
     }
-    
+
     // Verificar si cayó al vacío
     if (!suelo && (!plataforma || playerMeteoros.y > 250)) {
         const platX = parseInt(plataforma?.style.left) || -100;
@@ -2673,7 +2673,7 @@ function moverPlayerMeteoros(e) {
             return;
         }
     }
-    
+
     const player = document.getElementById('playerMeteoros');
     if (player) {
         player.style.left = playerMeteoros.x + 'px';
@@ -2687,7 +2687,7 @@ function crearPlataforma() {
     plataforma.id = 'plataformaMeteoros';
     plataforma.style.cssText = 'position:absolute;bottom:80px;left:150px;width:100px;height:20px;background:#FFD700;border:2px solid #FFA500;';
     gameArea.appendChild(plataforma);
-    
+
     alert('🚨 ¡PLATAFORMA CREADA! ¡Ve hacia ella antes de que se destruya el suelo! 🚨');
 }
 
@@ -2703,21 +2703,21 @@ let plataformaMovimiento;
 function iniciarMovimientoPlataforma() {
     const plataforma = document.getElementById('plataformaMeteoros');
     if (!plataforma) return;
-    
+
     let direccion = 1;
     let posX = 150;
-    
+
     alert('⚡ ¡LA PLATAFORMA AHORA SE MUEVE! ¡Mantente encima! ⚡');
-    
+
     plataformaMovimiento = setInterval(() => {
         posX += direccion * 3;
-        
+
         if (posX <= 0 || posX >= 300) {
             direccion *= -1;
         }
-        
+
         plataforma.style.left = posX + 'px';
-        
+
         // Mover jugador con plataforma si está encima
         if (playerMeteoros.x >= posX && playerMeteoros.x <= posX + 100 && playerMeteoros.y >= 190 && playerMeteoros.y <= 220) {
             playerMeteoros.x = Math.max(0, Math.min(370, playerMeteoros.x + direccion * 3));
@@ -2732,28 +2732,28 @@ function iniciarMovimientoPlataforma() {
 function crearMeteoro() {
     const gameArea = document.getElementById('meteorosGame');
     if (!gameArea) return;
-    
+
     const meteoro = document.createElement('div');
     meteoro.className = 'meteoro';
     meteoro.style.cssText = 'position:absolute;width:25px;height:25px;font-size:20px;';
     meteoro.textContent = ['☄️', '💥', '🔥', '⚡'][Math.floor(Math.random() * 4)];
     meteoro.style.left = Math.random() * 375 + 'px';
     meteoro.style.top = '-25px';
-    
+
     gameArea.appendChild(meteoro);
-    meteoros.push({element: meteoro, x: parseInt(meteoro.style.left), y: -25});
+    meteoros.push({ element: meteoro, x: parseInt(meteoro.style.left), y: -25 });
 }
 
 function moverMeteoros() {
     meteoros.forEach((meteoro, index) => {
         meteoro.y += 5;
         meteoro.element.style.top = meteoro.y + 'px';
-        
+
         if (Math.abs(meteoro.x - playerMeteoros.x) < 25 && Math.abs(meteoro.y - playerMeteoros.y) < 25) {
             meteorosDerrota();
             return;
         }
-        
+
         if (meteoro.y > 300) {
             meteoro.element.remove();
             meteoros.splice(index, 1);
@@ -2768,7 +2768,7 @@ function meteorosVictoria() {
     clearInterval(meteorosTimer);
     if (plataformaMovimiento) clearInterval(plataformaMovimiento);
     document.removeEventListener('keydown', moverPlayerMeteoros);
-    
+
     alert('🎉 ¡INCREÍBLE! ¡Sobreviviste al apocalipsis con plataforma móvil! 🎉');
     guardarProgreso(33);
     document.getElementById('nivel32').style.display = 'none';
@@ -2781,7 +2781,7 @@ function meteorosDerrota() {
     clearInterval(meteorosTimer);
     if (plataformaMovimiento) clearInterval(plataformaMovimiento);
     document.removeEventListener('keydown', moverPlayerMeteoros);
-    
+
     alert('💥 ¡APLASTADO O CAÍSTE AL VACÍO! ¡El apocalipsis no perdona! 😈');
     setTimeout(() => {
         iniciarMeteoros();
@@ -2798,12 +2798,12 @@ function iniciarLuzRojaVerdeOLD() {
     if (existingZona) existingZona.remove();
     if (existingContador) existingContador.remove();
     if (existingTimer) existingTimer.remove();
-    
+
     // Limpiar timer anterior
     if (luzTimer) {
         clearInterval(luzTimer);
     }
-    
+
     const container = document.getElementById('nivel32');
 
     const luzDiv = document.createElement('div');
@@ -2814,12 +2814,12 @@ function iniciarLuzRojaVerdeOLD() {
     zonaSegura.id = 'zonaSegura';
     zonaSegura.style.cssText = 'width:150px;height:150px;border:3px dashed #00ff00;margin:20px auto;display:flex;align-items:center;justify-content:center;';
     zonaSegura.textContent = 'ZONA SEGURA';
-    
+
     const contador = document.createElement('p');
     contador.id = 'contadorLuz';
     contador.style.cssText = 'font-size:1.5em;margin:10px;color:#00ff00;';
     contador.textContent = `Éxitos: ${exitosLuz}/3`;
-    
+
     const timerDisplay = document.createElement('p');
     timerDisplay.id = 'timerCambio';
     timerDisplay.style.cssText = 'font-size:1.2em;margin:10px;color:#ffff00;';
@@ -2830,7 +2830,7 @@ function iniciarLuzRojaVerdeOLD() {
     luzDiv.insertAdjacentElement('afterend', zonaSegura);
     zonaSegura.insertAdjacentElement('afterend', contador);
     contador.insertAdjacentElement('afterend', timerDisplay);
-    
+
     // Resetear variables
     luzActual = 'roja';
     mouseEnZona = false;
@@ -2858,14 +2858,14 @@ function reiniciarLuzRojaVerde() {
     if (luzTimer) {
         clearInterval(luzTimer);
     }
-    
+
     // Resetear variables
     luzActual = 'roja';
     mouseEnZona = false;
     exitosLuz = 0;
     tiempoEnVerde = 0;
     tiempoParaCambio = 0;
-    
+
     // Reiniciar después de un breve delay
     setTimeout(() => {
         iniciarLuzRojaVerde();
@@ -2876,13 +2876,13 @@ function cambiarLuz() {
     const luz = document.getElementById('luzSemaforo');
     tiempoEnVerde = 0;
     tiempoParaCambio = Math.random() * 3 + 2; // 2-5 segundos aleatorio
-    
+
     actualizarTimerDisplay();
 
     luzTimer = setInterval(() => {
         tiempoParaCambio--;
         actualizarTimerDisplay();
-        
+
         if (tiempoParaCambio <= 0) {
             if (luzActual === 'roja') {
                 luzActual = 'verde';
@@ -2894,7 +2894,7 @@ function cambiarLuz() {
                 if (tiempoEnVerde >= 3 && mouseEnZona) {
                     exitosLuz++;
                     document.getElementById('contadorLuz').textContent = `Éxitos: ${exitosLuz}/3`;
-                    
+
                     if (exitosLuz >= 3) {
                         clearInterval(luzTimer);
                         guardarProgreso(33);
@@ -2904,7 +2904,7 @@ function cambiarLuz() {
                         return;
                     }
                 }
-                
+
                 luzActual = 'roja';
                 luz.style.background = 'red';
                 tiempoParaCambio = Math.random() * 3 + 2; // Nuevo tiempo aleatorio
@@ -3208,7 +3208,7 @@ setInterval(function () {
     // Detectar cambios bruscos (inspector móvil) - Deshabilitado para Android
     const isAndroid = /Android/i.test(navigator.userAgent);
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-    
+
     if (!isAndroid && !isMobile) {
         if (Math.abs(currentWidth - lastWidth) > 100 || Math.abs(currentHeight - lastHeight) > 100) {
             intentosTrampas++;
@@ -3347,7 +3347,7 @@ console.dir = () => { consoleBloqueada = true; };
 window.eval = () => { alert('🚨 EVAL BLOQUEADO 🚨'); location.reload(); };
 
 // Proteger guardarProgreso
-guardarProgreso = function(nivel) {
+guardarProgreso = function (nivel) {
     const stack = new Error().stack;
     if (stack.includes('console') || stack.includes('eval') || consoleBloqueada) {
         alert('🚨 TRAMPA DETECTADA: Uso de consola bloqueado 🚨');

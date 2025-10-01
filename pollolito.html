@@ -607,6 +607,10 @@
                 height: 60px;
                 font-size: 12px;
                 min-width: 120px;
+                /* Optimizaciones para Android */
+                min-height: 48px;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: rgba(123, 104, 238, 0.3);
             }
 
             .submenu-button {
@@ -614,11 +618,13 @@
                 height: 70px;
                 font-size: 12px;
                 padding: 8px;
+                min-height: 48px;
             }
 
             .submenu-back-button {
                 width: 140px;
                 height: 45px;
+                min-height: 48px;
             }
 
             .button-icon {
@@ -628,15 +634,78 @@
 
             #dialogue-box {
                 font-size: 14px;
+                /* Mejor legibilidad en Android */
+                line-height: 1.4;
+                padding: 25px;
             }
 
             #precision-game {
                 width: 90%;
                 height: 120px;
+                /* Mejor visibilidad en Android */
+                border-width: 3px;
+            }
+
+            #precision-bar {
+                height: 60px;
+                border-width: 3px;
+            }
+
+            #precision-indicator {
+                width: 12px;
+                box-shadow: 0 0 8px #fff;
             }
 
             #mobile-warning {
                 display: flex;
+                font-size: 16px;
+                line-height: 1.5;
+            }
+            
+            /* Optimizaciones específicas para Android */
+            #music-toggle {
+                font-size: 10px;
+                padding: 6px 12px;
+                min-height: 40px;
+            }
+            
+            #secret-panel-toggle {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+        
+        /* Estilos específicos para Android */
+        @media (max-width: 768px) and (-webkit-min-device-pixel-ratio: 1) {
+            body {
+                -webkit-text-size-adjust: 100%;
+                -webkit-font-smoothing: antialiased;
+            }
+            
+            button {
+                -webkit-appearance: none;
+                appearance: none;
+                border-radius: 8px;
+                transition: all 0.15s ease;
+            }
+            
+            button:active {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }
+            
+            /* Mejor contraste para pantallas Android */
+            .status-text {
+                text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+                font-weight: bold;
+            }
+            
+            .battle-effect {
+                font-size: 28px;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
             }
         }
 
@@ -3918,17 +3987,103 @@
                 if (element && (element.tagName === 'BUTTON' || element.closest('button'))) {
                     const button = element.tagName === 'BUTTON' ? element : element.closest('button');
                     if (!button.disabled && !gameState.uiBlocked && !gameState.precisionGameActive) {
+                        // Feedback táctil mejorado para Android
+                        if (navigator.vibrate) {
+                            navigator.vibrate(30);
+                        }
+                        
                         button.classList.add('button-pressed');
-                        setTimeout(() => button.classList.remove('button-pressed'), 200);
-                        button.click();
+                        button.style.transform = 'scale(0.95)';
+                        button.style.boxShadow = '0 0 15px rgba(123, 104, 238, 0.6)';
+                        
+                        setTimeout(() => {
+                            button.classList.remove('button-pressed');
+                            button.style.transform = 'scale(1)';
+                            button.style.boxShadow = '';
+                        }, 150);
+                        
+                        // Delay para mejor respuesta en Android
+                        setTimeout(() => {
+                            button.click();
+                        }, 50);
                     }
                 }
+            }
+        }
+
+        // Optimizaciones específicas para Android
+        function setupAndroidOptimizations() {
+            const isAndroid = /Android/i.test(navigator.userAgent);
+            
+            if (isAndroid) {
+                // Prevenir zoom y menú contextual
+                document.addEventListener('contextmenu', e => e.preventDefault());
+                document.addEventListener('gesturestart', e => e.preventDefault());
+                document.addEventListener('gesturechange', e => e.preventDefault());
+                
+                // Prevenir scroll y zoom accidental
+                document.addEventListener('touchmove', e => {
+                    if (e.scale !== 1) e.preventDefault();
+                }, { passive: false });
+                
+                // Wake lock para mantener pantalla activa
+                if ('wakeLock' in navigator) {
+                    navigator.wakeLock.request('screen').catch(() => {});
+                }
+                
+                // Optimizar rendimiento para Android
+                const androidVersion = parseFloat(navigator.userAgent.match(/Android (\d+\.\d+)/)?.[1] || '0');
+                if (androidVersion < 7.0) {
+                    // Android más antiguo - reducir efectos
+                    document.documentElement.style.setProperty('--animation-duration', '0.1s');
+                }
+                
+                // Configurar fullscreen automático después de interacción
+                let hasInteracted = false;
+                const enableFullscreen = () => {
+                    if (!hasInteracted && gameState.isMobile) {
+                        hasInteracted = true;
+                        setTimeout(() => {
+                            if (document.documentElement.requestFullscreen) {
+                                document.documentElement.requestFullscreen().catch(() => {});
+                            } else if (document.documentElement.webkitRequestFullscreen) {
+                                document.documentElement.webkitRequestFullscreen().catch(() => {});
+                            }
+                        }, 1000);
+                    }
+                };
+                
+                document.addEventListener('touchstart', enableFullscreen, { once: true });
+                document.addEventListener('click', enableFullscreen, { once: true });
+                
+                // Mejorar respuesta táctil
+                document.body.style.touchAction = 'manipulation';
+                document.body.style.userSelect = 'none';
+                document.body.style.webkitUserSelect = 'none';
+                document.body.style.webkitTouchCallout = 'none';
+                
+                // Optimizar botones para Android
+                const buttons = document.querySelectorAll('button');
+                buttons.forEach(button => {
+                    button.style.minHeight = '48px';
+                    button.style.minWidth = '48px';
+                    button.addEventListener('touchstart', (e) => {
+                        if (navigator.vibrate) navigator.vibrate(25);
+                        button.style.transform = 'scale(0.95)';
+                    });
+                    button.addEventListener('touchend', (e) => {
+                        button.style.transform = 'scale(1)';
+                    });
+                });
             }
         }
 
         // Inicialización del juego
         window.addEventListener('DOMContentLoaded', () => {
             gameState.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            // Configurar optimizaciones para Android
+            setupAndroidOptimizations();
 
             if (gameState.isMobile) {
                 const checkOrientation = () => {
@@ -3945,6 +4100,11 @@
 
                 checkOrientation();
                 window.addEventListener('resize', checkOrientation);
+                
+                // Orientación de pantalla para Android
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('landscape').catch(() => {});
+                }
             } else {
                 BattleSystem.initGame();
             }

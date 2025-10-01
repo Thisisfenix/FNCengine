@@ -100,21 +100,6 @@
             display: none;
             border: 2px solid #4CAF50;
         }
-        
-        @keyframes damageFlash {
-            0% { opacity: 0.6; }
-            100% { opacity: 0; }
-        }
-        
-        @keyframes healFlash {
-            0% { opacity: 0.4; }
-            100% { opacity: 0; }
-        }
-        
-        @keyframes miniFlash {
-            0% { opacity: 0.15; }
-            100% { opacity: 0; }
-        }
     </style>
 </head>
 
@@ -131,36 +116,18 @@
         <div>Objetos: <span id="objects">0</span></div>
     </div>
 
-    <!-- Panel de Misión Colapsable -->
-    <div id="mission-panel" style="position: fixed; top: 50%; right: -280px; width: 300px; background: rgba(0,0,0,0.9); color: white; border-radius: 10px 0 0 10px; z-index: 100; transition: right 0.3s ease;">
-        <div id="mission-toggle" style="position: absolute; left: -30px; top: 50%; transform: translateY(-50%); width: 30px; height: 60px; background: rgba(0,0,0,0.9); border-radius: 10px 0 0 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">▶</div>
-        <div style="padding: 20px;">
-            <h3 style="margin: 0 0 15px 0; color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 5px;">MISIÓN ACTUAL</h3>
-            <p id="mission-text" style="margin: 0; line-height: 1.4;">Explora Aethermoor y encuentra los 4 cristales de poder para derrotar al Señor Oscuro</p>
-            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #333;">
-                <h4 style="margin: 0 0 10px 0; color: #FF9800;">Progreso:</h4>
-                <div id="mission-progress" style="font-size: 12px; color: #ccc;"></div>
-            </div>
-        </div>
+    <div id="objective">
+        <h3>MISIÓN ACTUAL</h3>
+        <p id="mission-text">Explora Aethermoor y encuentra los 4 cristales de poder para derrotar al Señor Oscuro</p>
     </div>
 
-    <!-- Barra de Vida Mejorada -->
-    <div id="health-bar" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 250px; height: 25px; background: rgba(0,0,0,0.8); border: 2px solid #fff; border-radius: 15px; overflow: hidden; z-index: 100;">
-        <div id="health-fill" style="height: 100%; width: 100%; background: linear-gradient(to right, #ff4444, #ffaa00, #44ff44); transition: width 1s ease-out, background-color 0.5s ease;"></div>
-        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; font-size: 12px; text-shadow: 1px 1px 2px #000; z-index: 1;"><span id="health-text">100/100</span></div>
+    <div id="health-bar">
+        <div id="health-fill"></div>
     </div>
 
-    <!-- Panel de Botones -->
-    <div id="button-panel" style="position: fixed; bottom: 20px; left: 20px; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 10px; z-index: 100;">
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px;">
-            <button id="btn-inventory" style="padding: 8px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">Inventario (I)</button>
-            <button id="btn-minimap" style="padding: 8px; background: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">Minimapa (M)</button>
-            <button id="btn-camera" style="padding: 8px; background: #FF9800; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">Cámara (C)</button>
-            <button id="btn-potion" style="padding: 8px; background: #E91E63; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">Poción (P)</button>
-            <button id="btn-interact" style="padding: 8px; background: #9C27B0; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">Hablar (Q)</button>
-            <button id="btn-pause" style="padding: 8px; background: #607D8B; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">Pausa (ESC)</button>
-        </div>
-        <div style="font-size: 10px; color: #ccc; text-align: center;">WASD: Mover | Espacio: Saltar | Click: Atacar | R: Correr</div>
+    <div id="controls">
+        WASD: Mover | Espacio: Saltar | Click: Atacar | R: Correr | P: Poción | Q: Hablar | I: Inventario | M: Minimapa
+        | C: Cámara | F5: Guardar Rápido | F6: Menú Guardar | F9: Cargar | ESC: Pausa
     </div>
 
     <div id="notification"></div>
@@ -176,12 +143,10 @@
         <button id="load-game"
             style="padding: 15px 30px; font-size: 1.2em; margin: 10px; background: #9C27B0; color: white; border: none; border-radius: 5px; cursor: pointer;">Cargar
             Partida</button>
-        <button id="tutorial-btn"
-            style="padding: 15px 30px; font-size: 1.2em; margin: 10px; background: #FF5722; color: white; border: none; border-radius: 5px; cursor: pointer;">Tutorial</button>
         <button id="settings-btn"
             style="padding: 15px 30px; font-size: 1.2em; margin: 10px; background: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer;">Configuración</button>
-        <button id="controls-btn"
-            style="padding: 15px 30px; font-size: 1.2em; margin: 10px; background: #FF9800; color: white; border: none; border-radius: 5px; cursor: pointer;">Controles</button>
+        <button id="tutorial-btn"
+            style="padding: 15px 30px; font-size: 1.2em; margin: 10px; background: #FF5722; color: white; border: none; border-radius: 5px; cursor: pointer;">Tutorial</button>
     </div>
 
     <!-- Menú de Pausa -->
@@ -199,14 +164,8 @@
 
     <!-- Configuración -->
     <div id="settings-menu"
-        style="position: fixed; top: 50px; left: 50px; width: 400px; background: rgba(0,0,0,0.9); color: white; padding: 20px; border-radius: 10px; z-index: 1001; display: none;">
+        style="position: fixed; top: 50px; left: 50px; width: 450px; max-height: 80vh; background: rgba(0,0,0,0.9); color: white; padding: 20px; border-radius: 10px; z-index: 1001; display: none; overflow-y: auto;">
         <h3>Configuración</h3>
-        <div style="margin: 10px 0;">Calidad Gráfica: <select id="graphics-quality">
-                <option value="low">Baja</option>
-                <option value="medium">Media</option>
-                <option value="high">Alta</option>
-                <option value="ultra">Ultra</option>
-            </select></div>
         <div style="margin: 10px 0;">Calidad de Sombras: <select id="shadow-quality">
                 <option value="off">Desactivadas</option>
                 <option value="low">Bajas</option>
@@ -220,8 +179,45 @@
         <div style="margin: 10px 0;">Mostrar Minimapa: <input type="checkbox" id="show-minimap" checked></div>
         <div style="margin: 10px 0;">Mostrar Brújula: <input type="checkbox" id="show-compass" checked></div>
         <div style="margin: 10px 0;">Ciclo Día/Noche: <input type="checkbox" id="day-night-cycle"></div>
-        <div style="margin: 10px 0;">Volumen: <input type="range" id="volume-slider" min="0" max="100" value="50"></div>
-        <div style="margin: 10px 0;">Distancia de Visión: <input type="range" id="view-distance" min="50" max="300" value="200"></div>
+        <div style="margin: 10px 0;">Pantalla Completa: <button id="fullscreen-btn"
+                style="padding: 5px 10px; background: #4CAF50; color: white; border: none; border-radius: 3px; cursor: pointer;">Activar</button>
+        </div>
+        <div style="margin: 10px 0;">Dificultad: <select id="difficulty-select">
+                <option value="easy">Fácil</option>
+                <option value="normal" selected>Normal</option>
+                <option value="hard">Difícil</option>
+            </select></div>
+        <div style="margin: 10px 0;">Volumen: <input type="range" id="volume-slider" min="0" max="100" value="50" style="width: 100px;"> <span id="volume-display">50%</span></div>
+        <div style="margin: 10px 0;">Auto-Guardar: <input type="checkbox" id="auto-save" checked></div>
+        
+        <!-- Controles Personalizables -->
+        <div style="margin: 15px 0; border-top: 1px solid #555; padding-top: 15px;">
+            <h4>Controles</h4>
+            <div id="key-bindings" style="font-size: 12px;">
+                <div style="margin: 5px 0;">Mover Adelante: <input type="text" id="key-forward" value="W" maxlength="1" style="width: 30px; text-align: center;"></div>
+                <div style="margin: 5px 0;">Mover Atrás: <input type="text" id="key-backward" value="S" maxlength="1" style="width: 30px; text-align: center;"></div>
+                <div style="margin: 5px 0;">Mover Izquierda: <input type="text" id="key-left" value="A" maxlength="1" style="width: 30px; text-align: center;"></div>
+                <div style="margin: 5px 0;">Mover Derecha: <input type="text" id="key-right" value="D" maxlength="1" style="width: 30px; text-align: center;"></div>
+                <div style="margin: 5px 0;">Correr: <input type="text" id="key-run" value="R" maxlength="1" style="width: 30px; text-align: center;"></div>
+                <div style="margin: 5px 0;">Usar Poción: <input type="text" id="key-potion" value="P" maxlength="1" style="width: 30px; text-align: center;"></div>
+                <div style="margin: 5px 0;">Inventario: <input type="text" id="key-inventory" value="I" maxlength="1" style="width: 30px; text-align: center;"></div>
+                <div style="margin: 5px 0;">Hablar: <input type="text" id="key-interact" value="Q" maxlength="1" style="width: 30px; text-align: center;"></div>
+            </div>
+        </div>
+        
+        <!-- Controles Táctiles (solo Android) -->
+        <div id="mobile-settings" style="margin: 15px 0; border-top: 1px solid #555; padding-top: 15px; display: none;">
+            <h4>Controles Táctiles</h4>
+            <div style="margin: 10px 0;">Tamaño Joystick: <input type="range" id="joystick-size" min="80" max="140" value="100" style="width: 100px;"> <span id="joystick-size-display">100px</span></div>
+            <div style="margin: 10px 0;">Tamaño Botones: <input type="range" id="button-size" min="40" max="80" value="60" style="width: 100px;"> <span id="button-size-display">60px</span></div>
+            <div style="margin: 10px 0;">Opacidad: <input type="range" id="controls-opacity" min="30" max="100" value="80" style="width: 100px;"> <span id="opacity-display">80%</span></div>
+            <div style="margin: 10px 0;">Vibración: <input type="checkbox" id="haptic-feedback" checked></div>
+        </div>
+        
+        <div style="margin: 15px 0; border-top: 1px solid #555; padding-top: 15px;">
+            <button id="controls-btn" style="padding: 8px 15px; margin: 5px; background: #FF9800; color: white; border: none; border-radius: 3px; cursor: pointer;">Ver Controles</button>
+            <button id="tutorial-btn-settings" style="padding: 8px 15px; margin: 5px; background: #FF5722; color: white; border: none; border-radius: 3px; cursor: pointer;">Tutorial</button>
+        </div>
         <button id="close-settings"
             style="padding: 10px 20px; margin-top: 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
     </div>
@@ -283,7 +279,7 @@
 
     <!-- Tutorial -->
     <div id="tutorial"
-        style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; background: rgba(0,0,0,0.95); color: white; padding: 30px; border-radius: 15px; z-index: 1004; display: none; text-align: center;">
+        style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; background: rgba(0,0,0,0.95); color: white; padding: 30px; border-radius: 15px; z-index: 1005; display: none; text-align: center;">
         <h2>Tutorial - Pepe's Quest</h2>
         <div id="tutorial-content"></div>
         <button id="tutorial-next"
@@ -292,18 +288,39 @@
             style="padding: 10px 20px; margin: 10px; background: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;">Saltar</button>
     </div>
 
-    <!-- Controles Móviles -->
+    <!-- Panel de Controles -->
+    <div id="controls-panel"
+        style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; max-height: 80vh; background: rgba(0,0,0,0.95); color: white; padding: 30px; border-radius: 15px; z-index: 1006; display: none; overflow-y: auto;">
+        <h2>Controles del Juego</h2>
+        <div id="controls-content"></div>
+        <button id="controls-close"
+            style="padding: 10px 20px; margin-top: 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
+    </div>
+
+    <!-- Controles Móviles Mejorados -->
     <div id="mobile-controls" style="position: fixed; bottom: 20px; left: 20px; z-index: 100; display: none;">
         <div id="joystick"
-            style="width: 100px; height: 100px; background: rgba(255,255,255,0.3); border-radius: 50%; position: relative;">
+            style="width: 100px; height: 100px; background: rgba(255,255,255,0.3); border: 2px solid rgba(255,255,255,0.5); border-radius: 50%; position: relative; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
             <div id="joystick-knob"
-                style="width: 40px; height: 40px; background: rgba(255,255,255,0.8); border-radius: 50%; position: absolute; top: 30px; left: 30px;">
+                style="width: 40px; height: 40px; background: rgba(255,255,255,0.9); border-radius: 50%; position: absolute; top: 30px; left: 30px; transition: all 0.1s; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">
             </div>
         </div>
         <button id="mobile-attack"
-            style="position: absolute; right: -120px; bottom: 0; width: 60px; height: 60px; background: #f44336; color: white; border: none; border-radius: 50%; font-size: 20px;">⚔</button>
+            style="position: absolute; right: -120px; bottom: 0; width: 60px; height: 60px; background: #f44336; color: white; border: none; border-radius: 50%; font-size: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: all 0.1s;">⚔</button>
         <button id="mobile-jump"
-            style="position: absolute; right: -120px; bottom: 70px; width: 60px; height: 60px; background: #4CAF50; color: white; border: none; border-radius: 50%; font-size: 20px;">↑</button>
+            style="position: absolute; right: -120px; bottom: 70px; width: 60px; height: 60px; background: #4CAF50; color: white; border: none; border-radius: 50%; font-size: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: all 0.1s;">↑</button>
+        <button id="mobile-potion"
+            style="position: absolute; right: -190px; bottom: 0; width: 50px; height: 50px; background: #9C27B0; color: white; border: none; border-radius: 50%; font-size: 16px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: all 0.1s;">🧪</button>
+        <button id="mobile-inventory"
+            style="position: absolute; right: -190px; bottom: 60px; width: 50px; height: 50px; background: #FF9800; color: white; border: none; border-radius: 50%; font-size: 16px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: all 0.1s;">🎒</button>
+        <button id="mobile-camera"
+            style="position: absolute; right: -190px; bottom: 120px; width: 50px; height: 50px; background: #2196F3; color: white; border: none; border-radius: 50%; font-size: 16px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: all 0.1s;">📷</button>
+    </div>
+
+    <!-- Botón de pausa para móvil -->
+    <div id="mobile-pause" style="position: fixed; top: 20px; right: 20px; z-index: 101; display: none;">
+        <button onclick="togglePause()"
+            style="width: 50px; height: 50px; background: rgba(0,0,0,0.7); color: white; border: 2px solid white; border-radius: 50%; font-size: 16px; cursor: pointer;">⏸</button>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -313,21 +330,13 @@
         let player, enemies = [], items = [], crystals = [], villagers = [], bosses = [];
         let keys = {}, gameActive = false, gamePaused = false, gameStarted = false;
         let playerHealth = 100, score = 0, kills = 0, crystalsFound = 0, playerLevel = 1, playerXP = 0;
-        
-        // Inicializar score correctamente
-        function initializeGame() {
-            score = 0;
-            playerHealth = 100;
-            kills = 0;
-            crystalsFound = 0;
-            playerLevel = 1;
-            playerXP = 0;
-        }
         let stats = { fps: 0, lastTime: 0, frames: 0 };
         let cameraMode = 'third', dayTime = 0.5, isMobile = false;
         let inventory = { sword: 1, shield: 1, potions: 3, keys: 0, coins: 0, artifacts: 0, magic: 0 };
         let currentQuest = { name: 'Encuentra los Cristales', progress: 0, total: 4 };
-        let settings = { shadows: 'low', minimap: true, compass: true, dayNight: false, audio: true };
+        let settings = { shadows: 'low', minimap: true, compass: true, dayNight: false, audio: true, volume: 0.5, autoSave: true, difficulty: 'normal' };
+        let keyBindings = { forward: 'KeyW', backward: 'KeyS', left: 'KeyA', right: 'KeyD', run: 'KeyR', potion: 'KeyP', inventory: 'KeyI', interact: 'KeyQ' };
+        let mobileSettings = { joystickSize: 100, buttonSize: 60, opacity: 80, hapticFeedback: true };
         let weather = { type: 'clear', intensity: 0, particles: [] };
         let achievements = [];
         let gameTime = 0;
@@ -349,37 +358,253 @@
         // Detectar dispositivo móvil
         function detectMobile() {
             isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+            // Detectar Android específicamente
+            const isAndroid = /Android/i.test(navigator.userAgent);
+
             if (isMobile) {
                 document.getElementById('mobile-controls').style.display = 'block';
                 setupMobileControls();
+                optimizeForMobile();
+
+                if (isAndroid) {
+                    setupAndroidSpecific();
+                }
+            }
+        }
+
+        // Configuración específica para Android
+        function setupAndroidSpecific() {
+            // Prevenir el menú contextual en Android
+            document.addEventListener('contextmenu', e => e.preventDefault());
+
+            // Optimizar para diferentes versiones de Android
+            const androidVersion = parseFloat(navigator.userAgent.match(/Android (\d+\.\d+)/)?.[1] || '0');
+
+            if (androidVersion < 7.0) {
+                // Android más antiguo - más optimizaciones
+                config.playerSpeed = 6; // Velocidad reducida
+                settings.shadows = 'off';
+            }
+
+            // Configurar wake lock para mantener pantalla activa
+            if ('wakeLock' in navigator) {
+                navigator.wakeLock.request('screen').catch(() => { });
+            }
+
+            // Configurar fullscreen automático en Android
+            setTimeout(() => {
+                if (gameActive && isMobile) {
+                    enterFullscreen();
+                }
+            }, 2000);
+        }
+
+        // Configurar controles personalizables
+        function setupKeyBindings() {
+            const keyInputs = ['forward', 'backward', 'left', 'right', 'run', 'potion', 'inventory', 'interact'];
+            keyInputs.forEach(action => {
+                const input = document.getElementById(`key-${action}`);
+                if (input) {
+                    input.addEventListener('input', (e) => {
+                        const key = e.target.value.toUpperCase();
+                        if (key) {
+                            keyBindings[action] = 'Key' + key;
+                            localStorage.setItem('pepequest_keybindings', JSON.stringify(keyBindings));
+                        }
+                    });
+                }
+            });
+            
+            // Cargar configuración guardada
+            const saved = localStorage.getItem('pepequest_keybindings');
+            if (saved) {
+                keyBindings = JSON.parse(saved);
+                Object.keys(keyBindings).forEach(action => {
+                    const input = document.getElementById(`key-${action}`);
+                    if (input) input.value = keyBindings[action].replace('Key', '');
+                });
+            }
+        }
+
+        // Configurar ajustes móviles
+        function setupMobileSettings() {
+            if (!isMobile) return;
+            
+            document.getElementById('mobile-settings').style.display = 'block';
+            
+            const joystickSizeSlider = document.getElementById('joystick-size');
+            const buttonSizeSlider = document.getElementById('button-size');
+            const opacitySlider = document.getElementById('controls-opacity');
+            const hapticCheck = document.getElementById('haptic-feedback');
+            
+            if (joystickSizeSlider) {
+                joystickSizeSlider.addEventListener('input', (e) => {
+                    mobileSettings.joystickSize = e.target.value;
+                    document.getElementById('joystick-size-display').textContent = e.target.value + 'px';
+                    updateMobileControls();
+                });
+            }
+            
+            if (buttonSizeSlider) {
+                buttonSizeSlider.addEventListener('input', (e) => {
+                    mobileSettings.buttonSize = e.target.value;
+                    document.getElementById('button-size-display').textContent = e.target.value + 'px';
+                    updateMobileControls();
+                });
+            }
+            
+            if (opacitySlider) {
+                opacitySlider.addEventListener('input', (e) => {
+                    mobileSettings.opacity = e.target.value;
+                    document.getElementById('opacity-display').textContent = e.target.value + '%';
+                    updateMobileControls();
+                });
+            }
+            
+            if (hapticCheck) {
+                hapticCheck.addEventListener('change', (e) => {
+                    mobileSettings.hapticFeedback = e.target.checked;
+                });
+            }
+            
+            // Cargar configuración guardada
+            const saved = localStorage.getItem('pepequest_mobilesettings');
+            if (saved) {
+                mobileSettings = JSON.parse(saved);
+                if (joystickSizeSlider) joystickSizeSlider.value = mobileSettings.joystickSize;
+                if (buttonSizeSlider) buttonSizeSlider.value = mobileSettings.buttonSize;
+                if (opacitySlider) opacitySlider.value = mobileSettings.opacity;
+                if (hapticCheck) hapticCheck.checked = mobileSettings.hapticFeedback;
+                updateMobileControls();
+            }
+        }
+
+        // Actualizar controles móviles
+        function updateMobileControls() {
+            const joystick = document.getElementById('joystick');
+            const buttons = document.querySelectorAll('#mobile-controls button');
+            
+            if (joystick) {
+                joystick.style.width = mobileSettings.joystickSize + 'px';
+                joystick.style.height = mobileSettings.joystickSize + 'px';
+                joystick.style.opacity = mobileSettings.opacity / 100;
+            }
+            
+            buttons.forEach(button => {
+                if (button.id !== 'mobile-pause') {
+                    button.style.width = mobileSettings.buttonSize + 'px';
+                    button.style.height = mobileSettings.buttonSize + 'px';
+                    button.style.opacity = mobileSettings.opacity / 100;
+                }
+            });
+            
+            localStorage.setItem('pepequest_mobilesettings', JSON.stringify(mobileSettings));
+        }
+
+        // Optimizar para móviles
+        function optimizeForMobile() {
+            // Reducir calidad automáticamente en móviles
+            settings.shadows = 'off';
+            updateGraphics();
+
+            // Ajustar controles para pantalla táctil
+            document.body.style.touchAction = 'none';
+            document.body.style.userSelect = 'none';
+            document.body.style.webkitUserSelect = 'none';
+            document.body.style.webkitTouchCallout = 'none';
+
+            // Prevenir zoom en iOS y Android
+            document.addEventListener('gesturestart', e => e.preventDefault());
+            document.addEventListener('gesturechange', e => e.preventDefault());
+            document.addEventListener('touchmove', e => {
+                if (e.scale !== 1) e.preventDefault();
+            }, { passive: false });
+
+            // Orientación de pantalla
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock('landscape').catch(() => { });
+            }
+
+            // Mostrar botón de pausa móvil
+            document.getElementById('mobile-pause').style.display = 'block';
+
+            // Ajustar UI para móvil
+            adjustMobileUI();
+
+            // Optimizar rendimiento para Android
+            optimizeAndroidPerformance();
+        }
+
+        // Ajustar UI para móvil
+        function adjustMobileUI() {
+            // Hacer elementos de UI más grandes
+            const ui = document.getElementById('ui');
+            if (ui) {
+                ui.style.fontSize = '14px';
+                ui.style.padding = '15px';
+            }
+
+            const stats = document.getElementById('stats');
+            if (stats) {
+                stats.style.fontSize = '12px';
+                stats.style.padding = '10px';
+            }
+
+            const objective = document.getElementById('objective');
+            if (objective) {
+                objective.style.fontSize = '14px';
+                objective.style.padding = '20px';
+                objective.style.bottom = '100px'; // Mover arriba para no tapar controles
+            }
+
+            const controls = document.getElementById('controls');
+            if (controls) {
+                controls.style.display = 'none'; // Ocultar en móvil
+            }
+        }
+
+        // Optimizar rendimiento para Android
+        function optimizeAndroidPerformance() {
+            // Reducir FPS objetivo en Android
+            const targetFPS = 30;
+            let lastFrame = 0;
+            const frameInterval = 1000 / targetFPS;
+
+            // Reducir complejidad de objetos
+            config.worldSize = 200; // Mundo más pequeño
+
+            // Limitar número de enemigos
+            const maxEnemies = 15;
+
+            // Desactivar efectos costosos
+            scene.fog.density = 0.01; // Menos niebla
+
+            // Usar geometrías más simples
+            if (renderer) {
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
             }
         }
 
         // Configurar menús
         function setupMenus() {
             const startBtn = document.getElementById('start-game');
-            const loadBtn = document.getElementById('load-game');
-            const tutorialBtn = document.getElementById('tutorial-btn');
             const settingsBtn = document.getElementById('settings-btn');
             const controlsBtn = document.getElementById('controls-btn');
+            const tutorialBtn = document.getElementById('tutorial-btn');
+            const tutorialBtnSettings = document.getElementById('tutorial-btn-settings');
             const closeSettingsBtn = document.getElementById('close-settings');
             const resumeBtn = document.getElementById('resume-game');
             const pauseSettingsBtn = document.getElementById('pause-settings');
             const mainMenuBtn = document.getElementById('main-menu-btn');
 
-            if (startBtn) startBtn.addEventListener('click', () => {
-                document.getElementById('save-menu').style.display = 'block';
-                loadNewGameSlots();
-            });
-            if (loadBtn) loadBtn.addEventListener('click', () => {
-                document.getElementById('save-menu').style.display = 'block';
-                loadSaveSlots();
-            });
-            if (tutorialBtn) tutorialBtn.addEventListener('click', showTutorial);
+            if (startBtn) startBtn.addEventListener('click', startGame);
             if (settingsBtn) settingsBtn.addEventListener('click', () => {
                 document.getElementById('settings-menu').style.display = 'block';
             });
             if (controlsBtn) controlsBtn.addEventListener('click', showControls);
+            if (tutorialBtn) tutorialBtn.addEventListener('click', showTutorial);
+            if (tutorialBtnSettings) tutorialBtnSettings.addEventListener('click', showTutorial);
             if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', () => {
                 document.getElementById('settings-menu').style.display = 'none';
             });
@@ -393,6 +618,10 @@
                 document.getElementById('pause-menu').style.display = 'none';
                 document.getElementById('main-menu').style.display = 'flex';
             });
+
+            // Botones de guardado/carga
+            const loadBtn = document.getElementById('load-game');
+            if (loadBtn) loadBtn.addEventListener('click', showSaveMenu);
 
             // Configuración
             const shadowQuality = document.getElementById('shadow-quality');
@@ -419,80 +648,223 @@
             if (dayNightCheck) dayNightCheck.addEventListener('change', (e) => {
                 settings.dayNight = e.target.checked;
             });
-            
-            // Nuevas configuraciones
-            const graphicsQuality = document.getElementById('graphics-quality');
+
+            // Fullscreen
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            if (fullscreenBtn) fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+            // Detectar cambios de fullscreen
+            document.addEventListener('fullscreenchange', updateFullscreenButton);
+            document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+            document.addEventListener('mozfullscreenchange', updateFullscreenButton);
+            document.addEventListener('MSFullscreenChange', updateFullscreenButton);
+
+            // Configuraciones adicionales
+            const difficultySelect = document.getElementById('difficulty-select');
             const volumeSlider = document.getElementById('volume-slider');
-            const viewDistance = document.getElementById('view-distance');
-            
-            if (graphicsQuality) graphicsQuality.addEventListener('change', (e) => {
-                settings.graphics = e.target.value;
-                updateGraphicsQuality();
+            const volumeDisplay = document.getElementById('volume-display');
+            const autoSaveCheck = document.getElementById('auto-save');
+
+            if (difficultySelect) difficultySelect.addEventListener('change', (e) => {
+                changeDifficulty(e.target.value);
             });
             if (volumeSlider) volumeSlider.addEventListener('input', (e) => {
                 settings.volume = e.target.value / 100;
+                volumeDisplay.textContent = e.target.value + '%';
             });
-            if (viewDistance) viewDistance.addEventListener('input', (e) => {
-                camera.far = parseInt(e.target.value);
-                camera.updateProjectionMatrix();
-                scene.fog.far = parseInt(e.target.value);
+            if (autoSaveCheck) autoSaveCheck.addEventListener('change', (e) => {
+                settings.autoSave = e.target.checked;
             });
-            
-            // Configurar botones del panel
-            setupButtonPanel();
-        }
-        
-        function setupButtonPanel() {
-            const btnInventory = document.getElementById('btn-inventory');
-            const btnMinimap = document.getElementById('btn-minimap');
-            const btnCamera = document.getElementById('btn-camera');
-            const btnPotion = document.getElementById('btn-potion');
-            const btnInteract = document.getElementById('btn-interact');
-            const btnPause = document.getElementById('btn-pause');
-            
-            if (btnInventory) btnInventory.addEventListener('click', toggleInventory);
-            if (btnMinimap) btnMinimap.addEventListener('click', toggleMinimap);
-            if (btnCamera) btnCamera.addEventListener('click', cycleCameraMode);
-            if (btnPotion) btnPotion.addEventListener('click', usePotion);
-            if (btnInteract) btnInteract.addEventListener('click', interactWithNearbyNPC);
-            if (btnPause) btnPause.addEventListener('click', togglePause);
-            
-            // Configurar panel de misión
-            setupMissionPanel();
-        }
-        
-        function setupMissionPanel() {
-            const missionPanel = document.getElementById('mission-panel');
-            const missionToggle = document.getElementById('mission-toggle');
-            let isOpen = false;
-            
-            if (missionToggle) {
-                missionToggle.addEventListener('click', () => {
-                    isOpen = !isOpen;
-                    if (isOpen) {
-                        missionPanel.style.right = '0px';
-                        missionToggle.innerHTML = '◀';
-                    } else {
-                        missionPanel.style.right = '-280px';
-                        missionToggle.innerHTML = '▶';
-                    }
-                });
-            }
+
+            // Configurar controles personalizables
+            setupKeyBindings();
+            setupMobileSettings();
         }
 
         function showControls() {
-            showNotification(`CONTROLES:\n\nWASD: Mover\nEspacio: Saltar\nClick: Atacar\nR: Correr\nP: Usar poción\nQ: Hablar con NPCs\nI: Inventario\nM: Minimapa\nC: Cambiar cámara\nESC: Pausar`, 8000);
+            const content = document.getElementById('controls-content');
+            
+            if (isMobile) {
+                content.innerHTML = `
+                    <div style="text-align: left; line-height: 1.6;">
+                        <h3 style="color: #4CAF50; text-align: center;">Controles Móviles</h3>
+                        <div style="margin: 15px 0;">
+                            <div style="margin: 8px 0;"><strong>Joystick:</strong> Mover (borde para correr)</div>
+                            <div style="margin: 8px 0;"><strong>⚔️ Botón Rojo:</strong> Atacar</div>
+                            <div style="margin: 8px 0;"><strong>↑ Botón Verde:</strong> Saltar</div>
+                            <div style="margin: 8px 0;"><strong>🧪 Botón Morado:</strong> Usar Poción</div>
+                            <div style="margin: 8px 0;"><strong>🎒 Botón Naranja:</strong> Inventario</div>
+                            <div style="margin: 8px 0;"><strong>📷 Botón Azul:</strong> Cambiar Cámara</div>
+                            <div style="margin: 8px 0;"><strong>💾 Botón Morado:</strong> Guardar Partida</div>
+                            <div style="margin: 8px 0;"><strong>Doble Toque:</strong> Hablar con NPCs</div>
+                            <div style="margin: 8px 0;"><strong>⏸ Botón Pausa:</strong> Pausar Juego</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 5px; margin-top: 15px;">
+                            <strong>Tip:</strong> Puedes personalizar el tamaño y opacidad de los controles en Configuración.
+                        </div>
+                    </div>
+                `;
+            } else {
+                content.innerHTML = `
+                    <div style="text-align: left; line-height: 1.6;">
+                        <h3 style="color: #4CAF50; text-align: center;">Controles PC</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0;">
+                            <div>
+                                <h4 style="color: #FF9800;">Movimiento</h4>
+                                <div style="margin: 5px 0;"><strong>${keyBindings.forward.replace('Key', '')}:</strong> Mover Adelante</div>
+                                <div style="margin: 5px 0;"><strong>${keyBindings.backward.replace('Key', '')}:</strong> Mover Atrás</div>
+                                <div style="margin: 5px 0;"><strong>${keyBindings.left.replace('Key', '')}:</strong> Mover Izquierda</div>
+                                <div style="margin: 5px 0;"><strong>${keyBindings.right.replace('Key', '')}:</strong> Mover Derecha</div>
+                                <div style="margin: 5px 0;"><strong>${keyBindings.run.replace('Key', '')}:</strong> Correr</div>
+                                <div style="margin: 5px 0;"><strong>Espacio:</strong> Saltar</div>
+                            </div>
+                            <div>
+                                <h4 style="color: #FF9800;">Acciones</h4>
+                                <div style="margin: 5px 0;"><strong>Click Izq:</strong> Atacar</div>
+                                <div style="margin: 5px 0;"><strong>Click Der:</strong> Bloquear</div>
+                                <div style="margin: 5px 0;"><strong>${keyBindings.potion.replace('Key', '')}:</strong> Usar Poción</div>
+                                <div style="margin: 5px 0;"><strong>${keyBindings.interact.replace('Key', '')}:</strong> Hablar con NPCs</div>
+                                <div style="margin: 5px 0;"><strong>${keyBindings.inventory.replace('Key', '')}:</strong> Inventario</div>
+                                <div style="margin: 5px 0;"><strong>M:</strong> Minimapa</div>
+                            </div>
+                        </div>
+                        <div style="margin: 15px 0;">
+                            <h4 style="color: #FF9800;">Sistema</h4>
+                            <div style="margin: 5px 0;"><strong>C:</strong> Cambiar Cámara</div>
+                            <div style="margin: 5px 0;"><strong>F5:</strong> Guardar Rápido</div>
+                            <div style="margin: 5px 0;"><strong>F6:</strong> Menú Guardar/Cargar</div>
+                            <div style="margin: 5px 0;"><strong>F9:</strong> Cargar Última Partida</div>
+                            <div style="margin: 5px 0;"><strong>ESC:</strong> Pausar Juego</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 5px; margin-top: 15px;">
+                            <strong>Tip:</strong> Puedes personalizar las teclas en Configuración → Controles.
+                        </div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('controls-panel').style.display = 'block';
+        }
+
+        // Cerrar panel de controles
+        document.getElementById('controls-close').addEventListener('click', () => {
+            document.getElementById('controls-panel').style.display = 'none';
+        });
+
+        function showTutorial() {
+            const tutorialSteps = [
+                "Bienvenido a Pepe's Quest! Eres el último guardián de Aethermoor.",
+                "Tu misión: Encontrar los 4 cristales principales y derrotar a todos los jefes.",
+                "Explora los reinos elementales: Fuego, Agua, Aire y Tierra.",
+                "Recoge monedas, pociones y mejoras de armas por el camino.",
+                "Habla con aldeanos para obtener pistas sobre los cristales.",
+                "Abre cofres para conseguir tesoros y mejoras.",
+                "Derrota enemigos para ganar experiencia y subir de nivel.",
+                "Usa pociones cuando tu salud esté baja.",
+                "¡Buena suerte, héroe! Aethermoor cuenta contigo."
+            ];
+            
+            let currentStep = 0;
+            
+            function showTutorialStep() {
+                if (currentStep < tutorialSteps.length) {
+                    const content = document.getElementById('tutorial-content');
+                    content.innerHTML = `
+                        <div style="margin: 20px 0; font-size: 16px;">
+                            <div style="color: #4CAF50; margin-bottom: 10px;">Paso ${currentStep + 1} de ${tutorialSteps.length}</div>
+                            <div>${tutorialSteps[currentStep]}</div>
+                        </div>
+                    `;
+                    
+                    const nextBtn = document.getElementById('tutorial-next');
+                    const skipBtn = document.getElementById('tutorial-skip');
+                    
+                    nextBtn.textContent = currentStep === tutorialSteps.length - 1 ? 'Finalizar' : 'Siguiente';
+                    
+                    nextBtn.onclick = () => {
+                        currentStep++;
+                        if (currentStep >= tutorialSteps.length) {
+                            closeTutorial();
+                        } else {
+                            showTutorialStep();
+                        }
+                    };
+                    
+                    skipBtn.onclick = closeTutorial;
+                }
+            }
+            
+            function closeTutorial() {
+                document.getElementById('tutorial').style.display = 'none';
+                currentStep = 0;
+            }
+            
+            document.getElementById('tutorial').style.display = 'block';
+            showTutorialStep();
         }
 
         // Iniciar juego
         function startGame() {
+            showSlotSelection();
+        }
+
+        // Seleccionar slot para nueva aventura
+        function showSlotSelection() {
+            const container = document.getElementById('save-slots');
+            container.innerHTML = '<h4>Selecciona un Slot para Nueva Aventura:</h4>';
+            
+            for (let i = 0; i < 3; i++) {
+                const saved = localStorage.getItem(`pepequest_slot_${i}`);
+                const slotDiv = document.createElement('div');
+                slotDiv.style.cssText = 'margin: 10px 0; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 5px; cursor: pointer; border: 2px solid transparent;';
+                slotDiv.onmouseover = () => slotDiv.style.borderColor = '#4CAF50';
+                slotDiv.onmouseout = () => slotDiv.style.borderColor = 'transparent';
+                
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    const date = new Date(data.timestamp).toLocaleString();
+                    slotDiv.innerHTML = `
+                        <div style="font-size: 16px;">Slot ${i + 1} - Nivel ${data.playerLevel || 1}</div>
+                        <div style="font-size: 12px; color: #ccc; margin: 5px 0;">${date}</div>
+                        <div style="color: #ff9800; font-size: 12px;">⚠️ Se sobrescribirá la partida existente</div>
+                    `;
+                } else {
+                    slotDiv.innerHTML = `
+                        <div style="font-size: 16px;">Slot ${i + 1} - Vacío</div>
+                        <div style="color: #4CAF50; font-size: 12px;">✓ Listo para nueva aventura</div>
+                    `;
+                }
+                
+                slotDiv.onclick = () => startNewGame(i);
+                container.appendChild(slotDiv);
+            }
+            
+            document.getElementById('save-menu').style.display = 'block';
+        }
+
+        // Iniciar nueva aventura en slot seleccionado
+        function startNewGame(slot) {
+            currentSaveSlot = slot;
+            document.getElementById('save-menu').style.display = 'none';
             document.getElementById('main-menu').style.display = 'none';
+            
             if (!gameStarted) {
                 init();
                 gameStarted = true;
+            } else {
+                // Reiniciar variables para nueva partida
+                playerHealth = 100; score = 0; kills = 0; crystalsFound = 0;
+                playerLevel = 1; playerXP = 0; gameTime = 0;
+                inventory = { sword: 1, shield: 1, potions: 3, keys: 0, coins: 0, artifacts: 0, magic: 0 };
+                achievements = []; playerStats = { totalDistance: 0, totalJumps: 0, totalAttacks: 0 };
+                if (player) player.position.set(0, 0, 0);
             }
+            
             gameActive = true;
             gamePaused = false;
+            updateUI();
+            updateInventoryUI();
+            showNotification(`Nueva aventura iniciada en Slot ${slot + 1}`, 3000);
         }
 
         // Pausar/Reanudar juego
@@ -509,16 +881,6 @@
 
         // Inicializar juego
         function init() {
-            // Inicializar variables del juego
-            initializeGame();
-            
-            // Guardar automáticamente al iniciar si hay slot seleccionado
-            if (currentSaveSlot !== undefined) {
-                setTimeout(() => {
-                    saveGame(currentSaveSlot);
-                }, 1000);
-            }
-            
             // Crear escena
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x87CEEB);
@@ -578,9 +940,6 @@
 
             // Iniciar bucle de juego
             animate();
-            
-            // Iniciar limpieza de memoria
-            startMemoryCleanup();
         }
 
         // Crear mundo
@@ -955,11 +1314,14 @@
                 keys[e.code] = true;
                 if (e.code === 'Space') e.preventDefault();
                 if (e.code === 'Escape') togglePause();
-                if (e.code === 'KeyI' && gameActive && !gamePaused) toggleInventory();
+                if (e.code === keyBindings.inventory && gameActive && !gamePaused) toggleInventory();
                 if (e.code === 'KeyM' && gameActive && !gamePaused) toggleMinimap();
                 if (e.code === 'KeyC' && gameActive && !gamePaused) cycleCameraMode();
-                if (e.code === 'KeyP' && gameActive && !gamePaused) usePotion();
-                if (e.code === 'KeyQ' && gameActive && !gamePaused) interactWithNearbyNPC();
+                if (e.code === keyBindings.potion && gameActive && !gamePaused) usePotion();
+                if (e.code === keyBindings.interact && gameActive && !gamePaused) interactWithNearbyNPC();
+                if (e.code === 'F5' && gameActive && !gamePaused) { saveSlot(currentSaveSlot || 0); e.preventDefault(); }
+                if (e.code === 'F6' && gameActive && !gamePaused) { showSaveMenu(); e.preventDefault(); }
+                if (e.code === 'F9' && gameActive && !gamePaused) { loadAutoSave(); e.preventDefault(); }
             });
 
             document.addEventListener('keyup', (e) => {
@@ -972,32 +1334,6 @@
             });
 
             document.addEventListener('contextmenu', (e) => e.preventDefault());
-            
-            // Controles de mouse para cámara libre
-            let mouseX = 0, mouseY = 0;
-            let isMouseDown = false;
-            
-            document.addEventListener('mousemove', (e) => {
-                if (!gameActive || gamePaused) return;
-                
-                const deltaX = e.movementX || e.webkitMovementX || 0;
-                const deltaY = e.movementY || e.webkitMovementY || 0;
-                
-                if (cameraMode === 'free' && camera.userData.freeMode) {
-                    camera.userData.yaw -= deltaX * 0.002;
-                    camera.userData.pitch -= deltaY * 0.002;
-                    camera.userData.pitch = Math.max(-Math.PI/3, Math.min(Math.PI/3, camera.userData.pitch));
-                }
-            });
-            
-            // Zoom para cámara libre
-            document.addEventListener('wheel', (e) => {
-                if (!gameActive || gamePaused || cameraMode !== 'free') return;
-                
-                e.preventDefault();
-                camera.userData.distance += e.deltaY * 0.01;
-                camera.userData.distance = Math.max(5, Math.min(30, camera.userData.distance));
-            });
 
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
@@ -1006,20 +1342,35 @@
             });
         }
 
-        // Controles móviles
+        // Controles móviles mejorados
         function setupMobileControls() {
             const joystick = document.getElementById('joystick');
             const knob = document.getElementById('joystick-knob');
             let isDragging = false;
+            let touchId = null;
 
+            // Joystick mejorado con mejor respuesta
             joystick.addEventListener('touchstart', (e) => {
-                isDragging = true;
-                e.preventDefault();
+                if (touchId === null) {
+                    isDragging = true;
+                    touchId = e.touches[0].identifier;
+                    e.preventDefault();
+                }
             });
 
             document.addEventListener('touchmove', (e) => {
-                if (!isDragging) return;
-                const touch = e.touches[0];
+                if (!isDragging || touchId === null) return;
+
+                let touch = null;
+                for (let i = 0; i < e.touches.length; i++) {
+                    if (e.touches[i].identifier === touchId) {
+                        touch = e.touches[i];
+                        break;
+                    }
+                }
+
+                if (!touch) return;
+
                 const rect = joystick.getBoundingClientRect();
                 const centerX = rect.left + rect.width / 2;
                 const centerY = rect.top + rect.height / 2;
@@ -1031,49 +1382,154 @@
                 knob.style.left = (30 + Math.cos(angle) * distance) + 'px';
                 knob.style.top = (30 + Math.sin(angle) * distance) + 'px';
 
-                // Simular teclas
-                keys['KeyW'] = deltaY < -10;
-                keys['KeyS'] = deltaY > 10;
-                keys['KeyA'] = deltaX < -10;
-                keys['KeyD'] = deltaX > 10;
+                // Simular teclas con mejor sensibilidad
+                const sensitivity = 8;
+                keys['KeyW'] = deltaY < -sensitivity;
+                keys['KeyS'] = deltaY > sensitivity;
+                keys['KeyA'] = deltaX < -sensitivity;
+                keys['KeyD'] = deltaX > sensitivity;
+                keys['KeyR'] = distance > 25; // Correr cuando se mueve al borde
 
                 e.preventDefault();
             });
 
-            document.addEventListener('touchend', () => {
-                isDragging = false;
-                knob.style.left = '30px';
-                knob.style.top = '30px';
-                keys['KeyW'] = keys['KeyS'] = keys['KeyA'] = keys['KeyD'] = false;
+            document.addEventListener('touchend', (e) => {
+                for (let i = 0; i < e.changedTouches.length; i++) {
+                    if (e.changedTouches[i].identifier === touchId) {
+                        isDragging = false;
+                        touchId = null;
+                        knob.style.left = '30px';
+                        knob.style.top = '30px';
+                        keys['KeyW'] = keys['KeyS'] = keys['KeyA'] = keys['KeyD'] = keys['KeyR'] = false;
+                        break;
+                    }
+                }
             });
 
+            // Botones mejorados con feedback haptico
             document.getElementById('mobile-attack').addEventListener('touchstart', (e) => {
                 attack();
+                if (navigator.vibrate) navigator.vibrate(50);
+                e.target.style.transform = 'scale(0.9)';
+                e.preventDefault();
+            });
+
+            document.getElementById('mobile-attack').addEventListener('touchend', (e) => {
+                e.target.style.transform = 'scale(1)';
                 e.preventDefault();
             });
 
             document.getElementById('mobile-jump').addEventListener('touchstart', (e) => {
                 keys['Space'] = true;
+                if (navigator.vibrate) navigator.vibrate(30);
+                e.target.style.transform = 'scale(0.9)';
                 e.preventDefault();
             });
 
             document.getElementById('mobile-jump').addEventListener('touchend', (e) => {
                 keys['Space'] = false;
+                e.target.style.transform = 'scale(1)';
                 e.preventDefault();
             });
+
+            // Configurar botones adicionales
+            document.getElementById('mobile-potion').addEventListener('touchstart', (e) => {
+                usePotion();
+                if (navigator.vibrate) navigator.vibrate(40);
+                e.target.style.transform = 'scale(0.9)';
+                e.preventDefault();
+            });
+
+            document.getElementById('mobile-potion').addEventListener('touchend', (e) => {
+                e.target.style.transform = 'scale(1)';
+            });
+
+            document.getElementById('mobile-inventory').addEventListener('touchstart', (e) => {
+                toggleInventory();
+                e.target.style.transform = 'scale(0.9)';
+                e.preventDefault();
+            });
+
+            document.getElementById('mobile-inventory').addEventListener('touchend', (e) => {
+                e.target.style.transform = 'scale(1)';
+            });
+
+            document.getElementById('mobile-camera').addEventListener('touchstart', (e) => {
+                cycleCameraMode();
+                e.target.style.transform = 'scale(0.9)';
+                e.preventDefault();
+            });
+
+            document.getElementById('mobile-camera').addEventListener('touchend', (e) => {
+                e.target.style.transform = 'scale(1)';
+            });
+
+            // Configurar doble toque para interacciones
+            setupDoubleTap();
+        }
+
+        // Configurar doble toque para interacciones
+        function setupDoubleTap() {
+            let lastTap = 0;
+
+            document.addEventListener('touchend', (e) => {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTap;
+
+                if (tapLength < 500 && tapLength > 0) {
+                    // Doble toque detectado
+                    if (gameActive && !gamePaused) {
+                        interactWithNearbyNPC();
+                        if (navigator.vibrate) navigator.vibrate(60);
+                    }
+                    e.preventDefault();
+                }
+
+                lastTap = currentTime;
+            });
+        }
+
+        // Botones adicionales para móvil
+        addMobileButtons();
+
+
+        // Añadir botones adicionales para móvil
+        function addMobileButtons() {
+            const mobileControls = document.getElementById('mobile-controls');
+
+            // Botón de poción
+            const potionBtn = document.createElement('button');
+            potionBtn.innerHTML = '🧪';
+            potionBtn.style.cssText = 'position: absolute; right: -190px; bottom: 0; width: 50px; height: 50px; background: #9C27B0; color: white; border: none; border-radius: 50%; font-size: 16px;';
+            potionBtn.addEventListener('touchstart', (e) => {
+                usePotion();
+                if (navigator.vibrate) navigator.vibrate(40);
+                e.preventDefault();
+            });
+            mobileControls.appendChild(potionBtn);
+
+            // Botón de inventario
+            const invBtn = document.createElement('button');
+            invBtn.innerHTML = '🎒';
+            invBtn.style.cssText = 'position: absolute; right: -190px; bottom: 60px; width: 50px; height: 50px; background: #FF9800; color: white; border: none; border-radius: 50%; font-size: 16px;';
+            invBtn.addEventListener('touchstart', (e) => {
+                toggleInventory();
+                e.preventDefault();
+            });
+            mobileControls.appendChild(invBtn);
         }
 
         // Actualizar jugador
         function updatePlayer(delta) {
             const userData = player.userData;
-            const speed = keys['KeyR'] ? config.playerSpeed * 1.5 : config.playerSpeed;
+            const speed = keys[keyBindings.run] ? config.playerSpeed * 1.5 : config.playerSpeed;
 
             // Movimiento
             const moveVector = new THREE.Vector3();
-            if (keys['KeyW']) moveVector.z -= 1;
-            if (keys['KeyS']) moveVector.z += 1;
-            if (keys['KeyA']) moveVector.x -= 1;
-            if (keys['KeyD']) moveVector.x += 1;
+            if (keys[keyBindings.forward]) moveVector.z -= 1;
+            if (keys[keyBindings.backward]) moveVector.z += 1;
+            if (keys[keyBindings.left]) moveVector.x -= 1;
+            if (keys[keyBindings.right]) moveVector.x += 1;
 
             if (moveVector.length() > 0) {
                 moveVector.normalize();
@@ -1109,43 +1565,16 @@
             // Actualizar cámara según modo
             switch (cameraMode) {
                 case 'first':
-                    // Primera persona mejorada
                     camera.position.copy(player.position);
                     camera.position.y += 1.8;
-                    
-                    // Usar rotación del jugador para la cámara
-                    const lookDirection = new THREE.Vector3(0, 0, -1);
-                    lookDirection.applyEuler(new THREE.Euler(0, player.rotation.y, 0));
-                    const lookTarget = player.position.clone().add(lookDirection.multiplyScalar(10));
-                    camera.lookAt(lookTarget);
+                    const forward = new THREE.Vector3(0, 0, -1);
+                    forward.applyQuaternion(player.quaternion);
+                    camera.lookAt(player.position.clone().add(forward));
                     break;
-                    
                 case 'free':
-                    // Cámara libre mejorada con controles de mouse
-                    if (!camera.userData.freeMode) {
-                        camera.userData.freeMode = true;
-                        camera.userData.yaw = 0;
-                        camera.userData.pitch = 0;
-                        camera.userData.distance = 15;
-                    }
-                    
-                    // Orbitar alrededor del jugador
-                    const spherical = new THREE.Spherical(
-                        camera.userData.distance,
-                        Math.PI / 2 - camera.userData.pitch,
-                        camera.userData.yaw
-                    );
-                    
-                    const freeCameraPos = new THREE.Vector3();
-                    freeCameraPos.setFromSpherical(spherical);
-                    freeCameraPos.add(player.position);
-                    
-                    camera.position.lerp(freeCameraPos, delta * 8);
-                    camera.lookAt(player.position.x, player.position.y + 1, player.position.z);
+                    // Cámara libre controlada por mouse
                     break;
-                    
                 default: // third person
-                    camera.userData.freeMode = false;
                     const cameraOffset = new THREE.Vector3(0, 8, 12);
                     const desiredPosition = player.position.clone().add(cameraOffset);
                     camera.position.lerp(desiredPosition, delta * 5);
@@ -1241,62 +1670,20 @@
             if (playerXP >= xpNeeded) {
                 playerXP -= xpNeeded;
                 playerLevel++;
-                healPlayer(20);
+                playerHealth = Math.min(100, playerHealth + 20);
                 inventory.potions++;
-                showNotification(`¡Nivel ${playerLevel}! +20 HP, +1 Poción`, 3000);
+                showNotification(`¡Nivel ${playerLevel}! +20 HP, +1 Poción", 3000`);
+                updateUI();
                 updateInventoryUI();
             }
         }
 
-        // Sistema de daño simple
-        function takeDamage(amount) {
-            playerHealth = Math.max(0, playerHealth - amount);
-            updateUI();
-            
-            // Efecto de pantalla roja
-            const damageOverlay = document.createElement('div');
-            damageOverlay.style.cssText = `
-                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                background: rgba(255, 0, 0, 0.3); z-index: 50; pointer-events: none;
-                animation: damageFlash 0.5s ease-out;
-            `;
-            document.body.appendChild(damageOverlay);
-            setTimeout(() => {
-                if (document.body.contains(damageOverlay)) {
-                    document.body.removeChild(damageOverlay);
-                }
-            }, 500);
-            
-            if (playerHealth <= 0) {
-                gameOver();
-            }
-        }
-        
-        // Sistema de curación simple
-        function healPlayer(amount) {
-            playerHealth = Math.min(100, playerHealth + amount);
-            updateUI();
-            
-            // Efecto de pantalla verde
-            const healOverlay = document.createElement('div');
-            healOverlay.style.cssText = `
-                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                background: rgba(0, 255, 0, 0.2); z-index: 50; pointer-events: none;
-                animation: healFlash 0.8s ease-out;
-            `;
-            document.body.appendChild(healOverlay);
-            setTimeout(() => {
-                if (document.body.contains(healOverlay)) {
-                    document.body.removeChild(healOverlay);
-                }
-            }, 800);
-        }
-        
         // Usar poción
         function usePotion() {
             if (inventory.potions > 0 && playerHealth < 100) {
                 inventory.potions--;
-                healPlayer(50);
+                playerHealth = Math.min(100, playerHealth + 50);
+                updateUI();
                 updateInventoryUI();
                 showNotification("+50 HP", 1500);
             }
@@ -1319,9 +1706,14 @@
 
                     // Atacar si está cerca
                     if (distance < userData.attackRange && userData.attackCooldown <= 0) {
-                        takeDamage(userData.damage);
+                        playerHealth -= userData.damage;
                         userData.attackCooldown = 1.5;
+                        updateUI();
                         showNotification(`-${userData.damage} HP`, 800);
+
+                        if (playerHealth <= 0) {
+                            gameOver();
+                        }
                     }
                 }
 
@@ -1413,40 +1805,16 @@
 
         // Actualizar UI
         function updateUI() {
-            
-            const healthPercent = Math.max(0, playerHealth);
-            document.getElementById('health').textContent = Math.floor(healthPercent);
-            document.getElementById('health-text').textContent = `${Math.floor(playerHealth)}/100`;
-            document.getElementById('score').textContent = score || 0;
+            document.getElementById('health').textContent = Math.max(0, playerHealth);
+            document.getElementById('score').textContent = score;
             document.getElementById('kills').textContent = kills;
             document.getElementById('crystals').textContent = crystalsFound;
-            
-            const healthFill = document.getElementById('health-fill');
-            healthFill.style.width = healthPercent + '%';
-            
-            // Cambiar color según la salud
-            if (healthPercent > 60) {
-                healthFill.style.background = 'linear-gradient(to right, #44ff44, #88ff44)';
-            } else if (healthPercent > 30) {
-                healthFill.style.background = 'linear-gradient(to right, #ffaa00, #ffcc44)';
-            } else {
-                healthFill.style.background = 'linear-gradient(to right, #ff4444, #ff6666)';
-            }
+            document.getElementById('health-fill').style.width = Math.max(0, playerHealth) + '%';
 
             // Actualizar misión
-            const minorCrystalsCollected = Math.max(0, 20 - (crystals.length - 4));
-            document.getElementById('mission-text').textContent = 'Encuentra todos los cristales de poder y derrota a los jefes de las mazmorras para salvar Aethermoor.';
-            
-            const progressEl = document.getElementById('mission-progress');
-            if (progressEl) {
-                progressEl.innerHTML = `
-                    <div style="margin: 5px 0;">• Cristales Principales: ${crystalsFound}/4</div>
-                    <div style="margin: 5px 0;">• Cristales Menores: ${minorCrystalsCollected}/20</div>
-                    <div style="margin: 5px 0;">• Jefes Derrotados: ${4 - bosses.length}/4</div>
-                    <div style="margin: 5px 0;">• Enemigos Eliminados: ${kills}</div>
-                    <div style="margin: 5px 0;">• Cofres Abiertos: ${20 - items.filter(i => i.userData.type === 'chest' && !i.userData.opened).length}/20</div>
-                `;
-            }
+            const totalCrystals = crystals.length + (crystalsFound * 5); // Estimar cristales restantes
+            document.getElementById('mission-text').textContent =
+                `Cristales Principales: ${crystalsFound}/4 | Cristales Menores: ${Math.max(0, 20 - (crystals.length - 4))}/20 | Jefes: ${4 - bosses.length}/4`;
         }
 
         // Mostrar notificación
@@ -1520,19 +1888,7 @@
             const modes = ['third', 'first', 'free'];
             const currentIndex = modes.indexOf(cameraMode);
             cameraMode = modes[(currentIndex + 1) % modes.length];
-            
-            // Resetear configuración de cámara libre
-            if (cameraMode === 'free') {
-                camera.userData.freeMode = false; // Se activará en el próximo frame
-                showNotification('Modo Cámara Libre: Mueve el mouse para rotar, scroll para zoom', 3000);
-            } else {
-                const modeNames = {
-                    'third': '3ª Persona',
-                    'first': '1ª Persona (Sigue al jugador)',
-                    'free': 'Libre'
-                };
-                showNotification(`Modo de cámara: ${modeNames[cameraMode]}`, 1500);
-            }
+            showNotification(`Modo de cámara: ${cameraMode === 'third' ? '3ª Persona' : cameraMode === 'first' ? '1ª Persona' : 'Libre'}`, 1500);
         }
 
         function block() {
@@ -1566,24 +1922,22 @@
 
         // Interactuar con NPCs
         function interactWithNearbyNPC() {
-            let interacted = false;
             villagers.forEach(villager => {
-                if (villager.userData.canInteract && !interacted) {
+                const distance = player.position.distanceTo(villager.position);
+                if (distance < 4) {
                     const dialogue = villager.userData.dialogue[villager.userData.currentDialogue];
-                    showNotification(`${villager.userData.name || 'Aldeano'}: "${dialogue}"`, 3000);
+                    showNotification(dialogue, 3000);
                     villager.userData.currentDialogue = (villager.userData.currentDialogue + 1) % villager.userData.dialogue.length;
-                    interacted = true;
                 }
             });
-            
-            if (!interacted) {
-                showNotification("No hay nadie cerca para hablar", 1500);
-            }
         }
 
         // Limpieza de memoria mejorada
         function cleanupMemory() {
-            if (window.gc) window.gc();
+            if (!scene || window.gc) {
+                if (window.gc) window.gc();
+                return;
+            }
 
             // Limpiar objetos eliminados
             scene.traverse((object) => {
@@ -1597,12 +1951,8 @@
             });
         }
 
-        // Auto-limpieza cada 30 segundos (solo si scene existe)
-        function startMemoryCleanup() {
-            setInterval(() => {
-                if (scene) cleanupMemory();
-            }, 30000);
-        }
+        // Auto-limpieza cada 30 segundos
+        setInterval(cleanupMemory, 30000);
 
         function updateGraphics() {
             if (!renderer) return;
@@ -1668,17 +2018,8 @@
 
             villager.userData = {
                 type: 'villager',
-                name: ['Aldeano Tom', 'Aldeana Ana', 'Mercader Luis', 'Granjero Pedro', 'Herrera María', 'Mago Sabio'][Math.floor(Math.random() * 6)],
-                dialogue: [
-                    'Hola Pepe! ¿Cómo va tu aventura?', 
-                    'Los cristales están en los reinos elementales', 
-                    'Ten cuidado con los enemigos, son más fuertes de noche',
-                    'He oído que hay tesoros escondidos por todo Aethermoor',
-                    'Los jefes de las mazmorras son muy poderosos, prepárate bien'
-                ],
-                currentDialogue: 0,
-                canInteract: false,
-                indicator: null
+                dialogue: ['Hola Pepe!', 'Salva nuestro reino!', 'Los cristales están en los reinos elementales'],
+                currentDialogue: 0
             };
 
             return villager;
@@ -1759,28 +2100,12 @@
         }
 
         function updateVillagers(delta) {
-            // Solo mostrar indicador de interacción, no diálogo automático
             villagers.forEach(villager => {
                 const distance = player.position.distanceTo(villager.position);
-                if (distance < 4) {
-                    villager.userData.canInteract = true;
-                    // Mostrar indicador visual sobre el NPC
-                    if (!villager.userData.indicator) {
-                        const indicator = new THREE.Mesh(
-                            new THREE.RingGeometry(0.5, 0.7, 8),
-                            new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.7 })
-                        );
-                        indicator.position.y = 3;
-                        indicator.rotation.x = -Math.PI / 2;
-                        villager.add(indicator);
-                        villager.userData.indicator = indicator;
-                    }
-                } else {
-                    villager.userData.canInteract = false;
-                    if (villager.userData.indicator) {
-                        villager.remove(villager.userData.indicator);
-                        villager.userData.indicator = null;
-                    }
+                if (distance < 3) {
+                    const dialogue = villager.userData.dialogue[villager.userData.currentDialogue];
+                    showNotification(dialogue, 2000);
+                    villager.userData.currentDialogue = (villager.userData.currentDialogue + 1) % villager.userData.dialogue.length;
                 }
             });
         }
@@ -1797,9 +2122,14 @@
                     boss.lookAt(player.position);
 
                     if (distance < boss.userData.attackRange && boss.userData.attackCooldown <= 0) {
-                        takeDamage(boss.userData.damage);
+                        playerHealth -= boss.userData.damage;
                         boss.userData.attackCooldown = 2;
+                        updateUI();
                         showNotification(`¡Jefe te ataca! -${boss.userData.damage} HP`, 1500);
+
+                        if (playerHealth <= 0) {
+                            gameOver();
+                        }
                     }
                 }
 
@@ -1812,61 +2142,15 @@
         function updateDayNight(delta) {
             if (!settings.dayNight) return;
 
-            // Ciclo más lento y realista (10 minutos = 1 día completo)
-            dayTime += delta * 0.00167; // 1/600 para 10 minutos
+            dayTime += delta * 0.1;
             if (dayTime > 1) dayTime = 0;
 
-            // Calcular hora del día (0-24)
-            const hour = dayTime * 24;
-            
-            // Intensidad de luz más realista
-            let lightIntensity, skyColor, fogColor;
-            
-            if (hour >= 6 && hour < 8) { // Amanecer
-                const t = (hour - 6) / 2;
-                lightIntensity = 0.2 + t * 0.6;
-                skyColor = new THREE.Color().lerpColors(
-                    new THREE.Color(0x191970), // Azul noche
-                    new THREE.Color(0xFF6B35), // Naranja amanecer
-                    t
-                );
-            } else if (hour >= 8 && hour < 18) { // Día
-                lightIntensity = 0.8;
-                skyColor = new THREE.Color(0x87CEEB); // Azul cielo
-            } else if (hour >= 18 && hour < 20) { // Atardecer
-                const t = (hour - 18) / 2;
-                lightIntensity = 0.8 - t * 0.5;
-                skyColor = new THREE.Color().lerpColors(
-                    new THREE.Color(0x87CEEB), // Azul día
-                    new THREE.Color(0xFF4500), // Naranja atardecer
-                    t
-                );
-            } else { // Noche
-                lightIntensity = 0.15;
-                skyColor = new THREE.Color(0x191970); // Azul noche
-            }
-            
-            // Aplicar cambios
-            scene.background = skyColor;
-            scene.fog.color = skyColor;
-            
+            const intensity = 0.3 + Math.sin(dayTime * Math.PI * 2) * 0.5;
             scene.children.forEach(child => {
                 if (child.type === 'DirectionalLight') {
-                    child.intensity = lightIntensity;
-                    // Cambiar color de luz según hora
-                    if (hour >= 6 && hour < 8 || hour >= 18 && hour < 20) {
-                        child.color.setHex(0xFFB347); // Luz cálida amanecer/atardecer
-                    } else if (hour >= 8 && hour < 18) {
-                        child.color.setHex(0xFFFFFF); // Luz blanca día
-                    } else {
-                        child.color.setHex(0x6495ED); // Luz azulada noche
-                    }
+                    child.intensity = Math.max(0.2, intensity);
                 }
             });
-            
-            // Mostrar hora actual
-            const timeString = `${Math.floor(hour).toString().padStart(2, '0')}:${Math.floor((hour % 1) * 60).toString().padStart(2, '0')}`;
-            document.getElementById('weather-info').innerHTML = `${document.getElementById('weather-info').textContent.split(' | ')[0]} | ${timeString}`;
         }
 
         function updateMinimap() {
@@ -2060,9 +2344,7 @@
                 snow: 'Nieve ❄️',
                 fog: 'Niebla 🌫️'
             };
-            const currentTime = document.getElementById('weather-info').textContent.includes('|') ? 
-                document.getElementById('weather-info').textContent.split(' | ')[1] : '12:00';
-            document.getElementById('weather-info').textContent = `${weatherNames[weather.type]} | ${currentTime}`;
+            document.getElementById('weather-info').textContent = weatherNames[weather.type];
         }
 
         function initAchievements() {
@@ -2150,276 +2432,212 @@
             }
         }
 
-        // Sistema de guardado
-        function saveGame(slot) {
-            if (!gameStarted) {
-                // Si no hay juego iniciado, iniciar nuevo juego en este slot
-                currentSaveSlot = slot;
-                document.getElementById('save-menu').style.display = 'none';
-                startGame();
-                return;
+        // Funciones de fullscreen
+        function toggleFullscreen() {
+            if (!document.fullscreenElement && !document.webkitFullscreenElement &&
+                !document.mozFullScreenElement && !document.msFullscreenElement) {
+                enterFullscreen();
+            } else {
+                exitFullscreen();
             }
-            
+        }
+
+        function enterFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        }
+
+        function exitFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+
+        function updateFullscreenButton() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!btn) return;
+
+            const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement ||
+                document.mozFullScreenElement || document.msFullscreenElement;
+
+            btn.textContent = isFullscreen ? 'Salir' : 'Activar';
+            btn.style.background = isFullscreen ? '#f44336' : '#4CAF50';
+        }
+
+        // Cambiar dificultad
+        function changeDifficulty(level) {
+            settings.difficulty = level;
+            switch(level) {
+                case 'easy':
+                    config.playerSpeed = 10;
+                    if (player) playerHealth = Math.min(150, playerHealth + 50);
+                    break;
+                case 'hard':
+                    config.playerSpeed = 6;
+                    if (player) playerHealth = Math.max(50, playerHealth - 25);
+                    break;
+                default: // normal
+                    config.playerSpeed = 8;
+            }
+            updateUI();
+            showNotification(`Dificultad: ${level.toUpperCase()}`, 2000);
+        }
+
+        // Auto-guardar en slot actual
+        function autoSave() {
+            if (!settings.autoSave || !gameActive || currentSaveSlot === null) return;
             const saveData = {
-                playerHealth: playerHealth || 100,
-                score: score || 0,
-                kills: kills || 0,
-                crystalsFound: crystalsFound || 0,
-                playerLevel: playerLevel || 1,
-                playerXP: playerXP || 0,
-                inventory: inventory || { sword: 1, shield: 1, potions: 3, keys: 0, coins: 0, artifacts: 0, magic: 0 },
-                achievements: achievements || [],
-                gameTime: gameTime || 0,
-                playerStats: playerStats || { totalDistance: 0, totalJumps: 0, totalAttacks: 0 },
-                playerPosition: player ? { x: player.position.x, y: player.position.y, z: player.position.z } : { x: 0, y: 0, z: 0 },
+                playerHealth, score, kills, crystalsFound, playerLevel, playerXP,
+                inventory, achievements, gameTime, playerStats,
+                position: player ? { x: player.position.x, y: player.position.y, z: player.position.z } : null,
                 timestamp: Date.now()
             };
-            
-            localStorage.setItem(`pepeQuest_save_${slot}`, JSON.stringify(saveData));
-            showNotification(`Partida guardada en slot ${slot + 1}`, 2000);
-            
-            // Actualizar la interfaz de slots si está abierta
-            setTimeout(() => {
-                if (document.getElementById('save-menu').style.display === 'block') {
-                    const currentTitle = document.getElementById('save-slots').innerHTML.includes('Nueva Partida') ? 'new' : 'load';
-                    if (currentTitle === 'new') {
-                        loadNewGameSlots();
-                    } else {
-                        loadSaveSlots();
-                    }
-                }
-            }, 100);
+            localStorage.setItem(`pepequest_slot_${currentSaveSlot}`, JSON.stringify(saveData));
         }
-        
-        function loadGame(slot) {
-            const saveData = localStorage.getItem(`pepeQuest_save_${slot}`);
-            if (!saveData) {
-                showNotification('No hay partida guardada en este slot', 2000);
-                return false;
+
+        // Función obsoleta - ahora se usa el sistema de slots
+        function loadAutoSave() {
+            return false;
+        }
+
+        // Sistema de slots de guardado
+        function showSaveMenu() {
+            updateSaveSlots();
+            document.getElementById('save-menu').style.display = 'block';
+        }
+
+        function updateSaveSlots() {
+            const container = document.getElementById('save-slots');
+            container.innerHTML = '<h4>Partidas Guardadas:</h4>';
+            
+            for (let i = 0; i < 3; i++) {
+                const saved = localStorage.getItem(`pepequest_slot_${i}`);
+                const slotDiv = document.createElement('div');
+                const isCurrentSlot = i === currentSaveSlot;
+                slotDiv.style.cssText = `margin: 10px 0; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 5px; ${isCurrentSlot ? 'border: 2px solid #4CAF50;' : ''}`;
+                
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    const date = new Date(data.timestamp).toLocaleString();
+                    slotDiv.innerHTML = `
+                        <div style="font-size: 16px;">Slot ${i + 1} - Nivel ${data.playerLevel || 1} ${isCurrentSlot ? '(Actual)' : ''}</div>
+                        <div style="font-size: 12px; color: #ccc; margin: 5px 0;">${date}</div>
+                        <div style="margin-top: 10px;">
+                            <button onclick="loadSlot(${i})" style="margin: 5px; padding: 8px 15px; background: #4CAF50; color: white; border: none; border-radius: 3px; ${isMobile ? 'font-size: 16px;' : ''}">Cargar</button>
+                            ${gameActive ? `<button onclick="saveSlot(${i})" style="margin: 5px; padding: 8px 15px; background: #2196F3; color: white; border: none; border-radius: 3px; ${isMobile ? 'font-size: 16px;' : ''}">Sobrescribir</button>` : ''}
+                        </div>
+                    `;
+                } else {
+                    slotDiv.innerHTML = `
+                        <div style="font-size: 16px;">Slot ${i + 1} - Vacío</div>
+                        ${gameActive ? `<button onclick="saveSlot(${i})" style="margin: 10px 5px 5px 0; padding: 8px 15px; background: #2196F3; color: white; border: none; border-radius: 3px; ${isMobile ? 'font-size: 16px;' : ''}">Guardar</button>` : ''}
+                    `;
+                }
+                container.appendChild(slotDiv);
             }
+        }
+
+        function saveSlot(slot) {
+            const saveData = {
+                playerHealth, score, kills, crystalsFound, playerLevel, playerXP,
+                inventory, achievements, gameTime, playerStats,
+                position: player ? { x: player.position.x, y: player.position.y, z: player.position.z } : null,
+                timestamp: Date.now()
+            };
+            localStorage.setItem(`pepequest_slot_${slot}`, JSON.stringify(saveData));
+            showNotification(`Guardado en Slot ${slot + 1}`, 2000);
+            updateSaveSlots();
+        }
+
+        function loadSlot(slot) {
+            const saved = localStorage.getItem(`pepequest_slot_${slot}`);
+            if (!saved) return;
             
-            const data = JSON.parse(saveData);
-            
-            // Cargar datos del juego
-            playerHealth = data.playerHealth || 100;
-            score = data.score || 0;
-            kills = data.kills || 0;
-            crystalsFound = data.crystalsFound || 0;
-            playerLevel = data.playerLevel || 1;
-            playerXP = data.playerXP || 0;
-            inventory = data.inventory || { sword: 1, shield: 1, potions: 3, keys: 0, coins: 0, artifacts: 0, magic: 0 };
-            achievements = data.achievements || [];
-            gameTime = data.gameTime || 0;
-            playerStats = data.playerStats || { totalDistance: 0, totalJumps: 0, totalAttacks: 0 };
-            
-            // Si el juego ya está iniciado, actualizar posición del jugador
-            if (player && data.playerPosition) {
-                player.position.set(data.playerPosition.x, data.playerPosition.y, data.playerPosition.z);
-            }
-            
-            // Actualizar UI
-            if (gameStarted) {
+            try {
+                const data = JSON.parse(saved);
+                currentSaveSlot = slot;
+                playerHealth = data.playerHealth || 100;
+                score = data.score || 0;
+                kills = data.kills || 0;
+                crystalsFound = data.crystalsFound || 0;
+                playerLevel = data.playerLevel || 1;
+                playerXP = data.playerXP || 0;
+                inventory = data.inventory || inventory;
+                achievements = data.achievements || [];
+                gameTime = data.gameTime || 0;
+                playerStats = data.playerStats || playerStats;
+                
+                if (!gameStarted) {
+                    init();
+                    gameStarted = true;
+                    setTimeout(() => {
+                        if (data.position && player) {
+                            player.position.set(data.position.x, data.position.y, data.position.z);
+                        }
+                    }, 100);
+                } else if (data.position && player) {
+                    player.position.set(data.position.x, data.position.y, data.position.z);
+                }
+                
+                gameActive = true;
+                gamePaused = false;
+                document.getElementById('main-menu').style.display = 'none';
                 updateUI();
                 updateInventoryUI();
-            }
-            
-            showNotification('Partida cargada correctamente', 2000);
-            document.getElementById('save-menu').style.display = 'none';
-            return true;
-        }
-        
-        function loadSaveSlots() {
-            const slotsContainer = document.getElementById('save-slots');
-            slotsContainer.innerHTML = '<h4>Cargar Partida</h4>';
-            
-            for (let i = 0; i < 3; i++) {
-                const saveData = localStorage.getItem(`pepeQuest_save_${i}`);
-                const slotDiv = document.createElement('div');
-                slotDiv.style.cssText = 'margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 5px;';
-                
-                if (saveData) {
-                    const data = JSON.parse(saveData);
-                    const date = new Date(data.timestamp).toLocaleString();
-                    slotDiv.innerHTML = `
-                        <div>Slot ${i + 1} - Nivel ${data.playerLevel}</div>
-                        <div style="font-size: 12px; color: #ccc;">${date}</div>
-                        <button onclick="loadAndStart(${i})" style="margin: 5px; padding: 5px 10px; background: #4CAF50; color: white; border: none; border-radius: 3px; cursor: pointer;">Cargar</button>
-                        <button onclick="saveGame(${i})" style="margin: 5px; padding: 5px 10px; background: #2196F3; color: white; border: none; border-radius: 3px; cursor: pointer;">Sobrescribir</button>
-                    `;
-                } else {
-                    slotDiv.innerHTML = `
-                        <div>Slot ${i + 1} - Vacío</div>
-                        <button onclick="saveGame(${i})" style="margin: 5px; padding: 5px 10px; background: #4CAF50; color: white; border: none; border-radius: 3px; cursor: pointer;">Guardar</button>
-                    `;
-                }
-                
-                slotsContainer.appendChild(slotDiv);
-            }
-        }
-        
-        function loadNewGameSlots() {
-            const slotsContainer = document.getElementById('save-slots');
-            slotsContainer.innerHTML = '<h4>Nueva Partida - Selecciona Slot</h4>';
-            
-            for (let i = 0; i < 3; i++) {
-                const saveData = localStorage.getItem(`pepeQuest_save_${i}`);
-                const slotDiv = document.createElement('div');
-                slotDiv.style.cssText = 'margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 5px;';
-                
-                if (saveData) {
-                    const data = JSON.parse(saveData);
-                    const date = new Date(data.timestamp).toLocaleString();
-                    slotDiv.innerHTML = `
-                        <div>Slot ${i + 1} - Nivel ${data.playerLevel}</div>
-                        <div style="font-size: 12px; color: #ccc;">${date}</div>
-                        <button onclick="startNewGame(${i})" style="margin: 5px; padding: 5px 10px; background: #FF5722; color: white; border: none; border-radius: 3px; cursor: pointer;">Sobrescribir</button>
-                        <button onclick="loadAndStart(${i})" style="margin: 5px; padding: 5px 10px; background: #4CAF50; color: white; border: none; border-radius: 3px; cursor: pointer;">Continuar</button>
-                    `;
-                } else {
-                    slotDiv.innerHTML = `
-                        <div>Slot ${i + 1} - Vacío</div>
-                        <button onclick="startNewGame(${i})" style="margin: 5px; padding: 5px 10px; background: #4CAF50; color: white; border: none; border-radius: 3px; cursor: pointer;">Nueva Partida</button>
-                    `;
-                }
-                
-                slotsContainer.appendChild(slotDiv);
-            }
-        }
-        
-        function startNewGame(slot) {
-            currentSaveSlot = slot;
-            
-            // Guardar partida inicial inmediatamente
-            const initialSave = {
-                playerHealth: 100,
-                score: 0,
-                kills: 0,
-                crystalsFound: 0,
-                playerLevel: 1,
-                playerXP: 0,
-                inventory: { sword: 1, shield: 1, potions: 3, keys: 0, coins: 0, artifacts: 0, magic: 0 },
-                achievements: [],
-                gameTime: 0,
-                playerStats: { totalDistance: 0, totalJumps: 0, totalAttacks: 0 },
-                playerPosition: { x: 0, y: 0, z: 0 },
-                timestamp: Date.now()
-            };
-            
-            localStorage.setItem(`pepeQuest_save_${slot}`, JSON.stringify(initialSave));
-            
-            document.getElementById('save-menu').style.display = 'none';
-            startGame();
-        }
-        
-        function loadAndStart(slot) {
-            const loaded = loadGame(slot);
-            if (loaded) {
-                if (!gameStarted) {
-                    startGame();
-                } else {
-                    // Si el juego ya está corriendo, solo cerrar el menú
-                    document.getElementById('main-menu').style.display = 'none';
-                    gameActive = true;
-                    gamePaused = false;
-                }
-            }
-        }
-        
-        // Sistema de tutorial
-        let tutorialStep = 0;
-        const tutorialSteps = [
-            {
-                title: "¡Bienvenido a Pepe's Quest!",
-                content: "Eres Pepe, el héroe destinado a salvar el reino de Aethermoor. Los cristales de poder han sido dispersados y debes encontrarlos."
-            },
-            {
-                title: "Controles Básicos",
-                content: "• WASD: Mover\n• Espacio: Saltar\n• Click: Atacar\n• R: Correr\n• ESC: Pausar"
-            },
-            {
-                title: "Interfaz del Juego",
-                content: "• Barra de vida: Arriba al centro\n• Minimapa: Esquina superior derecha\n• Botones de acción: Esquina inferior izquierda\n• Panel de misión: Lado derecho (click en la flecha)"
-            },
-            {
-                title: "Tu Misión",
-                content: "1. Encuentra los 4 cristales principales en los reinos elementales\n2. Derrota a los 4 jefes de las mazmorras\n3. Recolecta cristales menores para ganar XP\n4. Abre cofres para obtener mejoras"
-            },
-            {
-                title: "Consejos",
-                content: "• Habla con NPCs (Q) para obtener información\n• Usa pociones (P) para curarte\n• Mejora tu equipo derrotando enemigos\n• El minimapa te ayuda a navegar"
-            }
-        ];
-        
-        function showTutorial() {
-            tutorialStep = 0;
-            document.getElementById('tutorial').style.display = 'block';
-            updateTutorial();
-        }
-        
-        function updateTutorial() {
-            const step = tutorialSteps[tutorialStep];
-            document.getElementById('tutorial-content').innerHTML = `
-                <h3>${step.title}</h3>
-                <p style="text-align: left; white-space: pre-line; margin: 20px 0;">${step.content}</p>
-                <div style="margin: 20px 0; color: #ccc;">Paso ${tutorialStep + 1} de ${tutorialSteps.length}</div>
-            `;
-            
-            const nextBtn = document.getElementById('tutorial-next');
-            nextBtn.textContent = tutorialStep === tutorialSteps.length - 1 ? 'Finalizar' : 'Siguiente';
-        }
-        
-        function updateGraphicsQuality() {
-            if (!renderer) return;
-            
-            switch(settings.graphics) {
-                case 'low':
-                    renderer.setPixelRatio(0.5);
-                    settings.shadows = 'off';
-                    break;
-                case 'medium':
-                    renderer.setPixelRatio(0.75);
-                    settings.shadows = 'low';
-                    break;
-                case 'high':
-                    renderer.setPixelRatio(1);
-                    settings.shadows = 'high';
-                    break;
-                case 'ultra':
-                    renderer.setPixelRatio(window.devicePixelRatio);
-                    settings.shadows = 'high';
-                    break;
-            }
-            updateGraphics();
-        }
-        
-        // Event listeners para tutorial
-        document.addEventListener('DOMContentLoaded', () => {
-            const tutorialNext = document.getElementById('tutorial-next');
-            const tutorialSkip = document.getElementById('tutorial-skip');
-            const closeSave = document.getElementById('close-save');
-            
-            if (tutorialNext) tutorialNext.addEventListener('click', () => {
-                if (tutorialStep < tutorialSteps.length - 1) {
-                    tutorialStep++;
-                    updateTutorial();
-                } else {
-                    document.getElementById('tutorial').style.display = 'none';
-                }
-            });
-            
-            if (tutorialSkip) tutorialSkip.addEventListener('click', () => {
-                document.getElementById('tutorial').style.display = 'none';
-            });
-            
-            if (closeSave) closeSave.addEventListener('click', () => {
+                showNotification(`Cargado Slot ${slot + 1}`, 2000);
                 document.getElementById('save-menu').style.display = 'none';
-            });
+            } catch(e) {
+                showNotification('Error al cargar', 2000);
+            }
+        }
+
+        // Cerrar menú de guardado
+        document.getElementById('close-save').addEventListener('click', () => {
+            document.getElementById('save-menu').style.display = 'none';
         });
-        
+
+        // Botón de guardado rápido para móvil (se añade después de detectar móvil)
+        function addMobileSaveButton() {
+            if (!isMobile) return;
+            const mobileControls = document.getElementById('mobile-controls');
+            if (!mobileControls) return;
+            
+            const saveBtn = document.createElement('button');
+            saveBtn.innerHTML = '💾';
+            saveBtn.style.cssText = 'position: absolute; right: -260px; bottom: 0; width: 50px; height: 50px; background: #673AB7; color: white; border: none; border-radius: 50%; font-size: 16px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: all 0.1s;';
+            saveBtn.addEventListener('touchstart', (e) => {
+                if (gameActive) saveSlot(currentSaveSlot || 0);
+                e.target.style.transform = 'scale(0.9)';
+                e.preventDefault();
+            });
+            saveBtn.addEventListener('touchend', (e) => {
+                e.target.style.transform = 'scale(1)';
+            });
+            mobileControls.appendChild(saveBtn);
+        }
+
+        // Auto-guardado cada 30 segundos
+        setInterval(autoSave, 30000);
+
         // Inicializar cuando la página cargue
         window.addEventListener('load', () => {
             setupMenus();
             detectMobile();
+            addMobileSaveButton();
         });
     </script>
 </body>
