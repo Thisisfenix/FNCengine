@@ -1481,8 +1481,19 @@
             clearTimeout(settingsSaveTimeout);
             settingsSaveTimeout = setTimeout(() => {
                 saveSettings();
+                settingsSaveTimeout = null;
             }, 500);
         }
+
+        // Guardar configuración al cerrar la página
+        window.addEventListener('beforeunload', () => {
+            saveSettings();
+        });
+
+        // Guardar configuración periódicamente
+        setInterval(() => {
+            saveSettings();
+        }, 30000); // Cada 30 segundos
 
         // Mostrar un panel específico con animación
         function showPanel(panelId) {
@@ -1648,90 +1659,107 @@
 
         // Guardar configuración
         function saveSettings() {
-            // Guardar color por separado para mayor confiabilidad
-            localStorage.setItem('fnc-menu-color', document.getElementById('color-picker').value);
+            try {
+                // Guardar color por separado para mayor confiabilidad
+                localStorage.setItem('fnc-menu-color', document.getElementById('color-picker').value);
 
-            const settings = {
-                theme: document.getElementById('selector-tema').value,
-                difficulty: document.getElementById('selector-dificultad').value,
-                musicVolume: document.getElementById('volumen-musica').value,
-                soundVolume: document.getElementById('volumen-sonido').value,
-                currentMusic: currentMusic,
-                autoPlay: document.getElementById('auto-play-music').checked,
-                achievements: getUnlockedAchievements(),
-                visitedPanels: Array.from(visitedPanels),
-                secretModeUnlocked: secretModeUnlocked,
-                secretModeAttempts: secretModeAttempts,
-                menuActionsCompleted: menuActionsCompleted
-            };
+                const settings = {
+                    theme: document.getElementById('selector-tema').value,
+                    difficulty: document.getElementById('selector-dificultad').value,
+                    musicVolume: document.getElementById('volumen-musica').value,
+                    soundVolume: document.getElementById('volumen-sonido').value,
+                    currentMusic: currentMusic,
+                    autoPlay: document.getElementById('auto-play-music').checked,
+                    achievements: getUnlockedAchievements(),
+                    visitedPanels: Array.from(visitedPanels),
+                    secretModeUnlocked: secretModeUnlocked,
+                    secretModeAttempts: secretModeAttempts,
+                    menuActionsCompleted: menuActionsCompleted,
+                    lastSaved: Date.now()
+                };
 
-            localStorage.setItem('fncSettings', JSON.stringify(settings));
+                localStorage.setItem('fncSettings', JSON.stringify(settings));
+                console.log('Configuración guardada:', settings);
 
-            if (!settingsSaveTimeout) {
-                showNotification('Configuración guardada correctamente');
-                unlockAchievement('achievement-settingsSaver');
+                if (!settingsSaveTimeout) {
+                    showNotification('Configuración guardada correctamente');
+                    unlockAchievement('achievement-settingsSaver');
+                }
+            } catch (error) {
+                console.error('Error al guardar configuración:', error);
+                showNotification('Error al guardar configuración', 'error');
             }
         }
 
         // Cargar configuración
         function loadSettings() {
-            // Cargar color del menú primero (guardado por separado para mayor confiabilidad)
-            const savedColor = localStorage.getItem('fnc-menu-color') || '#e67e22';
-            document.getElementById('color-picker').value = savedColor;
-            document.documentElement.style.setProperty('--color-menu', savedColor);
-            document.documentElement.style.setProperty('--color-menu-hover', adjustColor(savedColor, -20));
-            document.documentElement.style.setProperty('--scrollbar-thumb', savedColor);
+            try {
+                // Cargar color del menú primero (guardado por separado para mayor confiabilidad)
+                const savedColor = localStorage.getItem('fnc-menu-color') || '#e67e22';
+                document.getElementById('color-picker').value = savedColor;
+                document.documentElement.style.setProperty('--color-menu', savedColor);
+                document.documentElement.style.setProperty('--color-menu-hover', adjustColor(savedColor, -20));
+                document.documentElement.style.setProperty('--scrollbar-thumb', savedColor);
 
-            const savedSettings = localStorage.getItem('fncSettings');
-            if (savedSettings) {
-                const settings = JSON.parse(savedSettings);
+                const savedSettings = localStorage.getItem('fncSettings');
+                console.log('Configuración cargada:', savedSettings);
+                
+                if (savedSettings) {
+                    const settings = JSON.parse(savedSettings);
+                    console.log('Configuración parseada:', settings);
 
-                // Aplicar configuración
-                document.getElementById('selector-tema').value = settings.theme || 'automatico';
-                document.getElementById('selector-dificultad').value = settings.difficulty || 'normal';
-                document.getElementById('volumen-musica').value = settings.musicVolume || 50;
-                document.getElementById('valor-volumen-musica').textContent = settings.musicVolume || 50;
-                document.getElementById('volumen-sonido').value = settings.soundVolume || 50;
-                document.getElementById('valor-volumen-sonido').textContent = settings.soundVolume || 50;
-                currentMusic = settings.currentMusic || 0;
-                document.getElementById('select-music').value = currentMusic;
-                document.getElementById('auto-play-music').checked = settings.autoPlay || false;
+                    // Aplicar configuración
+                    document.getElementById('selector-tema').value = settings.theme || 'automatico';
+                    document.getElementById('selector-dificultad').value = settings.difficulty || 'normal';
+                    document.getElementById('volumen-musica').value = settings.musicVolume || 50;
+                    document.getElementById('valor-volumen-musica').textContent = settings.musicVolume || 50;
+                    document.getElementById('volumen-sonido').value = settings.soundVolume || 50;
+                    document.getElementById('valor-volumen-sonido').textContent = settings.soundVolume || 50;
+                    currentMusic = settings.currentMusic || 0;
+                    document.getElementById('select-music').value = currentMusic;
+                    document.getElementById('auto-play-music').checked = settings.autoPlay || false;
 
-                // Aplicar el tema
-                applyTheme(settings.theme || 'automatico', true);
+                    // Aplicar el tema
+                    applyTheme(settings.theme || 'automatico', true);
 
-                // Restaurar logros desbloqueados
-                if (settings.achievements) {
-                    restoreAchievements(settings.achievements);
+                    // Restaurar logros desbloqueados
+                    if (settings.achievements) {
+                        restoreAchievements(settings.achievements);
+                    }
+
+                    // Restaurar paneles visitados
+                    if (settings.visitedPanels) {
+                        visitedPanels = new Set(settings.visitedPanels);
+                        checkAllPanelsVisited();
+                    }
+
+                    // Restaurar modo secreto
+                    if (settings.secretModeUnlocked) {
+                        secretModeUnlocked = settings.secretModeUnlocked;
+                        unlockSecretMode();
+                    }
+                    if (settings.secretModeAttempts) {
+                        secretModeAttempts = settings.secretModeAttempts;
+                    }
+                    if (settings.menuActionsCompleted) {
+                        menuActionsCompleted = settings.menuActionsCompleted;
+                    }
+
+                    // Aplicar volumen
+                    updateMusicVolume();
+
+                    // Marcar para reproducir música automáticamente si está configurado
+                    if (settings.autoPlay) {
+                        window.shouldAutoPlay = true;
+                    }
+
+                    updateMusicInfo();
+                } else {
+                    console.log('No hay configuración guardada, usando valores por defecto');
                 }
-
-                // Restaurar paneles visitados
-                if (settings.visitedPanels) {
-                    visitedPanels = new Set(settings.visitedPanels);
-                    checkAllPanelsVisited();
-                }
-
-                // Restaurar modo secreto
-                if (settings.secretModeUnlocked) {
-                    secretModeUnlocked = settings.secretModeUnlocked;
-                    unlockSecretMode();
-                }
-                if (settings.secretModeAttempts) {
-                    secretModeAttempts = settings.secretModeAttempts;
-                }
-                if (settings.menuActionsCompleted) {
-                    menuActionsCompleted = settings.menuActionsCompleted;
-                }
-
-                // Aplicar volumen
-                updateMusicVolume();
-
-                // Marcar para reproducir música automáticamente si está configurado
-                if (settings.autoPlay) {
-                    window.shouldAutoPlay = true;
-                }
-
-                updateMusicInfo();
+            } catch (error) {
+                console.error('Error al cargar configuración:', error);
+                showNotification('Error al cargar configuración', 'error');
             }
         }
 
