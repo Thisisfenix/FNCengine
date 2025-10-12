@@ -187,36 +187,51 @@
                 <option value="normal" selected>Normal</option>
                 <option value="hard">Difícil</option>
             </select></div>
-        <div style="margin: 10px 0;">Volumen: <input type="range" id="volume-slider" min="0" max="100" value="50" style="width: 100px;"> <span id="volume-display">50%</span></div>
+        <div style="margin: 10px 0;">Volumen: <input type="range" id="volume-slider" min="0" max="100" value="50"
+                style="width: 100px;"> <span id="volume-display">50%</span></div>
         <div style="margin: 10px 0;">Auto-Guardar: <input type="checkbox" id="auto-save" checked></div>
-        
+
         <!-- Controles Personalizables -->
         <div style="margin: 15px 0; border-top: 1px solid #555; padding-top: 15px;">
             <h4>Controles</h4>
             <div id="key-bindings" style="font-size: 12px;">
-                <div style="margin: 5px 0;">Mover Adelante: <input type="text" id="key-forward" value="W" maxlength="1" style="width: 30px; text-align: center;"></div>
-                <div style="margin: 5px 0;">Mover Atrás: <input type="text" id="key-backward" value="S" maxlength="1" style="width: 30px; text-align: center;"></div>
-                <div style="margin: 5px 0;">Mover Izquierda: <input type="text" id="key-left" value="A" maxlength="1" style="width: 30px; text-align: center;"></div>
-                <div style="margin: 5px 0;">Mover Derecha: <input type="text" id="key-right" value="D" maxlength="1" style="width: 30px; text-align: center;"></div>
-                <div style="margin: 5px 0;">Correr: <input type="text" id="key-run" value="R" maxlength="1" style="width: 30px; text-align: center;"></div>
-                <div style="margin: 5px 0;">Usar Poción: <input type="text" id="key-potion" value="P" maxlength="1" style="width: 30px; text-align: center;"></div>
-                <div style="margin: 5px 0;">Inventario: <input type="text" id="key-inventory" value="I" maxlength="1" style="width: 30px; text-align: center;"></div>
-                <div style="margin: 5px 0;">Hablar: <input type="text" id="key-interact" value="Q" maxlength="1" style="width: 30px; text-align: center;"></div>
+                <div style="margin: 5px 0;">Mover Adelante: <input type="text" id="key-forward" value="W" maxlength="1"
+                        style="width: 30px; text-align: center;"></div>
+                <div style="margin: 5px 0;">Mover Atrás: <input type="text" id="key-backward" value="S" maxlength="1"
+                        style="width: 30px; text-align: center;"></div>
+                <div style="margin: 5px 0;">Mover Izquierda: <input type="text" id="key-left" value="A" maxlength="1"
+                        style="width: 30px; text-align: center;"></div>
+                <div style="margin: 5px 0;">Mover Derecha: <input type="text" id="key-right" value="D" maxlength="1"
+                        style="width: 30px; text-align: center;"></div>
+                <div style="margin: 5px 0;">Correr: <input type="text" id="key-run" value="R" maxlength="1"
+                        style="width: 30px; text-align: center;"></div>
+                <div style="margin: 5px 0;">Usar Poción: <input type="text" id="key-potion" value="P" maxlength="1"
+                        style="width: 30px; text-align: center;"></div>
+                <div style="margin: 5px 0;">Inventario: <input type="text" id="key-inventory" value="I" maxlength="1"
+                        style="width: 30px; text-align: center;"></div>
+                <div style="margin: 5px 0;">Hablar: <input type="text" id="key-interact" value="Q" maxlength="1"
+                        style="width: 30px; text-align: center;"></div>
             </div>
         </div>
-        
+
         <!-- Controles Táctiles (solo Android) -->
         <div id="mobile-settings" style="margin: 15px 0; border-top: 1px solid #555; padding-top: 15px; display: none;">
             <h4>Controles Táctiles</h4>
-            <div style="margin: 10px 0;">Tamaño Joystick: <input type="range" id="joystick-size" min="80" max="140" value="100" style="width: 100px;"> <span id="joystick-size-display">100px</span></div>
-            <div style="margin: 10px 0;">Tamaño Botones: <input type="range" id="button-size" min="40" max="80" value="60" style="width: 100px;"> <span id="button-size-display">60px</span></div>
-            <div style="margin: 10px 0;">Opacidad: <input type="range" id="controls-opacity" min="30" max="100" value="80" style="width: 100px;"> <span id="opacity-display">80%</span></div>
+            <div style="margin: 10px 0;">Tamaño Joystick: <input type="range" id="joystick-size" min="80" max="140"
+                    value="100" style="width: 100px;"> <span id="joystick-size-display">100px</span></div>
+            <div style="margin: 10px 0;">Tamaño Botones: <input type="range" id="button-size" min="40" max="80"
+                    value="60" style="width: 100px;"> <span id="button-size-display">60px</span></div>
+            <div style="margin: 10px 0;">Opacidad: <input type="range" id="controls-opacity" min="30" max="100"
+                    value="80" style="width: 100px;"> <span id="opacity-display">80%</span></div>
             <div style="margin: 10px 0;">Vibración: <input type="checkbox" id="haptic-feedback" checked></div>
         </div>
-        
+
         <div style="margin: 15px 0; border-top: 1px solid #555; padding-top: 15px;">
-            <button id="controls-btn" style="padding: 8px 15px; margin: 5px; background: #FF9800; color: white; border: none; border-radius: 3px; cursor: pointer;">Ver Controles</button>
-            <button id="tutorial-btn-settings" style="padding: 8px 15px; margin: 5px; background: #FF5722; color: white; border: none; border-radius: 3px; cursor: pointer;">Tutorial</button>
+            <button id="controls-btn"
+                style="padding: 8px 15px; margin: 5px; background: #FF9800; color: white; border: none; border-radius: 3px; cursor: pointer;">Ver
+                Controles</button>
+            <button id="tutorial-btn-settings"
+                style="padding: 8px 15px; margin: 5px; background: #FF5722; color: white; border: none; border-radius: 3px; cursor: pointer;">Tutorial</button>
         </div>
         <button id="close-settings"
             style="padding: 10px 20px; margin-top: 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
@@ -306,15 +321,21 @@
             </div>
         </div>
         <button id="mobile-attack"
-            style="position: absolute; right: -120px; bottom: 0; width: 60px; height: 60px; background: #f44336; color: white; border: none; border-radius: 50%; font-size: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: all 0.1s;">⚔</button>
+            style="position: absolute; left: 120px; bottom: 0; width: 60px; height: 60px; background: #f44336; color: white; border: none; border-radius: 50%; font-size: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: all 0.1s;">⚔</button>
         <button id="mobile-jump"
-            style="position: absolute; right: -120px; bottom: 70px; width: 60px; height: 60px; background: #4CAF50; color: white; border: none; border-radius: 50%; font-size: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: all 0.1s;">↑</button>
+            style="position: absolute; left: 120px; bottom: 70px; width: 60px; height: 60px; background: #4CAF50; color: white; border: none; border-radius: 50%; font-size: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: all 0.1s;">↑</button>
         <button id="mobile-potion"
-            style="position: absolute; right: -190px; bottom: 0; width: 50px; height: 50px; background: #9C27B0; color: white; border: none; border-radius: 50%; font-size: 16px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: all 0.1s;">🧪</button>
+            style="position: absolute; left: 190px; bottom: 0; width: 50px; height: 50px; background: #9C27B0; color: white; border: none; border-radius: 50%; font-size: 16px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: all 0.1s;">🧪</button>
         <button id="mobile-inventory"
-            style="position: absolute; right: -190px; bottom: 60px; width: 50px; height: 50px; background: #FF9800; color: white; border: none; border-radius: 50%; font-size: 16px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: all 0.1s;">🎒</button>
+            style="position: absolute; left: 190px; bottom: 60px; width: 50px; height: 50px; background: #FF9800; color: white; border: none; border-radius: 50%; font-size: 16px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: all 0.1s;">🎒</button>
         <button id="mobile-camera"
-            style="position: absolute; right: -190px; bottom: 120px; width: 50px; height: 50px; background: #2196F3; color: white; border: none; border-radius: 50%; font-size: 16px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: all 0.1s;">📷</button>
+            style="position: absolute; left: 190px; bottom: 120px; width: 50px; height: 50px; background: #2196F3; color: white; border: none; border-radius: 50%; font-size: 16px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: all 0.1s;">📷</button>
+    </div>
+
+    <!-- Indicador de cámara táctil -->
+    <div id="camera-hint"
+        style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 15px; border-radius: 10px; z-index: 200; display: none; text-align: center;">
+        📱 Desliza la pantalla para rotar la cámara
     </div>
 
     <!-- Botón de pausa para móvil -->
@@ -359,16 +380,25 @@
         function detectMobile() {
             isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-            // Detectar Android específicamente
+            // Detectar tipos específicos de móvil
             const isAndroid = /Android/i.test(navigator.userAgent);
+            const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+            const isWindowsPhone = /IEMobile/i.test(navigator.userAgent);
 
             if (isMobile) {
                 document.getElementById('mobile-controls').style.display = 'block';
                 setupMobileControls();
                 optimizeForMobile();
 
+                // Configuraciones específicas por plataforma
                 if (isAndroid) {
                     setupAndroidSpecific();
+                } else if (isIOS) {
+                    setupIOSSpecific();
+                } else if (isWindowsPhone) {
+                    setupWindowsPhoneSpecific();
+                } else {
+                    setupGenericMobileSpecific();
                 }
             }
         }
@@ -383,8 +413,9 @@
 
             if (androidVersion < 7.0) {
                 // Android más antiguo - más optimizaciones
-                config.playerSpeed = 6; // Velocidad reducida
+                config.playerSpeed = 6;
                 settings.shadows = 'off';
+                config.worldSize = 150; // Mundo más pequeño
             }
 
             // Configurar wake lock para mantener pantalla activa
@@ -398,6 +429,15 @@
                     enterFullscreen();
                 }
             }, 2000);
+
+            // Botón flotante de configuración rápida para Android
+            addAndroidQuickSettings();
+            
+            // Gestos de Android
+            setupAndroidGestures();
+            
+            // Notificaciones nativas de Android
+            setupAndroidNotifications();
         }
 
         // Configurar controles personalizables
@@ -415,7 +455,7 @@
                     });
                 }
             });
-            
+
             // Cargar configuración guardada
             const saved = localStorage.getItem('pepequest_keybindings');
             if (saved) {
@@ -430,14 +470,14 @@
         // Configurar ajustes móviles
         function setupMobileSettings() {
             if (!isMobile) return;
-            
+
             document.getElementById('mobile-settings').style.display = 'block';
-            
+
             const joystickSizeSlider = document.getElementById('joystick-size');
             const buttonSizeSlider = document.getElementById('button-size');
             const opacitySlider = document.getElementById('controls-opacity');
             const hapticCheck = document.getElementById('haptic-feedback');
-            
+
             if (joystickSizeSlider) {
                 joystickSizeSlider.addEventListener('input', (e) => {
                     mobileSettings.joystickSize = e.target.value;
@@ -445,7 +485,7 @@
                     updateMobileControls();
                 });
             }
-            
+
             if (buttonSizeSlider) {
                 buttonSizeSlider.addEventListener('input', (e) => {
                     mobileSettings.buttonSize = e.target.value;
@@ -453,7 +493,7 @@
                     updateMobileControls();
                 });
             }
-            
+
             if (opacitySlider) {
                 opacitySlider.addEventListener('input', (e) => {
                     mobileSettings.opacity = e.target.value;
@@ -461,13 +501,13 @@
                     updateMobileControls();
                 });
             }
-            
+
             if (hapticCheck) {
                 hapticCheck.addEventListener('change', (e) => {
                     mobileSettings.hapticFeedback = e.target.checked;
                 });
             }
-            
+
             // Cargar configuración guardada
             const saved = localStorage.getItem('pepequest_mobilesettings');
             if (saved) {
@@ -484,13 +524,13 @@
         function updateMobileControls() {
             const joystick = document.getElementById('joystick');
             const buttons = document.querySelectorAll('#mobile-controls button');
-            
+
             if (joystick) {
                 joystick.style.width = mobileSettings.joystickSize + 'px';
                 joystick.style.height = mobileSettings.joystickSize + 'px';
                 joystick.style.opacity = mobileSettings.opacity / 100;
             }
-            
+
             buttons.forEach(button => {
                 if (button.id !== 'mobile-pause') {
                     button.style.width = mobileSettings.buttonSize + 'px';
@@ -498,7 +538,7 @@
                     button.style.opacity = mobileSettings.opacity / 100;
                 }
             });
-            
+
             localStorage.setItem('pepequest_mobilesettings', JSON.stringify(mobileSettings));
         }
 
@@ -521,7 +561,7 @@
                 if (e.scale !== 1) e.preventDefault();
             }, { passive: false });
 
-            // Orientación de pantalla
+            // Orientación de pantalla preferida horizontal
             if (screen.orientation && screen.orientation.lock) {
                 screen.orientation.lock('landscape').catch(() => { });
             }
@@ -534,6 +574,16 @@
 
             // Optimizar rendimiento para Android
             optimizeAndroidPerformance();
+
+            // Mostrar hint de cámara táctil
+            setTimeout(() => {
+                if (gameActive) {
+                    document.getElementById('camera-hint').style.display = 'block';
+                    setTimeout(() => {
+                        document.getElementById('camera-hint').style.display = 'none';
+                    }, 4000);
+                }
+            }, 3000);
         }
 
         // Ajustar UI para móvil
@@ -568,22 +618,34 @@
         function optimizeAndroidPerformance() {
             // Reducir FPS objetivo en Android
             const targetFPS = 30;
-            let lastFrame = 0;
-            const frameInterval = 1000 / targetFPS;
-
+            
             // Reducir complejidad de objetos
-            config.worldSize = 200; // Mundo más pequeño
+            config.worldSize = 200;
 
-            // Limitar número de enemigos
-            const maxEnemies = 15;
+            // Limitar número de enemigos según rendimiento
+            const maxEnemies = navigator.hardwareConcurrency > 4 ? 20 : 12;
 
             // Desactivar efectos costosos
-            scene.fog.density = 0.01; // Menos niebla
+            scene.fog.density = 0.01;
 
             // Usar geometrías más simples
             if (renderer) {
                 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+                // Modo de bajo consumo
+                renderer.powerPreference = 'low-power';
             }
+            
+            // Limpieza automática de memoria más frecuente
+            setInterval(() => {
+                if (enemies.length > maxEnemies) {
+                    // Eliminar enemigos más lejanos
+                    enemies.sort((a, b) => 
+                        player.position.distanceTo(b.position) - player.position.distanceTo(a.position)
+                    );
+                    const toRemove = enemies.splice(maxEnemies);
+                    toRemove.forEach(enemy => scene.remove(enemy));
+                }
+            }, 10000);
         }
 
         // Configurar menús
@@ -683,7 +745,7 @@
 
         function showControls() {
             const content = document.getElementById('controls-content');
-            
+
             if (isMobile) {
                 content.innerHTML = `
                     <div style="text-align: left; line-height: 1.6;">
@@ -742,7 +804,7 @@
                     </div>
                 `;
             }
-            
+
             document.getElementById('controls-panel').style.display = 'block';
         }
 
@@ -763,9 +825,9 @@
                 "Usa pociones cuando tu salud esté baja.",
                 "¡Buena suerte, héroe! Aethermoor cuenta contigo."
             ];
-            
+
             let currentStep = 0;
-            
+
             function showTutorialStep() {
                 if (currentStep < tutorialSteps.length) {
                     const content = document.getElementById('tutorial-content');
@@ -775,12 +837,12 @@
                             <div>${tutorialSteps[currentStep]}</div>
                         </div>
                     `;
-                    
+
                     const nextBtn = document.getElementById('tutorial-next');
                     const skipBtn = document.getElementById('tutorial-skip');
-                    
+
                     nextBtn.textContent = currentStep === tutorialSteps.length - 1 ? 'Finalizar' : 'Siguiente';
-                    
+
                     nextBtn.onclick = () => {
                         currentStep++;
                         if (currentStep >= tutorialSteps.length) {
@@ -789,16 +851,16 @@
                             showTutorialStep();
                         }
                     };
-                    
+
                     skipBtn.onclick = closeTutorial;
                 }
             }
-            
+
             function closeTutorial() {
                 document.getElementById('tutorial').style.display = 'none';
                 currentStep = 0;
             }
-            
+
             document.getElementById('tutorial').style.display = 'block';
             showTutorialStep();
         }
@@ -812,14 +874,14 @@
         function showSlotSelection() {
             const container = document.getElementById('save-slots');
             container.innerHTML = '<h4>Selecciona un Slot para Nueva Aventura:</h4>';
-            
+
             for (let i = 0; i < 3; i++) {
                 const saved = localStorage.getItem(`pepequest_slot_${i}`);
                 const slotDiv = document.createElement('div');
                 slotDiv.style.cssText = 'margin: 10px 0; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 5px; cursor: pointer; border: 2px solid transparent;';
                 slotDiv.onmouseover = () => slotDiv.style.borderColor = '#4CAF50';
                 slotDiv.onmouseout = () => slotDiv.style.borderColor = 'transparent';
-                
+
                 if (saved) {
                     const data = JSON.parse(saved);
                     const date = new Date(data.timestamp).toLocaleString();
@@ -834,11 +896,11 @@
                         <div style="color: #4CAF50; font-size: 12px;">✓ Listo para nueva aventura</div>
                     `;
                 }
-                
+
                 slotDiv.onclick = () => startNewGame(i);
                 container.appendChild(slotDiv);
             }
-            
+
             document.getElementById('save-menu').style.display = 'block';
         }
 
@@ -847,7 +909,7 @@
             currentSaveSlot = slot;
             document.getElementById('save-menu').style.display = 'none';
             document.getElementById('main-menu').style.display = 'none';
-            
+
             if (!gameStarted) {
                 init();
                 gameStarted = true;
@@ -859,7 +921,7 @@
                 achievements = []; playerStats = { totalDistance: 0, totalJumps: 0, totalAttacks: 0 };
                 if (player) player.position.set(0, 0, 0);
             }
-            
+
             gameActive = true;
             gamePaused = false;
             updateUI();
@@ -1138,7 +1200,7 @@
                 case 'strong':
                     color = 0x660000;
                     health = 60;
-                    speed = 2.5;
+                    speed = 2;
                     damage = 15;
                     size = 1.2;
                     xpReward = 40;
@@ -1147,7 +1209,7 @@
                 case 'elite':
                     color = 0x330000;
                     health = 100;
-                    speed = 4;
+                    speed = 1.5;
                     damage = 25;
                     size = 1.5;
                     xpReward = 75;
@@ -1156,30 +1218,82 @@
                 default: // basic
                     color = 0x990000;
                     health = 30;
-                    speed = 3;
+                    speed = 2.5;
                     damage = 10;
                     size = 1;
                     xpReward = 25;
                     scoreReward = 100;
             }
 
-            // Cuerpo
+            // Cuerpo principal
             const body = new THREE.Mesh(
-                new THREE.BoxGeometry(0.8 * size, 1.6 * size, 0.4 * size),
+                new THREE.CylinderGeometry(0.4 * size, 0.6 * size, 1.8 * size, 8),
                 new THREE.MeshLambertMaterial({ color })
             );
-            body.position.y = 0.8 * size;
+            body.position.y = 0.9 * size;
             body.castShadow = true;
             enemy.add(body);
 
-            // Cabeza
+            // Cabeza esférica
             const head = new THREE.Mesh(
-                new THREE.BoxGeometry(0.6 * size, 0.6 * size, 0.6 * size),
-                new THREE.MeshLambertMaterial({ color })
+                new THREE.SphereGeometry(0.5 * size, 12, 12),
+                new THREE.MeshLambertMaterial({ color: color + 0x111111 })
             );
-            head.position.y = 1.9 * size;
+            head.position.y = 2.2 * size;
             head.castShadow = true;
             enemy.add(head);
+
+            // Ojos rojos brillantes
+            const eyeGeometry = new THREE.SphereGeometry(0.08 * size, 6, 6);
+            const eyeMaterial = new THREE.MeshLambertMaterial({ color: 0xff0000, emissive: 0x440000 });
+            
+            const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+            leftEye.position.set(-0.2 * size, 2.3 * size, 0.4 * size);
+            enemy.add(leftEye);
+            
+            const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+            rightEye.position.set(0.2 * size, 2.3 * size, 0.4 * size);
+            enemy.add(rightEye);
+
+            // Brazos
+            const armGeometry = new THREE.CylinderGeometry(0.15 * size, 0.2 * size, 1.2 * size, 6);
+            const armMaterial = new THREE.MeshLambertMaterial({ color: color - 0x222222 });
+            
+            const leftArm = new THREE.Mesh(armGeometry, armMaterial);
+            leftArm.position.set(-0.8 * size, 1.2 * size, 0);
+            leftArm.rotation.z = 0.3;
+            leftArm.castShadow = true;
+            enemy.add(leftArm);
+            
+            const rightArm = new THREE.Mesh(armGeometry, armMaterial);
+            rightArm.position.set(0.8 * size, 1.2 * size, 0);
+            rightArm.rotation.z = -0.3;
+            rightArm.castShadow = true;
+            enemy.add(rightArm);
+
+            // Piernas
+            const legGeometry = new THREE.CylinderGeometry(0.2 * size, 0.25 * size, 1 * size, 6);
+            const legMaterial = new THREE.MeshLambertMaterial({ color: color - 0x111111 });
+            
+            const leftLeg = new THREE.Mesh(legGeometry, legMaterial);
+            leftLeg.position.set(-0.3 * size, 0.5 * size, 0);
+            leftLeg.castShadow = true;
+            enemy.add(leftLeg);
+            
+            const rightLeg = new THREE.Mesh(legGeometry, legMaterial);
+            rightLeg.position.set(0.3 * size, 0.5 * size, 0);
+            rightLeg.castShadow = true;
+            enemy.add(rightLeg);
+
+            // Arma según tipo
+            if (type === 'strong' || type === 'elite') {
+                const weaponGeometry = new THREE.BoxGeometry(0.1 * size, 1.5 * size, 0.1 * size);
+                const weaponMaterial = new THREE.MeshLambertMaterial({ color: 0x666666 });
+                const weapon = new THREE.Mesh(weaponGeometry, weaponMaterial);
+                weapon.position.set(1.2 * size, 1.5 * size, 0);
+                weapon.castShadow = true;
+                enemy.add(weapon);
+            }
 
             // Posición aleatoria
             const angle = Math.random() * Math.PI * 2;
@@ -1196,11 +1310,19 @@
                 maxHealth: health,
                 speed,
                 damage,
-                attackRange: 2,
+                attackRange: 3,
                 attackCooldown: 0,
                 xpReward,
                 scoreReward,
-                parts: { body, head }
+                lastPlayerPosition: new THREE.Vector3(),
+                searchTime: 0,
+                state: 'patrol',
+                patrolTarget: new THREE.Vector3(
+                    enemy.position.x + (Math.random() - 0.5) * 20,
+                    0,
+                    enemy.position.z + (Math.random() - 0.5) * 20
+                ),
+                parts: { body, head, leftEye, rightEye, leftArm, rightArm, leftLeg, rightLeg }
             };
 
             enemies.push(enemy);
@@ -1306,6 +1428,11 @@
             }
         }
 
+        // Variables para control de cámara móvil
+        let cameraRotation = { x: 0, y: 0 };
+        let isDraggingCamera = false;
+        let lastTouchX = 0, lastTouchY = 0;
+
         // Configurar controles
         function setupControls() {
             document.addEventListener('keydown', (e) => {
@@ -1335,6 +1462,11 @@
 
             document.addEventListener('contextmenu', (e) => e.preventDefault());
 
+            // Controles de cámara táctil para móvil
+            if (isMobile) {
+                setupMobileCameraControls();
+            }
+
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
@@ -1342,8 +1474,117 @@
             });
         }
 
-        // Controles móviles mejorados
+        // Configurar controles de cámara para móvil - MEJORADO
+        function setupMobileCameraControls() {
+            document.addEventListener('touchstart', (e) => {
+                // Solo activar rotación de cámara si no se toca un control
+                if (e.touches.length === 1 && !e.target.closest('#mobile-controls') && !e.target.closest('#mobile-pause')) {
+                    isDraggingCamera = true;
+                    lastTouchX = e.touches[0].clientX;
+                    lastTouchY = e.touches[0].clientY;
+                    e.preventDefault();
+                }
+            });
+
+            document.addEventListener('touchmove', (e) => {
+                if (isDraggingCamera && e.touches.length === 1 && gameActive && !gamePaused) {
+                    const deltaX = e.touches[0].clientX - lastTouchX;
+                    const deltaY = e.touches[0].clientY - lastTouchY;
+
+                    // Sensibilidad mejorada para rotación de cámara
+                    const sensitivity = 0.008;
+                    cameraRotation.y -= deltaX * sensitivity; // Invertido para que sea más natural
+                    cameraRotation.x -= deltaY * sensitivity; // Invertido para que sea más natural
+
+                    // Limitar rotación vertical para evitar que se voltee
+                    cameraRotation.x = Math.max(-Math.PI / 2.5, Math.min(Math.PI / 2.5, cameraRotation.x));
+
+                    // Normalizar rotación horizontal
+                    if (cameraRotation.y > Math.PI) cameraRotation.y -= Math.PI * 2;
+                    if (cameraRotation.y < -Math.PI) cameraRotation.y += Math.PI * 2;
+
+                    lastTouchX = e.touches[0].clientX;
+                    lastTouchY = e.touches[0].clientY;
+                    e.preventDefault();
+                }
+            });
+
+            document.addEventListener('touchend', (e) => {
+                if (isDraggingCamera) {
+                    isDraggingCamera = false;
+                    // Pequeña vibración para confirmar que se soltó la cámara
+                    if (navigator.vibrate && mobileSettings.hapticFeedback) {
+                        navigator.vibrate(20);
+                    }
+                }
+            });
+
+            // Prevenir scroll en iOS/Android cuando se arrastra la cámara
+            document.addEventListener('touchmove', (e) => {
+                if (isDraggingCamera) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+        }
+
+        // Controles móviles mejorados con posición horizontal
         function setupMobileControls() {
+            // Reposicionar controles para modo horizontal - separar del joystick
+            const mobileControls = document.getElementById('mobile-controls');
+            if (window.innerWidth > window.innerHeight) {
+                // Modo horizontal - joystick a la izquierda, botones a la derecha
+                mobileControls.style.left = '20px';
+                mobileControls.style.right = 'auto';
+                mobileControls.style.bottom = '20px';
+
+                // Reposicionar botones más a la derecha para separarlos del joystick
+                const buttons = mobileControls.querySelectorAll('button');
+                buttons.forEach((button, index) => {
+                    if (button.id === 'mobile-attack') {
+                        button.style.left = '200px'; // Más separado
+                        button.style.bottom = '0';
+                    } else if (button.id === 'mobile-jump') {
+                        button.style.left = '200px';
+                        button.style.bottom = '70px';
+                    } else if (button.id === 'mobile-potion') {
+                        button.style.left = '270px';
+                        button.style.bottom = '0';
+                    } else if (button.id === 'mobile-inventory') {
+                        button.style.left = '270px';
+                        button.style.bottom = '60px';
+                    } else if (button.id === 'mobile-camera') {
+                        button.style.left = '270px';
+                        button.style.bottom = '120px';
+                    }
+                });
+            } else {
+                // Modo vertical - posición original
+                mobileControls.style.left = '20px';
+                mobileControls.style.right = 'auto';
+                mobileControls.style.bottom = '20px';
+
+                // Restaurar posiciones originales en vertical
+                const buttons = mobileControls.querySelectorAll('button');
+                buttons.forEach((button) => {
+                    if (button.id === 'mobile-attack') {
+                        button.style.left = '120px';
+                        button.style.bottom = '0';
+                    } else if (button.id === 'mobile-jump') {
+                        button.style.left = '120px';
+                        button.style.bottom = '70px';
+                    } else if (button.id === 'mobile-potion') {
+                        button.style.left = '190px';
+                        button.style.bottom = '0';
+                    } else if (button.id === 'mobile-inventory') {
+                        button.style.left = '190px';
+                        button.style.bottom = '60px';
+                    } else if (button.id === 'mobile-camera') {
+                        button.style.left = '190px';
+                        button.style.bottom = '120px';
+                    }
+                });
+            }
+
             const joystick = document.getElementById('joystick');
             const knob = document.getElementById('joystick-knob');
             let isDragging = false;
@@ -1404,6 +1645,20 @@
                         break;
                     }
                 }
+            });
+
+            // Reposicionar en cambio de orientación
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    setupMobileControls(); // Reconfigurar completamente los controles
+                }, 100);
+            });
+
+            // También reconfigurar en resize
+            window.addEventListener('resize', () => {
+                setTimeout(() => {
+                    setupMobileControls();
+                }, 100);
             });
 
             // Botones mejorados con feedback haptico
@@ -1567,18 +1822,59 @@
                 case 'first':
                     camera.position.copy(player.position);
                     camera.position.y += 1.8;
-                    const forward = new THREE.Vector3(0, 0, -1);
-                    forward.applyQuaternion(player.quaternion);
-                    camera.lookAt(player.position.clone().add(forward));
+                    if (isMobile) {
+                        // Cámara primera persona con rotación táctil mejorada
+                        const euler = new THREE.Euler(cameraRotation.x, cameraRotation.y + player.rotation.y, 0, 'YXZ');
+                        camera.setRotationFromEuler(euler);
+                    } else {
+                        const forward = new THREE.Vector3(0, 0, -1);
+                        forward.applyQuaternion(player.quaternion);
+                        camera.lookAt(player.position.clone().add(forward));
+                    }
                     break;
                 case 'free':
-                    // Cámara libre controlada por mouse
+                    if (isMobile) {
+                        // Cámara libre con rotación táctil mejorada
+                        const radius = 15;
+                        const x = Math.sin(cameraRotation.y) * Math.cos(cameraRotation.x) * radius;
+                        const y = Math.sin(cameraRotation.x) * radius + 8;
+                        const z = Math.cos(cameraRotation.y) * Math.cos(cameraRotation.x) * radius;
+
+                        camera.position.set(
+                            player.position.x + x,
+                            player.position.y + y,
+                            player.position.z + z
+                        );
+                        camera.lookAt(player.position.x, player.position.y + 2, player.position.z);
+                    } else {
+                        // Cámara libre para PC (sin cambios)
+                        const cameraOffset = new THREE.Vector3(0, 15, 15);
+                        const desiredPosition = player.position.clone().add(cameraOffset);
+                        camera.position.lerp(desiredPosition, delta * 3);
+                        camera.lookAt(player.position.x, player.position.y + 2, player.position.z);
+                    }
                     break;
                 default: // third person
-                    const cameraOffset = new THREE.Vector3(0, 8, 12);
-                    const desiredPosition = player.position.clone().add(cameraOffset);
-                    camera.position.lerp(desiredPosition, delta * 5);
-                    camera.lookAt(player.position.x, player.position.y + 2, player.position.z);
+                    if (isMobile) {
+                        // Tercera persona con rotación táctil completamente funcional
+                        const radius = 12;
+                        const height = 8;
+                        const x = Math.sin(cameraRotation.y) * radius;
+                        const y = height + Math.sin(cameraRotation.x) * 5;
+                        const z = Math.cos(cameraRotation.y) * radius;
+
+                        camera.position.set(
+                            player.position.x + x,
+                            player.position.y + y,
+                            player.position.z + z
+                        );
+                        camera.lookAt(player.position.x, player.position.y + 2, player.position.z);
+                    } else {
+                        const cameraOffset = new THREE.Vector3(0, 8, 12);
+                        const desiredPosition = player.position.clone().add(cameraOffset);
+                        camera.position.lerp(desiredPosition, delta * 5);
+                        camera.lookAt(player.position.x, player.position.y + 2, player.position.z);
+                    }
             }
 
             // Animación de ataque
@@ -1689,31 +1985,82 @@
             }
         }
 
-        // Actualizar enemigos
+        // Actualizar enemigos con IA mejorada
         function updateEnemies(delta) {
             enemies.forEach(enemy => {
                 const userData = enemy.userData;
                 const distance = player.position.distanceTo(enemy.position);
+                const time = Date.now() * 0.003;
 
-                if (distance < 15) {
-                    // Perseguir jugador
-                    const direction = new THREE.Vector3()
-                        .subVectors(player.position, enemy.position)
-                        .normalize();
+                // Estados de IA
+                if (distance < 20) {
+                    userData.state = 'chase';
+                    userData.lastPlayerPosition.copy(player.position);
+                    userData.searchTime = 0;
+                } else if (userData.state === 'chase' && distance > 25) {
+                    userData.state = 'search';
+                    userData.searchTime = 3; // Buscar por 3 segundos
+                } else if (userData.state === 'search') {
+                    userData.searchTime -= delta;
+                    if (userData.searchTime <= 0) {
+                        userData.state = 'patrol';
+                        // Nuevo punto de patrulla
+                        userData.patrolTarget.set(
+                            enemy.position.x + (Math.random() - 0.5) * 30,
+                            0,
+                            enemy.position.z + (Math.random() - 0.5) * 30
+                        );
+                    }
+                }
 
-                    enemy.position.add(direction.multiplyScalar(userData.speed * delta));
-                    enemy.lookAt(player.position);
-
-                    // Atacar si está cerca
-                    if (distance < userData.attackRange && userData.attackCooldown <= 0) {
-                        playerHealth -= userData.damage;
-                        userData.attackCooldown = 1.5;
-                        updateUI();
-                        showNotification(`-${userData.damage} HP`, 800);
-
-                        if (playerHealth <= 0) {
-                            gameOver();
+                let targetPosition;
+                switch (userData.state) {
+                    case 'chase':
+                        targetPosition = player.position;
+                        break;
+                    case 'search':
+                        targetPosition = userData.lastPlayerPosition;
+                        break;
+                    case 'patrol':
+                        targetPosition = userData.patrolTarget;
+                        if (enemy.position.distanceTo(userData.patrolTarget) < 2) {
+                            userData.patrolTarget.set(
+                                enemy.position.x + (Math.random() - 0.5) * 30,
+                                0,
+                                enemy.position.z + (Math.random() - 0.5) * 30
+                            );
                         }
+                        break;
+                }
+
+                // Movimiento hacia objetivo
+                const direction = new THREE.Vector3()
+                    .subVectors(targetPosition, enemy.position)
+                    .normalize();
+                
+                const moveSpeed = userData.state === 'chase' ? userData.speed : userData.speed * 0.5;
+                enemy.position.add(direction.multiplyScalar(moveSpeed * delta));
+                enemy.lookAt(targetPosition);
+
+                // Atacar si está persiguiendo y cerca
+                if (userData.state === 'chase' && distance < userData.attackRange && userData.attackCooldown <= 0) {
+                    playerHealth -= userData.damage;
+                    userData.attackCooldown = 2;
+                    updateUI();
+                    showNotification(`-${userData.damage} HP`, 800);
+                    
+                    // Vibración y notificación en móvil
+                    if (isMobile && navigator.vibrate && mobileSettings.hapticFeedback) {
+                        navigator.vibrate([100, 50, 100]); // Patrón de vibración
+                    }
+                    
+                    // Notificación de Android si la app está en segundo plano
+                    if (document.hidden) {
+                        showAndroidNotification('¡Pepe bajo ataque!', `Enemigo ${userData.type} te atacó por ${userData.damage} HP`);
+                    }
+
+                    if (playerHealth <= 0) {
+                        gameOver();
                     }
                 }
 
@@ -1721,9 +2068,29 @@
                     userData.attackCooldown -= delta;
                 }
 
-                // Animación simple
-                const time = Date.now() * 0.003;
-                userData.parts.body.rotation.z = Math.sin(time) * 0.1;
+                // Animaciones mejoradas
+                if (userData.state === 'chase') {
+                    // Animación agresiva
+                    userData.parts.leftArm.rotation.x = Math.sin(time * 2) * 0.8;
+                    userData.parts.rightArm.rotation.x = Math.sin(time * 2 + Math.PI) * 0.8;
+                    userData.parts.leftLeg.rotation.x = Math.sin(time * 3) * 0.6;
+                    userData.parts.rightLeg.rotation.x = Math.sin(time * 3 + Math.PI) * 0.6;
+                    userData.parts.body.rotation.z = Math.sin(time * 4) * 0.2;
+                } else {
+                    // Animación calmada
+                    userData.parts.leftArm.rotation.x = Math.sin(time) * 0.3;
+                    userData.parts.rightArm.rotation.x = Math.sin(time + Math.PI) * 0.3;
+                    userData.parts.leftLeg.rotation.x = Math.sin(time * 1.5) * 0.4;
+                    userData.parts.rightLeg.rotation.x = Math.sin(time * 1.5 + Math.PI) * 0.4;
+                    userData.parts.body.rotation.z = Math.sin(time) * 0.1;
+                }
+
+                // Ojos brillantes cuando persigue
+                if (userData.parts.leftEye && userData.parts.rightEye) {
+                    const intensity = userData.state === 'chase' ? 0.8 : 0.2;
+                    userData.parts.leftEye.material.emissive.setHex(userData.state === 'chase' ? 0x880000 : 0x440000);
+                    userData.parts.rightEye.material.emissive.setHex(userData.state === 'chase' ? 0x880000 : 0x440000);
+                }
             });
         }
 
@@ -1888,7 +2255,26 @@
             const modes = ['third', 'first', 'free'];
             const currentIndex = modes.indexOf(cameraMode);
             cameraMode = modes[(currentIndex + 1) % modes.length];
-            showNotification(`Modo de cámara: ${cameraMode === 'third' ? '3ª Persona' : cameraMode === 'first' ? '1ª Persona' : 'Libre'}`, 1500);
+
+            // Resetear rotación de cámara al cambiar modo para mejor experiencia
+            if (isMobile) {
+                cameraRotation = { x: 0, y: 0 };
+            }
+
+            const modeNames = {
+                'third': '3ª Persona - Desliza para rotar cámara',
+                'first': '1ª Persona - Desliza para mirar alrededor',
+                'free': 'Cámara Libre - Desliza para orbitar'
+            };
+
+            showNotification(`📷 ${modeNames[cameraMode]}`, 3000);
+
+            // Mostrar hint adicional para móvil
+            if (isMobile) {
+                setTimeout(() => {
+                    showNotification('💡 Desliza fuera de los controles para rotar la cámara', 2000);
+                }, 3500);
+            }
         }
 
         function block() {
@@ -2481,7 +2867,7 @@
         // Cambiar dificultad
         function changeDifficulty(level) {
             settings.difficulty = level;
-            switch(level) {
+            switch (level) {
                 case 'easy':
                     config.playerSpeed = 10;
                     if (player) playerHealth = Math.min(150, playerHealth + 50);
@@ -2523,13 +2909,13 @@
         function updateSaveSlots() {
             const container = document.getElementById('save-slots');
             container.innerHTML = '<h4>Partidas Guardadas:</h4>';
-            
+
             for (let i = 0; i < 3; i++) {
                 const saved = localStorage.getItem(`pepequest_slot_${i}`);
                 const slotDiv = document.createElement('div');
                 const isCurrentSlot = i === currentSaveSlot;
                 slotDiv.style.cssText = `margin: 10px 0; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 5px; ${isCurrentSlot ? 'border: 2px solid #4CAF50;' : ''}`;
-                
+
                 if (saved) {
                     const data = JSON.parse(saved);
                     const date = new Date(data.timestamp).toLocaleString();
@@ -2566,7 +2952,7 @@
         function loadSlot(slot) {
             const saved = localStorage.getItem(`pepequest_slot_${slot}`);
             if (!saved) return;
-            
+
             try {
                 const data = JSON.parse(saved);
                 currentSaveSlot = slot;
@@ -2580,7 +2966,7 @@
                 achievements = data.achievements || [];
                 gameTime = data.gameTime || 0;
                 playerStats = data.playerStats || playerStats;
-                
+
                 if (!gameStarted) {
                     init();
                     gameStarted = true;
@@ -2592,7 +2978,7 @@
                 } else if (data.position && player) {
                     player.position.set(data.position.x, data.position.y, data.position.z);
                 }
-                
+
                 gameActive = true;
                 gamePaused = false;
                 document.getElementById('main-menu').style.display = 'none';
@@ -2600,7 +2986,7 @@
                 updateInventoryUI();
                 showNotification(`Cargado Slot ${slot + 1}`, 2000);
                 document.getElementById('save-menu').style.display = 'none';
-            } catch(e) {
+            } catch (e) {
                 showNotification('Error al cargar', 2000);
             }
         }
@@ -2615,7 +3001,7 @@
             if (!isMobile) return;
             const mobileControls = document.getElementById('mobile-controls');
             if (!mobileControls) return;
-            
+
             const saveBtn = document.createElement('button');
             saveBtn.innerHTML = '💾';
             saveBtn.style.cssText = 'position: absolute; right: -260px; bottom: 0; width: 50px; height: 50px; background: #673AB7; color: white; border: none; border-radius: 50%; font-size: 16px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: all 0.1s;';
@@ -2632,6 +3018,176 @@
 
         // Auto-guardado cada 30 segundos
         setInterval(autoSave, 30000);
+
+        // Funciones específicas para Android
+        function addAndroidQuickSettings() {
+            const quickBtn = document.createElement('button');
+            quickBtn.innerHTML = '⚙️';
+            quickBtn.style.cssText = 'position: fixed; top: 80px; right: 20px; width: 50px; height: 50px; background: rgba(0,0,0,0.7); color: white; border: 2px solid white; border-radius: 50%; font-size: 20px; z-index: 102; display: none;';
+            quickBtn.onclick = () => {
+                const menu = document.getElementById('settings-menu');
+                menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            };
+            document.body.appendChild(quickBtn);
+            
+            if (isMobile) quickBtn.style.display = 'block';
+        }
+        
+        function setupAndroidGestures() {
+            let swipeStartX = 0, swipeStartY = 0;
+            
+            document.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    swipeStartX = e.touches[0].clientX;
+                    swipeStartY = e.touches[0].clientY;
+                }
+            });
+            
+            document.addEventListener('touchend', (e) => {
+                if (e.changedTouches.length === 2) {
+                    const deltaX = e.changedTouches[0].clientX - swipeStartX;
+                    const deltaY = e.changedTouches[0].clientY - swipeStartY;
+                    
+                    // Gesto hacia arriba con 2 dedos = inventario
+                    if (deltaY < -100 && Math.abs(deltaX) < 50) {
+                        toggleInventory();
+                    }
+                    // Gesto hacia abajo con 2 dedos = pausa
+                    else if (deltaY > 100 && Math.abs(deltaX) < 50) {
+                        togglePause();
+                    }
+                }
+            });
+        }
+        
+        function setupAndroidNotifications() {
+            // Solicitar permisos de notificación
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+        }
+        
+        function showAndroidNotification(title, message) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(title, {
+                    body: message,
+                    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%234CAF50"/></svg>',
+                    badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%234CAF50"/></svg>'
+                });
+            }
+        }
+        
+        // Configuraciones específicas por plataforma móvil
+        function setupIOSSpecific() {
+            // Prevenir bounce en iOS
+            document.body.style.overscrollBehavior = 'none';
+            
+            // Configurar viewport para iOS
+            const viewport = document.querySelector('meta[name=viewport]');
+            if (viewport) {
+                viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover';
+            }
+            
+            // Configuraciones específicas de iOS
+            addMobileFeatures('iOS');
+        }
+        
+        function setupWindowsPhoneSpecific() {
+            // Configuraciones para Windows Phone
+            document.body.style.msContentZooming = 'none';
+            document.body.style.msTouchAction = 'manipulation';
+            
+            addMobileFeatures('Windows Phone');
+        }
+        
+        function setupGenericMobileSpecific() {
+            // Configuraciones para otros móviles
+            addMobileFeatures('Mobile');
+        }
+        
+        // Mejoras universales para todos los móviles
+        function addMobileFeatures(platform = 'Mobile') {
+            // Botón de ayuda rápida (universal)
+            const helpBtn = document.createElement('button');
+            helpBtn.innerHTML = '?';
+            helpBtn.style.cssText = 'position: fixed; bottom: 20px; right: 80px; width: 50px; height: 50px; background: #2196F3; color: white; border: none; border-radius: 50%; font-size: 20px; z-index: 102; display: block;';
+            helpBtn.onclick = () => {
+                const helpText = platform === 'iOS' ? 
+                    '📱 Desliza para rotar cámara\n👆 2 dedos arriba = Inventario\n👇 2 dedos abajo = Pausa\n🍎 Optimizado para iOS' :
+                    platform === 'Windows Phone' ?
+                    '📱 Desliza para rotar cámara\n👆 2 dedos arriba = Inventario\n👇 2 dedos abajo = Pausa\n🪟 Optimizado para Windows Phone' :
+                    '📱 Desliza para rotar cámara\n👆 2 dedos arriba = Inventario\n👇 2 dedos abajo = Pausa';
+                showNotification(helpText, 4000);
+            };
+            document.body.appendChild(helpBtn);
+            
+            // Modo de ahorro de batería (universal)
+            if ('getBattery' in navigator) {
+                navigator.getBattery().then(battery => {
+                    if (battery.level < 0.2) {
+                        settings.shadows = 'off';
+                        config.playerSpeed *= 0.8;
+                        showNotification(`🔋 Modo ahorro activado (${platform})`, 3000);
+                    }
+                }).catch(() => {
+                    // Fallback si no hay API de batería
+                    console.log('Battery API no disponible en', platform);
+                });
+            }
+            
+            // Configuración de gestos (universal)
+            setupMobileGestures();
+            
+            // Configuración de notificaciones (universal)
+            setupMobileNotifications();
+        }
+        
+        // Renombrar funciones para ser universales
+        function setupMobileGestures() {
+            let swipeStartX = 0, swipeStartY = 0;
+            
+            document.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    swipeStartX = e.touches[0].clientX;
+                    swipeStartY = e.touches[0].clientY;
+                }
+            });
+            
+            document.addEventListener('touchend', (e) => {
+                if (e.changedTouches.length === 2) {
+                    const deltaX = e.changedTouches[0].clientX - swipeStartX;
+                    const deltaY = e.changedTouches[0].clientY - swipeStartY;
+                    
+                    // Gesto hacia arriba con 2 dedos = inventario
+                    if (deltaY < -100 && Math.abs(deltaX) < 50) {
+                        toggleInventory();
+                        if (navigator.vibrate && mobileSettings.hapticFeedback) navigator.vibrate(50);
+                    }
+                    // Gesto hacia abajo con 2 dedos = pausa
+                    else if (deltaY > 100 && Math.abs(deltaX) < 50) {
+                        togglePause();
+                        if (navigator.vibrate && mobileSettings.hapticFeedback) navigator.vibrate(100);
+                    }
+                }
+            });
+        }
+        
+        function setupMobileNotifications() {
+            // Solicitar permisos de notificación (universal)
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+        }
+        
+        function showMobileNotification(title, message) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(title, {
+                    body: message,
+                    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%234CAF50"/></svg>',
+                    badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%234CAF50"/></svg>'
+                });
+            }
+        }
 
         // Inicializar cuando la página cargue
         window.addEventListener('load', () => {

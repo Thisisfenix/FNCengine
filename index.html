@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Friday Night Cooking 0.2.3</title>
+    <title>Friday Night Cooking 0.2.4</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -679,7 +679,34 @@
             <h2 class="text-center mb-4">Últimas Actualizaciones</h2>
             <div class="update-container">
                 <div class="update-item">
-                    <h4>Versión 0.2.3 <span class="badge bg-success ms-2">Nuevo</span></h4>
+                    <h4>Versión 0.2.4 <span class="badge bg-success ms-2">Nuevo</span></h4>
+                    <ul>
+                        <li><strong>🔥 HOTFIX - Pepe Quest Mobile:</strong>
+                            <ul>
+                                <li>📱 Controles móviles completamente rediseñados</li>
+                                <li>🎮 Rotación de cámara táctil arreglada (deslizar para rotar)</li>
+                                <li>🕹️ Controles separados del joystick en modo horizontal</li>
+                                <li>🤖 Optimizaciones específicas para Android, iOS y Windows Phone</li>
+                                <li>👹 Enemigos con modelos 3D mejorados y IA inteligente</li>
+                                <li>🧠 Sistema de estados: Patrulla → Persecución → Búsqueda</li>
+                                <li>👀 Ojos brillantes que se iluminan al perseguirte</li>
+                                <li>📳 Feedback háptico mejorado para móviles</li>
+                            </ul>
+                        </li>
+                        <li><strong>🎯 Mejoras universales móviles:</strong>
+                            <ul>
+                                <li>✋ Gestos de 2 dedos: Arriba=Inventario, Abajo=Pausa</li>
+                                <li>🔋 Modo ahorro de batería automático (<20%)</li>
+                                <li>📢 Notificaciones nativas por plataforma</li>
+                                <li>❓ Botón de ayuda con controles específicos</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <small class="text-muted">Publicado: 12/10/2025</small>
+                </div>
+                
+                <div class="update-item">
+                    <h4>Versión 0.2.3</h4>
                     <ul>
                         <li><strong>Nuevo juego añadido:</strong>
                             <ul>
@@ -1117,7 +1144,7 @@
                 </div>
 
                 <div class="mt-4">
-                    <h4 style="color: var(--color-menu);">FNC Engine 0.2.3</h4>
+                    <h4 style="color: var(--color-menu);">FNC Engine 0.2.4</h4>
                     <p class="mb-2" style="color: var(--color-texto);">© 2025 Todos los derechos reservados</p>
                     <small style="color: var(--color-texto); opacity: 0.8;">Desarrollado con ❤️ para la
                         comunidad</small>
@@ -1183,7 +1210,7 @@
     </main>
 
     <footer class="text-center py-3">
-        © FNC Engine 0.2.3 - Todos los derechos reservados
+        © FNC Engine 0.2.4 - Todos los derechos reservados
     </footer>
 
     <!-- Audio Elements -->
@@ -1232,17 +1259,17 @@
 
         function showUpdateNotification() {
             const lastVersion = localStorage.getItem('fncLastVersion');
-            if (lastVersion !== '0.2.3') {
+            if (lastVersion !== '0.2.4') {
                 showNotification(
-                    'Nueva versión 0.2.3 disponible',
+                    '🔥 HOTFIX 0.2.4 - Pepe Quest Mobile arreglado',
                     'info',
-                    'Haz clic para ver las novedades',
+                    'Controles móviles rediseñados + enemigos mejorados',
                     () => {
                         showPanel('panel-actualizacion');
                         unlockAchievement('achievement-updateChecker');
                     }
                 );
-                localStorage.setItem('fncLastVersion', '0.2.3');
+                localStorage.setItem('fncLastVersion', '0.2.4');
             }
         }
 
