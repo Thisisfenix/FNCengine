@@ -695,6 +695,17 @@
                 <div class="update-item">
                     <h4>Versión 0.2.4 <span class="badge bg-success ms-2">Nuevo</span></h4>
                     <ul>
+                        <li><strong>🎮 PEPE QUEST - Rework v1.0:</strong>
+                            <ul>
+                                <li>🌍 Mundo masivo con 5 reinos elementales</li>
+                                <li>⚔️ Sistema de combate completamente rediseñado</li>
+                                <li>👹 30+ enemigos con IA avanzada y 4 jefes épicos</li>
+                                <li>🌦️ Sistema de clima dinámico que afecta gameplay</li>
+                                <li>💬 NPCs con diálogos y sistema de comercio</li>
+                                <li>🎒 Inventario completo con armas, pociones y llaves</li>
+                                <li>💾 Sistema de guardado con 3 slots</li>
+                            </ul>
+                        </li>
                         <li><strong>🔥 HOTFIX - Pepe Quest Mobile:</strong>
                             <ul>
                                 <li>📱 Controles móviles completamente rediseñados</li>
@@ -710,7 +721,7 @@
                         <li><strong>🎯 Mejoras universales móviles:</strong>
                             <ul>
                                 <li>✋ Gestos de 2 dedos: Arriba=Inventario, Abajo=Pausa</li>
-                                <li>🔋 Modo ahorro de batería automático (<20%)</li>
+                                <li>🔋 Modo ahorro de batería automático (<20%)< /li>
                                 <li>📢 Notificaciones nativas por plataforma</li>
                                 <li>❓ Botón de ayuda con controles específicos</li>
                             </ul>
@@ -718,7 +729,7 @@
                     </ul>
                     <small class="text-muted">Publicado: 12/10/2025</small>
                 </div>
-                
+
                 <div class="update-item">
                     <h4>Versión 0.2.3</h4>
                     <ul>
@@ -1172,8 +1183,8 @@
 
             <div class="modos-juego">
                 <div class="modo-juego" id="modo-clasico">
-                    <h3>Pepe Quest ✅</h3>
-                    <p>¡Arreglado! Aventura épica con Pepe en un mundo lleno de desafíos y secretos por descubrir.</p>
+                    <h3>Pepe Quest v1.0 🆕</h3>
+                    <p>¡REWORK COMPLETO! Aventura épica con 5 reinos elementales, 30+ enemigos, 4 jefes finales, sistema de clima dinámico, NPCs con diálogos, misiones épicas y controles móviles optimizados. ¡La experiencia definitiva de Pepe!</p>
                     <button class="btn-cocina mt-2" id="btn-jugar-clasico">Jugar</button>
                 </div>
 
@@ -1186,7 +1197,7 @@
                 </div>
 
                 <div class="modo-juego" id="modo-desafio">
-                    <h3>Chef's Kitchen Frenzy 🆕</h3>
+                    <h3>Chef's Kitchen Frenzy </h3>
                     <p>¡REWORK! El clásico Circle Bounce ahora es un juego incremental de cocina. Controla una sartén
                         rebotante, desbloquea mejoras épicas y conviértete en el chef más famoso. Incluye modo música y
                         sistema de prestigio.</p>
@@ -1194,7 +1205,7 @@
                 </div>
 
                 <div class="modo-juego" id="modo-escape">
-                    <h3>Player Escape Minigames 🎮</h3>
+                    <h3>Player Escape Minigames 🎮🆕</h3>
                     <p>¡40 niveles de pura locura! Desde botones esquivos hasta matemáticas imposibles. ¿Podrás
                         completar todos los desafíos trolls y obtener tu recompensa final?</p>
                     <button class="btn-cocina mt-2" id="btn-jugar-escape">Jugar</button>
@@ -1275,9 +1286,9 @@
             const lastVersion = localStorage.getItem('fncLastVersion');
             if (lastVersion !== '0.2.4') {
                 showNotification(
-                    '🔥 HOTFIX 0.2.4 - Pepe Quest Mobile arreglado',
+                    '🎮 PEPE QUEST v1.0 - ¡REWORK COMPLETO!',
                     'info',
-                    'Controles móviles rediseñados + enemigos mejorados',
+                    '5 reinos, 30+ enemigos, jefes épicos, clima dinámico + controles móviles arreglados',
                     () => {
                         showPanel('panel-actualizacion');
                         unlockAchievement('achievement-updateChecker');
@@ -1744,7 +1755,7 @@
 
                 const savedSettings = localStorage.getItem('fncSettings');
                 console.log('Configuración cargada:', savedSettings);
-                
+
                 if (savedSettings) {
                     const settings = JSON.parse(savedSettings);
                     console.log('Configuración parseada:', settings);
