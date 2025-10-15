@@ -2090,45 +2090,51 @@
         let then = performance.now();
 
         function gameLoop() {
-            requestAnimationFrame(gameLoop);
+            try {
+                requestAnimationFrame(gameLoop);
 
-            const now = performance.now();
-            const elapsed = now - then;
+                const now = performance.now();
+                const elapsed = now - then;
 
-            // Control de FPS real
-            if (elapsed > fpsInterval) {
-                then = now - (elapsed % fpsInterval);
+                // Control de FPS real
+                if (elapsed > fpsInterval) {
+                    then = now - (elapsed % fpsInterval);
 
-                // Calcular FPS real
-                frameCount++;
-                if (now - lastFPSUpdate >= 1000) {
-                    currentFPS = Math.round(frameCount * 1000 / (now - lastFPSUpdate));
-                    frameCount = 0;
-                    lastFPSUpdate = now;
+                    // Calcular FPS real
+                    frameCount++;
+                    if (now - lastFPSUpdate >= 1000) {
+                        currentFPS = Math.round(frameCount * 1000 / (now - lastFPSUpdate));
+                        frameCount = 0;
+                        lastFPSUpdate = now;
 
-                    // Actualizar display de FPS
-                    const fpsDisplay = document.getElementById('fpsDisplay');
-                    if (fpsDisplay) {
-                        fpsDisplay.textContent = `FPS: ${currentFPS} / ${targetFPS}`;
+                        // Actualizar display de FPS
+                        const fpsDisplay = document.getElementById('fpsDisplay');
+                        if (fpsDisplay) {
+                            fpsDisplay.textContent = `FPS: ${currentFPS} / ${targetFPS}`;
+                        }
+
+                        // Actualizar stats panel
+                        const fpsCounter = document.getElementById('fpsCounter');
+                        if (fpsCounter) {
+                            fpsCounter.textContent = currentFPS;
+                        }
                     }
 
-                    // Actualizar stats panel
-                    const fpsCounter = document.getElementById('fpsCounter');
-                    if (fpsCounter) {
-                        fpsCounter.textContent = currentFPS;
+                    // Optimización automática
+                    if (elapsed > 33 && !batterySaverMode && particles.length > 20) {
+                        particles.splice(0, Math.floor(particles.length * 0.3));
+                    }
+
+                    if (!gamePaused) {
+                        update();
+                        updateMusicEffects();
+                        render();
                     }
                 }
-
-                // Optimización automática
-                if (elapsed > 33 && !batterySaverMode && particles.length > 20) {
-                    particles.splice(0, Math.floor(particles.length * 0.3));
-                }
-
-                if (!gamePaused) {
-                    update();
-                    updateMusicEffects();
-                    render();
-                }
+            } catch (error) {
+                console.error('Error in game loop:', error);
+                // Continue game loop even if there's an error
+                requestAnimationFrame(gameLoop);
             }
         }
 
@@ -2142,16 +2148,27 @@
         }
 
         function update() {
-            // Aplicar límite de velocidad
-            const currentSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
-            if (currentSpeed > ball.maxSpeed) {
-                const ratio = ball.maxSpeed / currentSpeed;
-                ball.dx *= ratio;
-                ball.dy *= ratio;
-            }
+            try {
+                // Resource management - limit objects
+                if (orbs.length > GAME_CONFIG.MAX_ORBS) {
+                    const removed = orbs.splice(0, orbs.length - GAME_CONFIG.MAX_ORBS);
+                    removed.forEach(returnOrbToPool);
+                }
+                if (particles.length > GAME_CONFIG.MAX_PARTICLES) {
+                    const removed = particles.splice(0, particles.length - GAME_CONFIG.MAX_PARTICLES);
+                    removed.forEach(returnParticleToPool);
+                }
 
-            ball.x += ball.dx * gameSpeed;
-            ball.y += ball.dy * gameSpeed;
+                // Aplicar límite de velocidad
+                const currentSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+                if (currentSpeed > ball.maxSpeed) {
+                    const ratio = ball.maxSpeed / currentSpeed;
+                    ball.dx *= ratio;
+                    ball.dy *= ratio;
+                }
+
+                ball.x += ball.dx * gameSpeed;
+                ball.y += ball.dy * gameSpeed;
 
             if (ball.x <= ball.radius) {
                 ball.x = ball.radius + 1;
@@ -2180,6 +2197,9 @@
             updateOrbEffects();
             updateAfkSystem();
             updateDailyChallenges();
+            } catch (error) {
+                console.error('Error in update function:', error);
+            }
         }
 
         function render() {
@@ -2477,31 +2497,19 @@
             }
 
             // Skip si hay demasiadas partículas
-            if (particles.length > 50) return;
+            if (particles.length > GAME_CONFIG.MAX_PARTICLES) return;
 
             for (let i = 0; i < count; i++) {
-                let particle;
-
-                if (particlePool.length > 0) {
-                    particle = particlePool.pop();
-                    particle.x = x;
-                    particle.y = y;
-                    particle.dx = (Math.random() - 0.5) * 10;
-                    particle.dy = (Math.random() - 0.5) * 10;
-                    particle.life = isMobile ? 500 : 1000;
-                    particle.maxLife = particle.life;
-                    particle.alpha = 1;
-                    particle.color = '#4CAF50';
-                } else {
-                    particle = {
-                        x: x, y: y,
-                        dx: (Math.random() - 0.5) * 10,
-                        dy: (Math.random() - 0.5) * 10,
-                        life: isMobile ? 500 : 1000,
-                        maxLife: isMobile ? 500 : 1000,
-                        alpha: 1, color: '#4CAF50'
-                    };
-                }
+                let particle = getPooledParticle();
+                
+                Object.assign(particle, {
+                    x: x, y: y,
+                    dx: (Math.random() - 0.5) * 10,
+                    dy: (Math.random() - 0.5) * 10,
+                    life: isMobile ? 500 : GAME_CONFIG.PARTICLE_LIFETIME,
+                    maxLife: isMobile ? 500 : GAME_CONFIG.PARTICLE_LIFETIME,
+                    alpha: 1, color: '#4CAF50'
+                });
 
                 particles.push(particle);
             }
@@ -2513,9 +2521,10 @@
         }
 
         function updateParticles() {
-            const maxParticles = isMobile ? 15 : (batterySaverMode ? 20 : (performanceMode ? 50 : 100));
+            const maxParticles = isMobile ? 15 : (batterySaverMode ? 20 : (performanceMode ? 50 : GAME_CONFIG.MAX_PARTICLES));
             if (particles.length > maxParticles) {
-                particles.splice(0, particles.length - maxParticles);
+                const removed = particles.splice(0, particles.length - maxParticles);
+                removed.forEach(returnParticleToPool);
             }
 
             const step = isMobile ? 2 : 1; // Skip frames en móvil
@@ -2529,7 +2538,7 @@
                 particle.alpha = particle.life / particle.maxLife;
 
                 if (particle.life <= 0) {
-                    particlePool.push(particles.splice(i, 1)[0]);
+                    returnParticleToPool(particles.splice(i, 1)[0]);
                 }
             }
         }
@@ -3310,7 +3319,7 @@
         let lastFrameTime = 0;
         let lastFPSUpdate = performance.now();
         let currentFPS = 60;
-        let particlePool = [];
+
         let batterySaverMode = false;
         let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         let isLowEndDevice = navigator.hardwareConcurrency <= 2 || navigator.deviceMemory <= 2;
@@ -6904,19 +6913,59 @@
             resetAfkTimer();
         }
 
+        // Game Constants
+        const GAME_CONFIG = {
+            BALL_SPEED: 2,
+            BALL_RADIUS: 10,
+            ORB_LIFETIME: 15000,
+            PARTICLE_LIFETIME: 2000,
+            AFK_TIMEOUT: 300000,
+            MAX_ORBS: 50,
+            MAX_PARTICLES: 100,
+            CANVAS_WIDTH: 800,
+            CANVAS_HEIGHT: 600
+        };
+
+        // Object Pools for Performance
+        const orbPool = [];
+        const particlePool = [];
+        
+        function getPooledOrb() {
+            return orbPool.pop() || {};
+        }
+        
+        function returnOrbToPool(orb) {
+            if (orbPool.length < 20) orbPool.push(orb);
+        }
+        
+        function getPooledParticle() {
+            return particlePool.pop() || {};
+        }
+        
+        function returnParticleToPool(particle) {
+            if (particlePool.length < 50) particlePool.push(particle);
+        }
+
         function redeemCode() {
-            const codeInput = document.getElementById('codeInput');
-            const code = codeInput.value.trim().toUpperCase();
-            
-            if (!code) {
-                showNotification('⚠️ Ingresa un código');
-                return;
-            }
-            
-            if (redeemedCodes.includes(code)) {
-                showNotification('⚠️ Código ya canjeado');
-                return;
-            }
+            try {
+                const codeInput = document.getElementById('codeInput');
+                if (!codeInput) {
+                    console.warn('Code input element not found');
+                    return;
+                }
+                
+                const code = codeInput.value.trim().toUpperCase();
+                
+                // Input validation
+                if (!code || code.length > 20) {
+                    showNotification('⚠️ Ingresa un código válido');
+                    return;
+                }
+                
+                if (redeemedCodes.includes(code)) {
+                    showNotification('⚠️ Código ya canjeado');
+                    return;
+                }
             
             const codes = {
                 'WELCOME2': { coins: 1000, diamonds: 5, message: 'Pack de bienvenida beta' },
@@ -6975,27 +7024,221 @@
             } else {
                 showNotification('❌ Código inválido');
             }
+            } catch (error) {
+                console.warn('Error redeeming code:', error);
+                showNotification('❌ Error procesando código');
+            }
         }
 
         function spawnSpecialOrb(type) {
-            const specialOrb = orbTypes.find(orb => orb.id === type);
-            if (specialOrb) {
-                orbs.push({
-                    x: Math.random() * (width - 100) + 50,
-                    y: Math.random() * (height - 100) + 50,
-                    radius: 20,
-                    type: specialOrb,
-                    alpha: 1,
-                    life: 15000,
-                    maxLife: 15000,
-                    pulsePhase: 0,
-                    musical: false
-                });
+            try {
+                const specialOrb = orbTypes.find(orb => orb.id === type);
+                if (specialOrb && orbs.length < GAME_CONFIG.MAX_ORBS) {
+                    const orb = getPooledOrb();
+                    Object.assign(orb, {
+                        x: Math.random() * (width - 100) + 50,
+                        y: Math.random() * (height - 100) + 50,
+                        radius: 20,
+                        type: specialOrb,
+                        alpha: 1,
+                        life: GAME_CONFIG.ORB_LIFETIME,
+                        maxLife: GAME_CONFIG.ORB_LIFETIME,
+                        pulsePhase: 0,
+                        musical: false
+                    });
+                    orbs.push(orb);
+                }
+            } catch (error) {
+                console.warn('Error spawning special orb:', error);
             }
         }
         
-        // Initialize everything
-        window.addEventListener('load', init);
+        // Función mejorada para cargar archivos de música
+        function loadMusicFile(file) {
+            if (!file) return;
+            
+            // Limpiar audio anterior de forma segura
+            if (audioSource) {
+                audioSource.pause();
+                audioSource.currentTime = 0;
+                if (audioSource.src && audioSource.src.startsWith('blob:')) {
+                    try {
+                        URL.revokeObjectURL(audioSource.src);
+                    } catch (e) {
+                        console.warn('Error revocando URL:', e);
+                    }
+                }
+                // Remover event listeners
+                audioSource.onloadedmetadata = null;
+                audioSource.ontimeupdate = null;
+                audioSource.onended = null;
+                audioSource.onerror = null;
+            }
+            
+            // Verificar tipo de archivo
+            const validTypes = ['audio/mp3', 'audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/m4a'];
+            const validExtensions = /\.(mp3|wav|ogg|m4a)$/i;
+            
+            if (!validTypes.includes(file.type) && !file.name.match(validExtensions)) {
+                console.warn('Formato de audio no soportado:', file.type, file.name);
+                return;
+            }
+            
+            try {
+                // Crear nuevo elemento de audio
+                audioSource = new Audio();
+                
+                // Crear URL del archivo de forma segura
+                const url = URL.createObjectURL(file);
+                audioSource.src = url;
+                
+                // Configurar eventos con manejo de errores mejorado
+                audioSource.onloadedmetadata = function() {
+                    try {
+                        const duration = this.duration || 0;
+                        const minutes = Math.floor(duration / 60);
+                        const seconds = Math.floor(duration % 60);
+                        const infoEl = document.getElementById('musicInfo');
+                        if (infoEl) {
+                            infoEl.textContent = `${file.name} - ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                        }
+                    } catch (e) {
+                        console.warn('Error actualizando info de música:', e);
+                    }
+                };
+                
+                audioSource.ontimeupdate = function() {
+                    try {
+                        updateMusicProgress();
+                    } catch (e) {
+                        console.warn('Error actualizando progreso:', e);
+                    }
+                };
+                
+                audioSource.onended = function() {
+                    try {
+                        const playBtn = document.getElementById('playPauseBtn');
+                        if (playBtn) playBtn.textContent = '▶️ Play';
+                        resetMusicEffects();
+                    } catch (e) {
+                        console.warn('Error al finalizar música:', e);
+                    }
+                };
+                
+                audioSource.onerror = function(e) {
+                    console.warn('Error de audio (manejado):', e);
+                    // No mostrar notificación para evitar spam
+                    try {
+                        if (this.src && this.src.startsWith('blob:')) {
+                            URL.revokeObjectURL(this.src);
+                        }
+                        resetMusicEffects();
+                    } catch (cleanupError) {
+                        console.warn('Error en cleanup:', cleanupError);
+                    }
+                };
+                
+                // Precargar metadatos
+                audioSource.load();
+                
+            } catch (error) {
+                console.warn('Error cargando archivo de música:', error);
+                // Continuar sin música en lugar de mostrar error
+            }
+        }
+
+        // Función para limpiar recursos de audio al cerrar
+        function cleanupAudioResources() {
+            if (audioSource) {
+                try {
+                    audioSource.pause();
+                    if (audioSource.src && audioSource.src.startsWith('blob:')) {
+                        URL.revokeObjectURL(audioSource.src);
+                    }
+                } catch (e) {
+                    console.warn('Error en cleanup:', e);
+                }
+            }
+            
+            if (audioContext && audioContext.state !== 'closed') {
+                try {
+                    audioContext.close();
+                } catch (e) {
+                    console.warn('Error cerrando AudioContext:', e);
+                }
+            }
+        }
+
+        // Enhanced resource cleanup
+        function cleanupAllResources() {
+            try {
+                cleanupAudioResources();
+                
+                // Cancel animation frame
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                }
+                
+                // Clear arrays and return objects to pools
+                orbs.forEach(returnOrbToPool);
+                particles.forEach(returnParticleToPool);
+                orbs.length = 0;
+                particles.length = 0;
+                
+                // Clear timers
+                afkTimer = 0;
+                
+            } catch (error) {
+                console.warn('Error during cleanup:', error);
+            }
+        }
+
+        // Error boundary for unhandled errors
+        window.addEventListener('error', function(event) {
+            console.error('Unhandled error:', event.error);
+            // Don't crash the game, just log the error
+            event.preventDefault();
+        });
+
+        // Enhanced page lifecycle management
+        window.addEventListener('beforeunload', cleanupAllResources);
+        window.addEventListener('unload', cleanupAllResources);
+        window.addEventListener('pagehide', cleanupAllResources);
+
+        // Keyboard accessibility
+        document.addEventListener('keydown', function(event) {
+            try {
+                switch(event.key) {
+                    case ' ':
+                    case 'Escape':
+                        event.preventDefault();
+                        if (gameRunning) {
+                            gamePaused = !gamePaused;
+                            showNotification(gamePaused ? '⏸️ Pausado' : '▶️ Reanudado');
+                        }
+                        break;
+                    case 'r':
+                    case 'R':
+                        if (event.ctrlKey) {
+                            event.preventDefault();
+                            location.reload();
+                        }
+                        break;
+                }
+            } catch (error) {
+                console.warn('Error handling keyboard input:', error);
+            }
+        });
+
+        // Initialize everything with error handling
+        window.addEventListener('load', function() {
+            try {
+                init();
+            } catch (error) {
+                console.error('Error during initialization:', error);
+                showNotification('❌ Error al inicializar el juego');
+            }
+        });
     </script>
 </body>
 
